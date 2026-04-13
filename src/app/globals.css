@@ -1,0 +1,124 @@
+@import "tailwindcss";
+
+/* ─── Mohanji Design Tokens ─────────────────────────────────── */
+@theme {
+  /* Colors */
+  --color-primary:    #C95D63;   /* rose — buttons, CTAs */
+  --color-primary-hover: #f4442e;
+  --color-secondary:  #16697A;   /* teal — headings, gradient, nav */
+  --color-accent:     #E2B748;   /* gold — divider lines */
+  --color-text:       #191919;   /* body text */
+  --color-text-muted: #2B2828;
+  --color-bg:         #F5F5F5;   /* page background */
+  --color-white:      #FFFFFF;
+
+  /* Fonts */
+  --font-heading: "EB Garamond", Georgia, serif;
+  --font-body: "Lato", system-ui, sans-serif;
+
+  /* Breakpoints */
+  --breakpoint-sm: 544px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 922px;
+  --breakpoint-xl: 1200px;
+
+  /* Container */
+  --container-max: 1200px;
+  --container-padding-desktop: 6.67em;
+  --container-padding-mobile: 1.5rem;
+
+  /* Typography scale */
+  --text-h1: 2.5rem;       /* 40px */
+  --text-h1-mobile: 1.875rem; /* 30px */
+  --text-h2: 2rem;         /* 32px */
+  --text-h3: 1.625rem;     /* 26px */
+  --text-body: 0.9375rem;  /* 15px */
+
+  /* Line heights */
+  --leading-heading: 1.35;
+  --leading-body: 1.6;
+}
+
+/* ─── Base styles ────────────────────────────────────────────── */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-body);
+  font-size: var(--text-body);
+  line-height: var(--leading-body);
+  margin: 0;
+}
+
+@layer base {
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-heading);
+    font-weight: 600;
+    line-height: var(--leading-heading);
+    color: var(--color-secondary);
+    margin-top: 0;
+  }
+
+  h1 { font-size: var(--text-h1); }
+  h2 { font-size: var(--text-h2); }
+  h3 { font-size: var(--text-h3); }
+
+  @media (max-width: 544px) {
+    h1 { font-size: var(--text-h1-mobile); }
+  }
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* ─── Utilities ──────────────────────────────────────────────── */
+.container {
+  max-width: var(--container-max);
+  margin-inline: auto;
+  padding-inline: var(--container-padding-desktop);
+}
+
+@media (max-width: 922px) {
+  .container {
+    padding-inline: 2rem;
+  }
+}
+
+@media (max-width: 544px) {
+  .container {
+    padding-inline: var(--container-padding-mobile);
+  }
+}
+
+/* Gold divider — signature Mohanji visual element */
+.gold-divider {
+  display: block;
+  width: 60px;
+  height: 3px;
+  background-color: var(--color-accent);
+  margin: 0.75rem 0 1.5rem;
+}
+
+.gold-divider--center {
+  margin-inline: auto;
+}
+
+/* Hero gradient — teal to purple/maroon */
+.hero-gradient {
+  background: linear-gradient(135deg, var(--color-secondary) 0%, #5B2D8E 100%);
+}

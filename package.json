@@ -1,0 +1,42 @@
+{
+  "name": "mohanji-website",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "cross-env NODE_OPTIONS=--no-deprecation next dev --webpack",
+    "build": "cross-env NODE_OPTIONS=\"--no-deprecation --max-old-space-size=8000\" next build",
+    "start": "cross-env NODE_OPTIONS=--no-deprecation next start",
+    "lint": "cross-env NODE_OPTIONS=--no-deprecation eslint .",
+    "payload": "cross-env NODE_OPTIONS=--no-deprecation payload",
+    "generate:types": "cross-env NODE_OPTIONS=--no-deprecation payload generate:types",
+    "generate:importmap": "cross-env NODE_OPTIONS=--no-deprecation payload generate:importmap",
+    "migrate:json": "npx tsx scripts/migrate-json-templates.ts",
+    "migrate:wp": "npx tsx scripts/migrate-wp-rest.ts",
+    "migrate:media": "npx tsx scripts/migrate-media.ts"
+  },
+  "dependencies": {
+    "@payloadcms/db-postgres": "^3.82.1",
+    "@payloadcms/next": "^3.82.1",
+    "@payloadcms/richtext-lexical": "^3.82.1",
+    "@payloadcms/storage-s3": "^3.82.1",
+    "@payloadcms/ui": "^3.82.1",
+    "cross-env": "^10.1.0",
+    "dotenv": "^17.4.1",
+    "graphql": "^16.13.2",
+    "next": "16.2.3",
+    "payload": "^3.82.1",
+    "react": "19.2.4",
+    "react-dom": "19.2.4",
+    "sharp": "^0.34.5"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "eslint": "^9",
+    "eslint-config-next": "16.2.3",
+    "tailwindcss": "^4",
+    "typescript": "^5"
+  }
+}
