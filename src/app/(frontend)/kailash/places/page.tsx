@@ -1,7 +1,7 @@
 import React from 'react'
 import type { Metadata } from 'next'
 
-export const revalidate = 3600
+export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
   title: 'Sacred Places of the Kailash Pilgrimage | Mohanji',

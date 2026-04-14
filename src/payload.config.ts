@@ -5,6 +5,7 @@ import { buildConfig } from 'payload'
 import sharp from 'sharp'
 import path from 'path'
 import { fileURLToPath } from 'url'
+import { PHASE_PRODUCTION_BUILD } from 'next/constants'
 
 // Collections
 import { Users } from './collections/Users'
@@ -36,6 +37,7 @@ import { seedIfNeeded } from './seed'
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 
+const isBuilding = process.env.NEXT_PHASE === PHASE_PRODUCTION_BUILD
 const useS3 = Boolean(process.env.S3_BUCKET && process.env.S3_REGION && process.env.AWS_ACCESS_KEY_ID)
 
 export default buildConfig({
@@ -84,7 +86,12 @@ export default buildConfig({
 
   db: postgresAdapter({
     pool: {
-      connectionString: process.env.DATABASE_URI || process.env.DATABASE_URL,
+      // During next build (compile phase), use a dummy URL — pages are force-dynamic so no DB needed at build
+      connectionString: isBuilding
+        ? 'postgresql://localhost:5432/build_placeholder'
+        : (process.env.DATABASE_URI || process.env.DATABASE_URL),
+      // SSL config separate from connection string (never mix sslmode= in the URL with this object)
+      ssl: isBuilding ? false : { rejectUnauthorized: false },
     },
     push: false,
   }),

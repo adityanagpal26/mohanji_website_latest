@@ -8,7 +8,7 @@ import { HeroSlider } from '@/components/ui/HeroSlider'
 import { CounterBar } from '@/components/ui/CounterBar'
 import type { HeroSlide } from '@/components/ui/HeroSlider'
 
-export const revalidate = 3600
+export const dynamic = 'force-dynamic'
 
 /**
  * generateMetadata() is Next.js's async alternative to `export const metadata`.

@@ -5,7 +5,7 @@ import Link from 'next/link'
 import { getPayloadClient } from '@/lib/payload'
 import { RenderBlocks } from '@/components/RenderBlocks'
 
-export const revalidate = 3600
+export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
   title: 'Mohanji Acharyas | Mohanji',

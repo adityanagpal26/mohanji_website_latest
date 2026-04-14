@@ -2,7 +2,7 @@ import React from 'react'
 import type { Metadata } from 'next'
 import { getPayloadClient } from '@/lib/payload'
 
-export const revalidate = 3600
+export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
   title: 'Mohanji Global Council | Mohanji',
