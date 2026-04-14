@@ -75,7 +75,7 @@ export default async function DonatePage() {
   // Attempt to load donation links from SiteSettings global
   let donationLinks: any[] = []
   try {
-    const settings = await payload.findGlobal({ slug: 'siteSettings', depth: 0 })
+    const settings = await payload.findGlobal({ slug: 'site-settings', depth: 0 })
     if ((settings as any)?.donationLinks?.length) {
       donationLinks = (settings as any).donationLinks
     }
