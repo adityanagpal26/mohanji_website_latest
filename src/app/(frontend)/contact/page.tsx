@@ -2,6 +2,8 @@
 
 import React, { useState } from 'react'
 
+export const dynamic = 'force-dynamic'
+
 // Note: this page uses a client component for the form interactivity.
 // Metadata is handled via the parent layout since this is a client component.
 

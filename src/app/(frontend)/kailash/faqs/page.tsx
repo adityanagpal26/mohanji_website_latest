@@ -2,6 +2,8 @@
 
 import React, { useState } from 'react'
 
+export const dynamic = 'force-dynamic'
+
 const faqs = [
   {
     question: 'Who is eligible to join the Kailash pilgrimage?',

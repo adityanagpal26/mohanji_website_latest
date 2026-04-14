@@ -3,6 +3,8 @@
 import React, { useState } from 'react'
 import Link from 'next/link'
 
+export const dynamic = 'force-dynamic'
+
 const COUNTRIES = [
   'Australia', 'Brazil', 'Canada', 'France', 'Germany', 'India', 'Indonesia',
   'Italy', 'Malaysia', 'Netherlands', 'New Zealand', 'Russia', 'Serbia',

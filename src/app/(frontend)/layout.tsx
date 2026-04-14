@@ -20,6 +20,8 @@ const lato = Lato({
   display: 'swap',
 })
 
+export const dynamic = 'force-dynamic'
+
 export const metadata: Metadata = {
   title: { default: 'Mohanji — Boundless Love, Timeless Wisdom', template: '%s | Mohanji' },
   description: 'Mohanji is a spiritual master, humanitarian, and the embodiment of boundless love and timeless wisdom.',
@@ -40,12 +42,18 @@ export const metadata: Metadata = {
 }
 
 export default async function FrontendLayout({ children }: { children: React.ReactNode }) {
-  const payload = await getPayloadClient()
+  let headerData = null
+  let footerData = null
 
-  const [headerData, footerData] = await Promise.all([
-    payload.findGlobal({ slug: 'header', depth: 1 }).catch(() => null),
-    payload.findGlobal({ slug: 'footer', depth: 1 }).catch(() => null),
-  ])
+  try {
+    const payload = await getPayloadClient()
+    ;[headerData, footerData] = await Promise.all([
+      payload.findGlobal({ slug: 'header', depth: 1 }).catch(() => null),
+      payload.findGlobal({ slug: 'footer', depth: 1 }).catch(() => null),
+    ])
+  } catch {
+    // DB unavailable during build — render with empty header/footer
+  }
 
   return (
     <html lang="en" className={`${ebGaramond.variable} ${lato.variable}`}>
