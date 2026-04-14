@@ -7,6 +7,11 @@ import { getPayload } from 'payload'
 import config from '@payload-config'
 import { NextResponse } from 'next/server'
 
+// ─── Helper: wrap plain string in Lexical rich text format ───────────────────
+function toRichText(text: string) {
+  return { root: { type: 'root', children: [{ type: 'paragraph', version: 1, children: [{ type: 'text', text, version: 1 }], direction: 'ltr' as const, format: '' as const, indent: 0 }], direction: 'ltr' as const, format: '' as const, indent: 0, version: 1 } }
+}
+
 // ─── Helper: download image from URL → Payload media record ──────────────────
 async function createMedia(
   payload: Awaited<ReturnType<typeof getPayload>>,
@@ -108,7 +113,7 @@ export async function GET() {
           title: award.title,
           organization: award.organization,
           date: award.date,
-          description: award.description,
+          description: toRichText(award.description),
           ...(imageId ? { image: imageId } : {}),
         },
       })
@@ -186,8 +191,8 @@ export async function GET() {
         data: {
           title: med.title,
           slug: med.slug,
-          description: med.description,
-          benefits: med.benefits,
+          description: toRichText(med.description),
+          benefits: toRichText(med.benefits),
           ...(imageId ? { featuredImage: imageId } : {}),
         },
       })
@@ -263,9 +268,9 @@ export async function GET() {
         data: {
           title: practice.title,
           slug: practice.slug,
-          description: practice.description,
-          benefits: practice.benefits,
-          howItWorks: practice.howItWorks,
+          description: toRichText(practice.description),
+          benefits: toRichText(practice.benefits),
+          howItWorks: toRichText(practice.howItWorks),
           applicationFormUrl: practice.applicationFormUrl,
           ...(imageId ? { featuredImage: imageId } : {}),
         },
@@ -318,10 +323,10 @@ export async function GET() {
         data: {
           title: event.title,
           slug: event.slug,
-          description: event.description,
+          description: toRichText(event.description),
           startDate: event.startDate,
           endDate: event.endDate,
-          eventType: event.eventType,
+          eventType: event.eventType as 'retreat' | 'satsang' | 'pilgrimage' | 'celebration' | 'workshop' | 'online',
           registrationUrl: event.registrationUrl,
           status: 'published',
           isPast: false,
@@ -393,7 +398,7 @@ export async function GET() {
           slug: book.slug,
           author: book.author,
           purchaseUrl: book.purchaseUrl,
-          bookType: book.bookType,
+          bookType: book.bookType as 'children' | 'coffee-table' | 'biography' | 'translation',
           ...(imageId ? { coverImage: imageId } : {}),
         },
       })
@@ -488,10 +493,10 @@ export async function GET() {
         data: {
           title: post.title,
           slug: post.slug,
-          postType: post.postType,
+          postType: post.postType as 'news' | 'blog' | 'press-coverage' | 'interview',
           excerpt: post.excerpt,
-          content: post.content,
-          status: post.status,
+          content: toRichText(post.content),
+          status: post.status as 'draft' | 'published',
           _status: 'published',
         },
       })
@@ -533,8 +538,8 @@ export async function GET() {
         data: {
           title: audio.title,
           slug: audio.slug,
-          description: audio.description,
-          audioType: audio.audioType,
+          description: toRichText(audio.description),
+          audioType: audio.audioType as 'prayer' | 'mantra' | 'chant' | 'talk',
           duration: audio.duration,
         },
       })
