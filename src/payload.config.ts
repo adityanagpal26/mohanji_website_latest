@@ -31,9 +31,6 @@ import { Header } from './globals/Header'
 import { Footer } from './globals/Footer'
 import { SiteSettings } from './globals/SiteSettings'
 
-// Seed
-import { seedIfNeeded } from './seed'
-
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 
@@ -41,11 +38,8 @@ const isBuilding = process.env.NEXT_PHASE === PHASE_PRODUCTION_BUILD
 const useS3 = Boolean(process.env.S3_BUCKET && process.env.S3_REGION && process.env.AWS_ACCESS_KEY_ID)
 
 export default buildConfig({
-  onInit: async (payload) => {
-    await seedIfNeeded(payload).catch((err) => {
-      console.error('[seed] Seeding failed (non-fatal):', err)
-    })
-  },
+  // Seed is triggered on-demand via GET /api/dev-seed — NOT on startup.
+  // Running seed in onInit causes Lambda cold-start timeouts (image downloads take too long).
 
   admin: {
     user: Users.slug,
