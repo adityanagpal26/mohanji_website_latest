@@ -3,7 +3,7 @@ frontend:
   phases:
     preBuild:
       commands:
-        - npm ci --prefer-offline
+        - npm ci --prefer-offline --include=dev
     build:
       commands:
         - npx cross-env NODE_OPTIONS="--no-deprecation --max-old-space-size=8000" next build --webpack
