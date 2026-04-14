@@ -3,7 +3,6 @@ import { getPayloadClient } from '@/lib/payload'
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = process.env.NEXT_PUBLIC_APP_URL ?? 'https://mohanji.org'
-  const payload = await getPayloadClient()
 
   // Static pages
   const staticRoutes = [
@@ -25,6 +24,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const dynamicRoutes: MetadataRoute.Sitemap = []
 
   try {
+    const payload = await getPayloadClient()
     const [posts, events, meditations, books, practices, courses] = await Promise.all([
       payload.find({ collection: 'posts', limit: 1000, depth: 0 }),
       payload.find({ collection: 'events', limit: 1000, depth: 0 }),

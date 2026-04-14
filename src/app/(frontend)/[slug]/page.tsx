@@ -26,9 +26,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export async function generateStaticParams() {
-  const payload = await getPayloadClient()
-  const { docs } = await payload.find({ collection: 'pages', limit: 500, depth: 0 })
-  return (docs as any[]).map((p) => ({ slug: p.slug as string }))
+  // Return empty — pages are rendered on-demand (ISR) at runtime
+  // Avoids DB connection requirement during build
+  return []
 }
 
 export default async function CmsPage({ params }: Props) {
