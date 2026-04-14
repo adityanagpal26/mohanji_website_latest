@@ -27,15 +27,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export async function generateStaticParams() {
-  const payload = await getPayloadClient()
-  const { docs } = await payload.find({
-    collection: 'meditations',
-    limit: 100,
-    depth: 0,
-  })
-  return (docs as any[]).filter((m) => m.slug).map((m) => ({ slug: m.slug as string }))
+  return []
 }
-
 export default async function MeditationDownloadPage({ params }: Props) {
   const { slug } = await params
   const payload = await getPayloadClient()

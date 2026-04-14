@@ -9,19 +9,8 @@ export const revalidate = 3600
 type Props = { params: Promise<{ slug: string }> }
 
 export async function generateStaticParams() {
-  const payload = await getPayloadClient()
-  try {
-    const { docs } = await payload.find({
-      collection: 'audios',
-      limit: 500,
-      depth: 0,
-    })
-    return (docs as any[]).filter((a) => a.slug).map((a) => ({ slug: a.slug as string }))
-  } catch {
-    return []
-  }
+  return []
 }
-
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params
   const payload = await getPayloadClient()

@@ -58,15 +58,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export async function generateStaticParams() {
-  const payload = await getPayloadClient()
-  const { docs } = await payload.find({
-    collection: 'events',
-    limit: 500,
-    depth: 0,
-  })
-  return (docs as any[]).filter((e) => e.slug).map((e) => ({ slug: e.slug as string }))
+  return []
 }
-
 export default async function EventDetailPage({ params }: Props) {
   const { slug } = await params
   const payload = await getPayloadClient()

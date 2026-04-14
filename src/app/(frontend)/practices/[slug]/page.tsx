@@ -24,15 +24,8 @@ function extractTextFromRichText(content: any): string {
 }
 
 export async function generateStaticParams() {
-  const payload = await getPayloadClient()
-  const { docs } = await payload.find({
-    collection: 'practices',
-    limit: 100,
-    depth: 0,
-  })
-  return (docs as any[]).filter((p) => p.slug).map((p) => ({ slug: p.slug as string }))
+  return []
 }
-
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params
   const payload = await getPayloadClient()

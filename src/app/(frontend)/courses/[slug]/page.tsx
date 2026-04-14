@@ -369,23 +369,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export async function generateStaticParams() {
-  const payload = await getPayloadClient()
-  try {
-    const { docs } = await payload.find({
-      collection: 'courses',
-      where: { status: { equals: 'published' } },
-      limit: 200,
-      depth: 0,
-    })
-    const cmsParams = (docs as any[]).filter((c) => c.slug).map((c) => ({ slug: c.slug as string }))
-    const staticParams = Object.keys(staticCourseData).map((slug) => ({ slug }))
-    const allSlugs = new Set([...cmsParams.map((p) => p.slug), ...staticParams.map((p) => p.slug)])
-    return Array.from(allSlugs).map((slug) => ({ slug }))
-  } catch {
-    return Object.keys(staticCourseData).map((slug) => ({ slug }))
-  }
+  return []
 }
-
 export default async function CourseDetailPage({ params }: Props) {
   const { slug } = await params
   const payload = await getPayloadClient()

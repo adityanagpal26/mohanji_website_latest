@@ -47,15 +47,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export async function generateStaticParams() {
-  const payload = await getPayloadClient()
-  const { docs } = await payload.find({
-    collection: 'books',
-    limit: 100,
-    depth: 0,
-  })
-  return (docs as any[]).filter((b) => b.slug).map((b) => ({ slug: b.slug as string }))
+  return []
 }
-
 export default async function BookDetailPage({ params }: Props) {
   const { slug } = await params
   const payload = await getPayloadClient()
