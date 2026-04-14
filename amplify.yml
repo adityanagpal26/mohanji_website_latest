@@ -11,6 +11,8 @@ frontend:
         - echo "DATABASE_URL=$DATABASE_URL" >> .env.production
         - echo "PAYLOAD_SECRET=$PAYLOAD_SECRET" >> .env.production
         - echo "NEXT_PUBLIC_SERVER_URL=$NEXT_PUBLIC_SERVER_URL" >> .env.production
+        # Run pending migrations against the RDS database before building
+        - DATABASE_URI=$DATABASE_URI npx payload migrate
     build:
       commands:
         - npx cross-env NODE_OPTIONS="--no-deprecation --max-old-space-size=8000" next build --webpack
