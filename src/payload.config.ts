@@ -93,7 +93,9 @@ export default buildConfig({
       // SSL config separate from connection string (never mix sslmode= in the URL with this object)
       ssl: isBuilding ? false : { rejectUnauthorized: false },
     },
-    push: false,
+    // push:true syncs schema to DB on startup (safe for initial deploy — additive only)
+    // After first successful deploy, switch to migrations: npx payload migrate:create + migrate
+    push: true,
   }),
 
   sharp,
