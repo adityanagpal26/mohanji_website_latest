@@ -4,6 +4,13 @@ frontend:
     preBuild:
       commands:
         - npm ci --prefer-offline --include=dev
+        # Write secrets from Amplify branch env vars into .env.production
+        # so the SSR Lambda reads them at runtime.
+        # Values come from Amplify Console → branch env vars — never committed to git.
+        - echo "DATABASE_URI=$DATABASE_URI" >> .env.production
+        - echo "DATABASE_URL=$DATABASE_URL" >> .env.production
+        - echo "PAYLOAD_SECRET=$PAYLOAD_SECRET" >> .env.production
+        - echo "NEXT_PUBLIC_SERVER_URL=$NEXT_PUBLIC_SERVER_URL" >> .env.production
     build:
       commands:
         - npx cross-env NODE_OPTIONS="--no-deprecation --max-old-space-size=8000" next build --webpack

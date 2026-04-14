@@ -30,8 +30,11 @@ yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
 
-# env files (can opt-in for committing if needed)
-.env*
+# env files — secrets never committed
+.env
+.env.local
+.env.*.local
+# .env.production is committed but contains NO secrets (secrets injected by amplify.yml)
 
 # vercel
 .vercel
