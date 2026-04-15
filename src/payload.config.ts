@@ -84,8 +84,13 @@ export default buildConfig({
       connectionString: isBuilding
         ? 'postgresql://localhost:5432/build_placeholder'
         : (process.env.DATABASE_URI || process.env.DATABASE_URL),
-      // SSL config separate from connection string (never mix sslmode= in the URL with this object)
-      ssl: isBuilding ? false : { rejectUnauthorized: false },
+      // SSL: enabled for remote RDS, disabled for local Docker
+      ssl: (() => {
+        if (isBuilding) return false
+        const dbUrl = process.env.DATABASE_URI || process.env.DATABASE_URL || ''
+        const isLocal = dbUrl.includes('localhost') || dbUrl.includes('127.0.0.1')
+        return isLocal ? false : { rejectUnauthorized: false }
+      })(),
     },
     push: false,
   }),

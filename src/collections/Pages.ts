@@ -43,6 +43,7 @@ export const Pages: CollectionConfig = {
         { label: 'Global Ambassador', value: 'global-ambassador' },
         { label: 'Awards & Recognition', value: 'awards' },
         { label: 'Free Guided Meditations (listing)', value: 'meditations-listing' },
+        { label: 'Practices (listing)', value: 'practices-listing' },
       ],
     },
 
@@ -557,9 +558,7 @@ export const Pages: CollectionConfig = {
           type: 'upload',
           relationTo: 'media',
           label: 'Hero Background Image',
-          validate: (val: any, { data }: any) =>
-            data?.pageType === 'meditations-listing' && !val ? 'Hero background image is required' : true,
-          admin: { description: '★ Required. Full-width background image for the hero section.' },
+          admin: { description: 'Optional. Full-width background image for the hero banner. Falls back to a teal gradient if not set.' },
         },
         {
           name: 'brochureUrl',
@@ -590,6 +589,72 @@ export const Pages: CollectionConfig = {
           validate: (val: any, { data }: any) =>
             data?.pageType === 'meditations-listing' && !val ? 'CTA text is required' : true,
           admin: { description: '★ Required. Description text in the call-to-action section.' },
+        },
+      ],
+    },
+
+    // ─────────────────────────────────────────────────────────────────────────
+    // PRACTICES LISTING (pageType === 'practices-listing')
+    // ─────────────────────────────────────────────────────────────────────────
+    {
+      name: 'practicesListingContent',
+      type: 'group',
+      label: 'Practices Listing Page Content',
+      admin: { condition: (data: any) => data?.pageType === 'practices-listing' },
+      fields: [
+        {
+          name: 'heroTitle',
+          type: 'text',
+          validate: (val: any, { data }: any) =>
+            data?.pageType === 'practices-listing' && !val ? 'Hero title is required' : true,
+          admin: { description: '★ Required. Main heading in the hero banner.' },
+        },
+        {
+          name: 'heroSubtitle',
+          type: 'textarea',
+          label: 'Hero Subtitle',
+          validate: (val: any, { data }: any) =>
+            data?.pageType === 'practices-listing' && !val ? 'Hero subtitle is required' : true,
+          admin: { description: '★ Required. Subheading below the hero title.' },
+        },
+        {
+          name: 'heroImage',
+          type: 'upload',
+          relationTo: 'media',
+          label: 'Hero Background Image',
+          admin: { description: 'Full-width background image for the hero banner. Falls back to gradient if not set.' },
+        },
+        {
+          name: 'introText',
+          type: 'textarea',
+          label: 'Intro Paragraph',
+          validate: (val: any, { data }: any) =>
+            data?.pageType === 'practices-listing' && !val ? 'Intro paragraph is required' : true,
+          admin: { description: '★ Required. Shown below the hero in a white section.' },
+        },
+        {
+          name: 'ctaHeading',
+          type: 'text',
+          label: 'CTA Section Heading',
+          admin: { description: 'Heading for the call-to-action section at the bottom of the page.' },
+        },
+        {
+          name: 'ctaText',
+          type: 'textarea',
+          label: 'CTA Section Text',
+          admin: { description: 'Body text in the call-to-action section.' },
+        },
+        {
+          name: 'ctaLinkLabel',
+          type: 'text',
+          label: 'CTA Button Label',
+          admin: { description: 'e.g. "Explore Meditations"' },
+        },
+        {
+          name: 'ctaLinkUrl',
+          type: 'text',
+          label: 'CTA Button URL',
+          admin: { description: 'e.g. "/meditations"' },
         },
       ],
     },

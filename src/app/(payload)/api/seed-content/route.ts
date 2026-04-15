@@ -263,17 +263,24 @@ export async function GET() {
   for (const practice of practicesData) {
     try {
       const imageId = await createMedia(payload, practice.imageUrl, practice.title)
+      // Convert newline-separated string benefits/howItWorks to array format
+      const benefitItems = practice.benefits
+        ? practice.benefits.split('\n').filter(Boolean).map((b: string) => ({ benefit: b.trim() }))
+        : []
+      const howItWorksItems = practice.howItWorks
+        ? practice.howItWorks.split('\n').filter(Boolean).map((s: string) => ({ step: s.trim() }))
+        : []
       await payload.create({
         collection: 'practices',
         data: {
           title: practice.title,
           slug: practice.slug,
           description: toRichText(practice.description),
-          benefits: toRichText(practice.benefits),
-          howItWorks: toRichText(practice.howItWorks),
+          benefits: benefitItems,
+          howItWorks: howItWorksItems,
           applicationFormUrl: practice.applicationFormUrl,
           ...(imageId ? { featuredImage: imageId } : {}),
-        },
+        } as any,
       })
       practicesCount++
     } catch { /* skip */ }

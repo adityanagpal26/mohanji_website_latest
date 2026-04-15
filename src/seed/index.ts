@@ -11,6 +11,7 @@ import { seedGlobalAmbassador } from './globalAmbassador'
 import { seedAwardsPage } from './awardsPage'
 import { seedAwardsCollection } from './awardsCollection'
 import { seedMeditations } from './meditations'
+import { seedPractices } from './practices'
 
 /**
  * Runs all seed functions on server startup.
@@ -60,6 +61,10 @@ export async function seedIfNeeded(payload: Payload): Promise<void> {
     // Seed meditations
     console.log('[seed] Seeding meditations...')
     await seedMeditations(payload)
+
+    // Seed practices
+    console.log('[seed] Seeding practices...')
+    await seedPractices(payload)
   } finally {
     await pool.end()
   }

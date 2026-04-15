@@ -248,7 +248,38 @@ const seed = async () => {
       console.log('   ✓ Meditations listing page already exists — skipping')
     }
 
-    // ── 7. Add howToUse steps to all meditations (idempotent) ──────────────
+    // ── 7. Seed practices listing page ──────────────────────────────────────
+    console.log('🧘 Seeding practices listing page...')
+    const { docs: existingPracPage } = await payload.find({
+      collection: 'pages',
+      where: { pageType: { equals: 'practices-listing' } },
+      limit: 1,
+    })
+    if (existingPracPage.length === 0) {
+      await payload.create({
+        collection: 'pages',
+        data: {
+          title: 'Spiritual Practices',
+          slug: 'practices',
+          pageType: 'practices-listing',
+          status: 'published',
+          practicesListingContent: {
+            heroTitle: 'SPIRITUAL PRACTICES',
+            heroSubtitle: 'Transformative tools for inner growth — grounded in ancient wisdom and accessible to all who seek.',
+            introText: "Mohanji offers a rich array of spiritual practices, each designed to address specific aspects of human suffering and liberation. From powerful energy transmissions and healing methods to movement-based practices and daily techniques, these tools meet you exactly where you are.",
+            ctaHeading: 'Deepen Your Practice',
+            ctaText: 'Complement your practice with Mohanji\'s free guided meditations — available in multiple languages and ready to download.',
+            ctaLinkLabel: 'Explore Meditations',
+            ctaLinkUrl: '/meditations',
+          },
+        } as any,
+      })
+      console.log('   ✓ Practices listing page created')
+    } else {
+      console.log('   ✓ Practices listing page already exists — skipping')
+    }
+
+    // ── 8. Add howToUse steps to all meditations (idempotent) ──────────────
     console.log('📝 Adding howToUse steps to meditations...')
     const defaultSteps = [
       { title: 'Find a Quiet Space', description: 'Sit or lie comfortably in a place where you will not be disturbed.' },
