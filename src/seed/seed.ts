@@ -218,6 +218,55 @@ const seed = async () => {
     await seedIfNeeded(payload)
     console.log('   ✓ Pages seeded')
 
+    // ── 6. Seed meditations listing page ────────────────────────────────────
+    console.log('🧘 Seeding meditations listing page...')
+    const { docs: existingMedPage } = await payload.find({
+      collection: 'pages',
+      where: { pageType: { equals: 'meditations-listing' } },
+      limit: 1,
+    })
+    if (existingMedPage.length === 0) {
+      await payload.create({
+        collection: 'pages',
+        data: {
+          title: 'Free Guided Meditations',
+          slug: 'meditations',
+          pageType: 'meditations-listing',
+          status: 'published',
+          meditationsListingContent: {
+            heroTitle: 'FREE GUIDED MEDITATIONS',
+            heroSubtitle: 'Eight meditations, translated into many languages, helping hundreds of thousands of people around the world to cleanse, heal and raise awareness.',
+            brochureUrl: 'https://mohanji.org/wp-content/uploads/2026/04/Free-Guided-Meditations-Brochure.pdf',
+            introText: "Mohanji's transformative free guided meditations play a significant role in creating a better daily life. Simply download them from their respective links, find a quiet space to sit, relax with the soothing background meditation music and let yourself be guided.",
+            ctaHeading: 'Deepen Your Practice',
+            ctaText: 'Join a live retreat or course to experience these meditations with Mohanji in person.',
+          },
+        } as any,
+      })
+      console.log('   ✓ Meditations listing page created')
+    } else {
+      console.log('   ✓ Meditations listing page already exists — skipping')
+    }
+
+    // ── 7. Add howToUse steps to all meditations (idempotent) ──────────────
+    console.log('📝 Adding howToUse steps to meditations...')
+    const defaultSteps = [
+      { title: 'Find a Quiet Space', description: 'Sit or lie comfortably in a place where you will not be disturbed.' },
+      { title: 'Use Headphones', description: 'For the best experience, listen with headphones and close your eyes.' },
+      { title: 'Practise Regularly', description: 'Each session deepens the cleansing. Regular practice brings lasting transformation.' },
+    ]
+    const { docs: allMeditations } = await payload.find({ collection: 'meditations', limit: 50 })
+    for (const med of allMeditations as any[]) {
+      if (!med.howToUse || med.howToUse.length === 0) {
+        await payload.update({
+          collection: 'meditations',
+          id: med.id,
+          data: { howToUse: defaultSteps } as any,
+        })
+        console.log(`   ✓ howToUse added to "${med.title}"`)
+      }
+    }
+
     console.log('')
     console.log('✅ Seed complete!')
     console.log('   Admin:    admin@mohanji.org')

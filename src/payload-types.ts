@@ -254,6 +254,7 @@ export interface Page {
         | 'golden-path'
         | 'global-ambassador'
         | 'awards'
+        | 'meditations-listing'
       )
     | null;
   layout?:
@@ -808,6 +809,24 @@ export interface Page {
     introText?: string | null;
     closingQuote?: string | null;
   };
+  meditationsListingContent?: {
+    heroTitle?: string | null;
+    /**
+     * Text shown below the title in the hero banner.
+     */
+    heroSubtitle?: string | null;
+    heroImage?: (number | null) | Media;
+    /**
+     * Link for the "Download Brochure" button. Upload the PDF to media and paste its URL here.
+     */
+    brochureUrl?: string | null;
+    /**
+     * Shown below the hero section.
+     */
+    introText?: string | null;
+    ctaHeading?: string | null;
+    ctaText?: string | null;
+  };
   status?: ('draft' | 'published') | null;
   publishedAt?: string | null;
   updatedAt: string;
@@ -1257,6 +1276,19 @@ export interface Meditation {
          * e.g. 52:52 — shown next to the language name
          */
         fileSize?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * The step-by-step instructions shown below the download list. Add 3 steps.
+   */
+  howToUse?:
+    | {
+        /**
+         * e.g. Find a Quiet Space
+         */
+        title: string;
+        description: string;
         id?: string | null;
       }[]
     | null;
@@ -2897,6 +2929,17 @@ export interface PagesSelect<T extends boolean = true> {
         introText?: T;
         closingQuote?: T;
       };
+  meditationsListingContent?:
+    | T
+    | {
+        heroTitle?: T;
+        heroSubtitle?: T;
+        heroImage?: T;
+        brochureUrl?: T;
+        introText?: T;
+        ctaHeading?: T;
+        ctaText?: T;
+      };
   status?: T;
   publishedAt?: T;
   updatedAt?: T;
@@ -3186,6 +3229,13 @@ export interface MeditationsSelect<T extends boolean = true> {
         languageCode?: T;
         audioFile?: T;
         fileSize?: T;
+        id?: T;
+      };
+  howToUse?:
+    | T
+    | {
+        title?: T;
+        description?: T;
         id?: T;
       };
   meta?:

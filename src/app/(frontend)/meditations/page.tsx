@@ -24,6 +24,26 @@ function getDescriptionText(richText: any): string {
 export default async function MeditationsPage() {
   const payload = await getPayloadClient()
 
+  // Fetch the meditations listing page from the Pages collection
+  const { docs: pageResults } = await payload.find({
+    collection: 'pages',
+    where: { pageType: { equals: 'meditations-listing' } },
+    depth: 1,
+    limit: 1,
+  })
+  const page = pageResults[0] as any
+  const cms = page?.meditationsListingContent ?? {}
+
+  // CMS values with fallbacks
+  const heroTitle    = cms.heroTitle    || 'FREE GUIDED MEDITATIONS'
+  const heroSubtitle = cms.heroSubtitle || 'Eight meditations, translated into many languages, helping hundreds of thousands of people around the world to cleanse, heal and raise awareness.'
+  const heroImageUrl = typeof cms.heroImage === 'object' ? cms.heroImage?.url : null
+  const brochureUrl  = cms.brochureUrl  || null
+  const introText    = cms.introText    || "Mohanji's transformative free guided meditations play a significant role in creating a better daily life. Simply download them, find a quiet space to sit, relax with the soothing background music and let yourself be guided."
+  const ctaHeading   = cms.ctaHeading   || 'Deepen Your Practice'
+  const ctaText      = cms.ctaText      || 'Join a live retreat or course to experience these meditations with Mohanji in person.'
+
+  // Fetch all meditations
   const { docs: meditations } = await payload.find({
     collection: 'meditations',
     sort: 'title',
@@ -36,44 +56,38 @@ export default async function MeditationsPage() {
       {/* Hero */}
       <section className="relative py-24 text-center overflow-hidden">
         <div className="absolute inset-0">
-          <Image
-            src="/images/meditations/bg.webp"
-            alt="Meditation background"
-            fill
-            className="object-cover"
-            priority
-            sizes="100vw"
-          />
+          {heroImageUrl ? (
+            <Image src={heroImageUrl} alt={heroTitle} fill className="object-cover" priority sizes="100vw" />
+          ) : (
+            <Image src="/images/meditations/bg.webp" alt="Meditation background" fill className="object-cover" priority sizes="100vw" />
+          )}
           <div className="absolute inset-0 bg-[#16697A]/80" />
         </div>
         <div className="relative z-10 container">
           <h1 className="text-white font-heading text-4xl md:text-5xl font-semibold mb-2">
-            FREE GUIDED MEDITATIONS
+            {heroTitle}
           </h1>
           <span className="block w-14 h-0.5 bg-[#E2B748] mx-auto my-5" />
           <p className="text-white/90 text-lg max-w-2xl mx-auto leading-relaxed">
-            Eight meditations, translated into many languages, helping hundreds of thousands of
-            people around the world to cleanse, heal and raise awareness.
+            {heroSubtitle}
           </p>
-          <a
-            href="https://mohanji.org/wp-content/uploads/2026/04/Free-Guided-Meditations-Brochure.pdf"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-block mt-8 px-7 py-3 bg-[#E2B748] text-[#191919] font-semibold rounded hover:bg-[#c9a23f] transition-colors"
-          >
-            Download Brochure
-          </a>
+          {brochureUrl && (
+            <a
+              href={brochureUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-block mt-8 px-7 py-3 bg-[#E2B748] text-[#191919] font-semibold rounded hover:bg-[#c9a23f] transition-colors"
+            >
+              Download Brochure
+            </a>
+          )}
         </div>
       </section>
 
       {/* Intro */}
       <section className="py-10 bg-white">
         <div className="container max-w-3xl text-center">
-          <p className="text-gray-600 leading-relaxed text-lg">
-            Mohanji&apos;s transformative free guided meditations play a significant role in
-            creating a better daily life. Simply download them, find a quiet space to sit, relax
-            with the soothing background music and let yourself be guided.
-          </p>
+          <p className="text-gray-600 leading-relaxed text-lg">{introText}</p>
         </div>
       </section>
 
@@ -99,7 +113,6 @@ export default async function MeditationsPage() {
                     key={meditation.id}
                     className="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow overflow-hidden flex flex-col"
                   >
-                    {/* Image */}
                     <Link href={`/meditations/${meditation.slug}`} className="group block">
                       <div className="relative h-52 bg-gradient-to-br from-[#16697A]/20 to-[#5B2D8E]/20 overflow-hidden">
                         {imageUrl ? (
@@ -115,13 +128,11 @@ export default async function MeditationsPage() {
                             <span className="text-5xl opacity-30">☯</span>
                           </div>
                         )}
-                        {/* Duration badge */}
                         {meditation.duration && (
                           <div className="absolute top-3 left-3 bg-black/50 text-white text-xs font-semibold px-2 py-1 rounded uppercase tracking-wide">
                             {meditation.duration}
                           </div>
                         )}
-                        {/* Language count badge */}
                         {downloadCount > 0 && (
                           <div className="absolute bottom-3 right-3 bg-[#E2B748] text-[#191919] text-xs font-semibold px-2 py-1 rounded">
                             {downloadCount} language{downloadCount !== 1 ? 's' : ''}
@@ -129,8 +140,6 @@ export default async function MeditationsPage() {
                         )}
                       </div>
                     </Link>
-
-                    {/* Content */}
                     <div className="p-5 flex flex-col flex-1">
                       <Link href={`/meditations/${meditation.slug}`} className="group">
                         <h3 className="font-heading text-xl text-[#16697A] leading-snug mb-2 group-hover:text-[#C95D63] transition-colors">
@@ -168,22 +177,14 @@ export default async function MeditationsPage() {
       {/* CTA */}
       <section className="py-16 bg-white text-center">
         <div className="container max-w-2xl">
-          <h2 className="font-heading text-3xl text-[#16697A] mb-1">Deepen Your Practice</h2>
+          <h2 className="font-heading text-3xl text-[#16697A] mb-1">{ctaHeading}</h2>
           <span className="block w-14 h-0.5 bg-[#E2B748] mx-auto my-4" />
-          <p className="text-gray-600 mb-8">
-            Join a live retreat or course to experience these meditations with Mohanji in person.
-          </p>
+          <p className="text-gray-600 mb-8">{ctaText}</p>
           <div className="flex flex-wrap justify-center gap-4">
-            <Link
-              href="/courses"
-              className="px-8 py-3 bg-[#C95D63] text-white font-medium rounded hover:bg-[#f4442e] transition-colors"
-            >
+            <Link href="/courses" className="px-8 py-3 bg-[#C95D63] text-white font-medium rounded hover:bg-[#f4442e] transition-colors">
               Explore Courses
             </Link>
-            <Link
-              href="/events"
-              className="px-8 py-3 border-2 border-[#16697A] text-[#16697A] font-medium rounded hover:bg-[#16697A] hover:text-white transition-colors"
-            >
+            <Link href="/events" className="px-8 py-3 border-2 border-[#16697A] text-[#16697A] font-medium rounded hover:bg-[#16697A] hover:text-white transition-colors">
               Upcoming Events
             </Link>
           </div>

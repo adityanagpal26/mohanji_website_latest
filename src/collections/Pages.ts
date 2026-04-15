@@ -42,6 +42,7 @@ export const Pages: CollectionConfig = {
         { label: 'The Golden Path', value: 'golden-path' },
         { label: 'Global Ambassador', value: 'global-ambassador' },
         { label: 'Awards & Recognition', value: 'awards' },
+        { label: 'Free Guided Meditations (listing)', value: 'meditations-listing' },
       ],
     },
 
@@ -524,6 +525,33 @@ export const Pages: CollectionConfig = {
         { name: 'heroImage', type: 'upload', relationTo: 'media' },
         { name: 'introText', type: 'textarea' },
         { name: 'closingQuote', type: 'textarea' },
+      ],
+    },
+
+    // ─────────────────────────────────────────────────────────────────────────
+    // MEDITATIONS LISTING (pageType === 'meditations-listing')
+    // ─────────────────────────────────────────────────────────────────────────
+    {
+      name: 'meditationsListingContent',
+      type: 'group',
+      label: 'Meditations Listing Page Content',
+      admin: { condition: (data: any) => data?.pageType === 'meditations-listing' },
+      fields: [
+        { name: 'heroTitle', type: 'text', defaultValue: 'FREE GUIDED MEDITATIONS' },
+        { name: 'heroSubtitle', type: 'textarea', label: 'Hero Subtitle', admin: { description: 'Text shown below the title in the hero banner.' } },
+        { name: 'heroImage', type: 'upload', relationTo: 'media', label: 'Hero Background Image' },
+        {
+          name: 'brochureUrl',
+          type: 'text',
+          label: 'Brochure PDF URL',
+          admin: { description: 'Link for the "Download Brochure" button. Upload the PDF to media and paste its URL here.' },
+        },
+        { name: 'introText', type: 'textarea', label: 'Intro Paragraph', admin: { description: 'Shown below the hero section.' } },
+        {
+          name: 'ctaHeading', type: 'text', label: 'CTA Section Heading',
+          defaultValue: 'Deepen Your Practice',
+        },
+        { name: 'ctaText', type: 'textarea', label: 'CTA Section Text' },
       ],
     },
 

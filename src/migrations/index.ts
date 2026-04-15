@@ -1,5 +1,7 @@
 import * as migration_20260414_104413_initial from './20260414_104413_initial';
 import * as migration_20260415_134023_meditations_duration from './20260415_134023_meditations_duration';
+import * as migration_20260415_140309_meditations_cms_fields from './20260415_140309_meditations_cms_fields';
+import * as migration_20260415_144726_pages_meditations_listing_enum from './20260415_144726_pages_meditations_listing_enum';
 
 export const migrations = [
   {
@@ -11,5 +13,15 @@ export const migrations = [
     up: migration_20260415_134023_meditations_duration.up,
     down: migration_20260415_134023_meditations_duration.down,
     name: '20260415_134023_meditations_duration',
+  },
+  {
+    up: migration_20260415_140309_meditations_cms_fields.up,
+    down: migration_20260415_140309_meditations_cms_fields.down,
+    name: '20260415_140309_meditations_cms_fields',
+  },
+  {
+    up: migration_20260415_144726_pages_meditations_listing_enum.up,
+    down: migration_20260415_144726_pages_meditations_listing_enum.down,
+    name: '20260415_144726_pages_meditations_listing_enum',
   },
 ];

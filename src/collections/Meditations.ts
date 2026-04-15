@@ -84,6 +84,16 @@ export const Meditations: CollectionConfig = {
       ],
     },
     {
+      name: 'howToUse',
+      type: 'array',
+      label: 'How to Use — Steps (shown on download page)',
+      admin: { description: 'The step-by-step instructions shown below the download list. Add 3 steps.' },
+      fields: [
+        { name: 'title', type: 'text', required: true, admin: { description: 'e.g. Find a Quiet Space' } },
+        { name: 'description', type: 'textarea', required: true },
+      ],
+    },
+    {
       name: 'meta',
       type: 'group',
       fields: [

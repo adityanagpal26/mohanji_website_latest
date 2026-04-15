@@ -117,30 +117,28 @@ export default async function MeditationDownloadPage({ params }: Props) {
         </div>
       </section>
 
-      {/* How to Use */}
-      <section className="py-12 bg-white">
-        <div className="container max-w-3xl">
-          <h2 className="font-heading text-2xl text-[#16697A] text-center mb-2">
-            How to Use This Meditation
-          </h2>
-          <span className="block w-14 h-0.5 bg-[#E2B748] mx-auto mb-8" />
-          <div className="grid sm:grid-cols-3 gap-6 text-center">
-            {[
-              { step: '1', title: 'Find a Quiet Space', desc: 'Sit or lie comfortably in a place where you will not be disturbed.' },
-              { step: '2', title: 'Use Headphones', desc: 'For the best experience, listen with headphones and close your eyes.' },
-              { step: '3', title: 'Practise Regularly', desc: 'Each session deepens the cleansing. Regular practice brings lasting transformation.' },
-            ].map((item) => (
-              <div key={item.step} className="flex flex-col items-center">
-                <div className="w-12 h-12 rounded-full bg-[#16697A] text-white flex items-center justify-center font-heading font-semibold text-lg mb-3">
-                  {item.step}
+      {/* How to Use — from CMS (howToUse array on meditation record) */}
+      {meditation.howToUse?.length > 0 && (
+        <section className="py-12 bg-white">
+          <div className="container max-w-3xl">
+            <h2 className="font-heading text-2xl text-[#16697A] text-center mb-2">
+              How to Use This Meditation
+            </h2>
+            <span className="block w-14 h-0.5 bg-[#E2B748] mx-auto mb-8" />
+            <div className={`grid gap-6 text-center ${meditation.howToUse.length === 3 ? 'sm:grid-cols-3' : meditation.howToUse.length === 2 ? 'sm:grid-cols-2' : 'sm:grid-cols-2 md:grid-cols-4'}`}>
+              {(meditation.howToUse as any[]).map((item: any, idx: number) => (
+                <div key={idx} className="flex flex-col items-center">
+                  <div className="w-12 h-12 rounded-full bg-[#16697A] text-white flex items-center justify-center font-heading font-semibold text-lg mb-3">
+                    {idx + 1}
+                  </div>
+                  <h3 className="font-semibold text-[#16697A] mb-2">{item.title}</h3>
+                  <p className="text-gray-600 text-sm leading-relaxed">{item.description}</p>
                 </div>
-                <h3 className="font-semibold text-[#16697A] mb-2">{item.title}</h3>
-                <p className="text-gray-600 text-sm leading-relaxed">{item.desc}</p>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       {/* Navigation */}
       <section className="py-8 bg-[#F5F5F5] border-t border-gray-200">
