@@ -54,7 +54,7 @@ export default async function TraditionalYogaPage() {
 
   const heroImageUrl: string | null = cms.heroImage?.url || null
 
-  const whyImageUrl: string | null =
+  const whyImageUrl: string =
     cms.whySectionImage?.url || `/images/practices/why-traditional-yoga.jpg`
 
   return (
