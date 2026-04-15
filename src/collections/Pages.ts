@@ -45,6 +45,7 @@ export const Pages: CollectionConfig = {
         { label: 'Free Guided Meditations (listing)', value: 'meditations-listing' },
         { label: 'Practices (listing)', value: 'practices-listing' },
         { label: 'Mai-Tri Method', value: 'mai-tri-method' },
+        { label: 'Traditional Yoga (HSTY)', value: 'traditional-yoga' },
       ],
     },
 
@@ -841,6 +842,85 @@ export const Pages: CollectionConfig = {
           type: 'email',
           label: 'Session Booking Form — Recipient Email',
           admin: { description: 'Session booking requests are forwarded to this address.' },
+        },
+      ],
+    },
+
+    // ── Traditional Yoga (HSTY) Page Content ─────────────────────────────────
+    {
+      name: 'traditionalYogaContent',
+      type: 'group',
+      label: 'Traditional Yoga (HSTY) Page Content',
+      admin: { condition: (data: any) => data?.pageType === 'traditional-yoga' },
+      fields: [
+        {
+          name: 'heroTitle',
+          type: 'text',
+          label: 'Hero Title',
+          admin: { description: 'Main heading on the page.' },
+        },
+        {
+          name: 'tagline',
+          type: 'textarea',
+          label: 'Tagline / Pull Quote',
+          admin: { description: 'Short quote shown under hero and as a pull quote section.' },
+        },
+        {
+          name: 'heroImage',
+          type: 'upload',
+          relationTo: 'media',
+          label: 'Hero Background Image',
+        },
+        {
+          name: 'introText',
+          type: 'textarea',
+          label: 'Intro / Mission Paragraph',
+          admin: { description: 'What HSTY is — the mission statement paragraph.' },
+        },
+        {
+          name: 'whySectionTitle',
+          type: 'text',
+          label: 'Why HSTY — Section Title',
+          admin: { description: 'e.g. "Why Himalayan School Of Traditional Yoga?"' },
+        },
+        {
+          name: 'whySectionText',
+          type: 'textarea',
+          label: 'Why HSTY — Body Text',
+          admin: { description: 'Paragraphs for the Why section. Separate with a blank line (\\n\\n).' },
+        },
+        {
+          name: 'whySectionImage',
+          type: 'upload',
+          relationTo: 'media',
+          label: 'Why HSTY — Section Image',
+        },
+        {
+          name: 'downloadMeditationUrl',
+          type: 'text',
+          label: 'Download Meditation Button URL',
+          admin: { description: 'Optional CTA below the Why section. Leave blank to hide the button.' },
+        },
+        {
+          name: 'programs',
+          type: 'array',
+          label: 'Programs (numbered list)',
+          admin: { description: 'Each entry is one numbered program item.' },
+          fields: [
+            { name: 'text', type: 'textarea', required: true },
+          ],
+        },
+        {
+          name: 'visitUsUrl',
+          type: 'text',
+          label: 'Visit Us — Button URL',
+          admin: { description: 'Defaults to https://himalayanschool.com/yoga' },
+        },
+        {
+          name: 'visitUsLabel',
+          type: 'text',
+          label: 'Visit Us — Button Label',
+          admin: { description: 'Defaults to "Visit Us"' },
         },
       ],
     },

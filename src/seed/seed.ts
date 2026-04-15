@@ -364,7 +364,44 @@ const seed = async () => {
       console.log('   ✓ Mai-Tri Method page already exists — skipping')
     }
 
-    // ── 9. Add howToUse steps to all meditations (idempotent) ──────────────
+    // ── 9. Seed Traditional Yoga (HSTY) page ────────────────────────────────
+    console.log('🧘 Seeding Traditional Yoga page...')
+    const { docs: existingTradYoga } = await payload.find({
+      collection: 'pages',
+      where: { pageType: { equals: 'traditional-yoga' } },
+      limit: 1,
+    })
+    if (existingTradYoga.length === 0) {
+      await payload.create({
+        collection: 'pages',
+        data: {
+          title: 'Himalayan School of Traditional Yoga',
+          slug: 'traditional-yoga',
+          pageType: 'traditional-yoga',
+          status: 'published',
+          traditionalYogaContent: {
+            heroTitle: 'Himalayan School Of Traditional Yoga',
+            tagline: 'Yoga is the science of staying liberated, through conscious connection with oneself, maintaining sensitivity, fluidity and flexibility',
+            introText: "Himalayan School of Traditional Yoga (HSTY) is dedicated to propagating traditional yoga, i.e. the essence of yoga as per the original teachings codified in the scriptures by Maharishi Patanjali. Set up under the inspiration and guidance of Mohanji, HSTY's mission is to promote a culture of yoga and make it accessible to all of mankind, beyond boundaries of country, religion, gender, class and wealth.",
+            whySectionTitle: 'Why Himalayan School Of Traditional Yoga?',
+            whySectionText: "HSTY offers authentic yoga rooted in the Patanjali tradition — not just postures, but a complete path of living. Our teachers are trained to transmit the full depth of yoga philosophy alongside the physical practice.\n\nEvery program at HSTY is designed to take you beyond the physical, into the subtler dimensions of breath, energy, and awareness. Rooted in tradition yet practical for modern life.\n\nThrough individual and group programs, HSTY serves seekers across the world, offering tools for sustained wellbeing, inner balance, and spiritual growth — accessible to everyone regardless of background or ability.",
+            programs: [
+              { text: 'Yoga Teacher Training — A comprehensive residential program rooted in classical yoga, covering asana, pranayama, philosophy, meditation, and teaching methodology.' },
+              { text: 'Wellness Retreats — Immersive programs combining traditional yoga, meditation, and conscious living practices in serene natural settings.' },
+              { text: 'Online Programs — Live and recorded courses bringing traditional yoga teachings to practitioners worldwide, with direct teacher guidance.' },
+              { text: "Children's Yoga — Age-appropriate programs introducing children to yoga's physical, mental, and ethical dimensions through play and awareness." },
+            ],
+            visitUsUrl: 'https://himalayanschool.com/yoga',
+            visitUsLabel: 'Visit Us',
+          },
+        } as any,
+      })
+      console.log('   ✓ Traditional Yoga page created')
+    } else {
+      console.log('   ✓ Traditional Yoga page already exists — skipping')
+    }
+
+    // ── 10. Add howToUse steps to all meditations (idempotent) ──────────────
     console.log('📝 Adding howToUse steps to meditations...')
     const defaultSteps = [
       { title: 'Find a Quiet Space', description: 'Sit or lie comfortably in a place where you will not be disturbed.' },
