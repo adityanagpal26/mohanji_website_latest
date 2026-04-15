@@ -52,15 +52,10 @@ export default async function TraditionalYogaPage() {
   const visitUsUrl: string = cms.visitUsUrl || 'https://himalayanschool.com/yoga'
   const visitUsLabel: string = cms.visitUsLabel || 'Visit Us'
 
-  const heroImageUrl: string | null =
-    cms.heroImage?.url ||
-    cms.heroImage?.filename
-      ? `/images/practices/traditional-yoga-hero.jpg`
-      : null
+  const heroImageUrl: string | null = cms.heroImage?.url || null
 
   const whyImageUrl: string | null =
-    cms.whySectionImage?.url ||
-    `/images/practices/why-traditional-yoga.jpg`
+    cms.whySectionImage?.url || `/images/practices/why-traditional-yoga.jpg`
 
   return (
     <div>
@@ -101,7 +96,6 @@ export default async function TraditionalYogaPage() {
                 alt={whySectionTitle}
                 fill
                 className="object-cover"
-                onError={() => {}}
               />
             </div>
 
