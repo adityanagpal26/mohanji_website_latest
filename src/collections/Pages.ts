@@ -809,6 +809,26 @@ export const Pages: CollectionConfig = {
           ],
         },
 
+        // ── Practitioner Apply Page ───────────────────────────────────────────
+        {
+          name: 'applyPageTitle',
+          type: 'text',
+          label: 'Practitioner Apply Page — Title',
+          admin: { description: 'Heading on the /apply page. Default: "Apply to Become a Mai-Tri Practitioner".' },
+        },
+        {
+          name: 'applyPageIntro',
+          type: 'textarea',
+          label: 'Practitioner Apply Page — Intro Text',
+          admin: { description: 'Subtitle shown below the apply page heading.' },
+        },
+        {
+          name: 'applyFormEmail',
+          type: 'email',
+          label: 'Practitioner Application — Recipient Email',
+          admin: { description: 'Practitioner applications will be forwarded to this address once email is configured.' },
+        },
+
         // ── Booking ───────────────────────────────────────────────────────────
         {
           name: 'bookingText',

@@ -84,6 +84,8 @@ export interface Config {
     tags: Tag;
     venues: Venue;
     forms: Form;
+    'mai-tri-applications': MaiTriApplication;
+    'kriya-applications': KriyaApplication;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -108,6 +110,8 @@ export interface Config {
     tags: TagsSelect<false> | TagsSelect<true>;
     venues: VenuesSelect<false> | VenuesSelect<true>;
     forms: FormsSelect<false> | FormsSelect<true>;
+    'mai-tri-applications': MaiTriApplicationsSelect<false> | MaiTriApplicationsSelect<true>;
+    'kriya-applications': KriyaApplicationsSelect<false> | KriyaApplicationsSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -966,6 +970,18 @@ export interface Page {
           id?: string | null;
         }[]
       | null;
+    /**
+     * Heading on the /apply page. Default: "Apply to Become a Mai-Tri Practitioner".
+     */
+    applyPageTitle?: string | null;
+    /**
+     * Subtitle shown below the apply page heading.
+     */
+    applyPageIntro?: string | null;
+    /**
+     * Practitioner applications will be forwarded to this address once email is configured.
+     */
+    applyFormEmail?: string | null;
     /**
      * Intro text above the session booking form.
      */
@@ -1859,6 +1875,18 @@ export interface Practice {
    */
   brochureUrl?: string | null;
   /**
+   * Heading shown at the top of the /apply page. Leave blank to use the default.
+   */
+  applyPageTitle?: string | null;
+  /**
+   * Subtitle / intro paragraph shown below the apply page heading.
+   */
+  applyPageIntro?: string | null;
+  /**
+   * Application submissions will be forwarded to this address (once email service is configured).
+   */
+  applyFormEmail?: string | null;
+  /**
    * Show a contact/enquiry form at the bottom of this practice page.
    */
   showContactForm?: boolean | null;
@@ -2379,6 +2407,60 @@ export interface Award {
   createdAt: string;
 }
 /**
+ * Practitioner application submissions from the Mai-Tri Method apply page.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "mai-tri-applications".
+ */
+export interface MaiTriApplication {
+  id: number;
+  status?: ('new' | 'reviewing' | 'approved' | 'rejected') | null;
+  fullName: string;
+  email: string;
+  phone?: string | null;
+  dateOfBirth?: string | null;
+  country?: string | null;
+  city?: string | null;
+  mohanjiConnection?: string | null;
+  yearsWithMohanji?: string | null;
+  attendedRetreats?: string | null;
+  practicesFollowed?: string | null;
+  meditationPractice?: string | null;
+  dietaryPractice?: string | null;
+  smokingAlcohol?: string | null;
+  healthConditions?: string | null;
+  hoursPerWeek?: string | null;
+  sessionMode?: string | null;
+  languages?: string | null;
+  whyMaiTri?: string | null;
+  innerMotivation?: string | null;
+  previousHealingExperience?: string | null;
+  signatureDate?: string | null;
+  signaturePlace?: string | null;
+  signatureName?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * Initiation application submissions from the Consciousness Kriya apply page.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "kriya-applications".
+ */
+export interface KriyaApplication {
+  id: number;
+  status?: ('new' | 'reviewing' | 'approved' | 'rejected') | null;
+  fullName: string;
+  phone?: string | null;
+  gender?: string | null;
+  country?: string | null;
+  age?: number | null;
+  email: string;
+  needsAssistance?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv".
  */
@@ -2469,6 +2551,14 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'forms';
         value: number | Form;
+      } | null)
+    | ({
+        relationTo: 'mai-tri-applications';
+        value: number | MaiTriApplication;
+      } | null)
+    | ({
+        relationTo: 'kriya-applications';
+        value: number | KriyaApplication;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -3193,6 +3283,9 @@ export interface PagesSelect<T extends boolean = true> {
               location?: T;
               id?: T;
             };
+        applyPageTitle?: T;
+        applyPageIntro?: T;
+        applyFormEmail?: T;
         bookingText?: T;
         bookingFormEmail?: T;
       };
@@ -3773,6 +3866,9 @@ export interface PracticesSelect<T extends boolean = true> {
       };
   applicationFormUrl?: T;
   brochureUrl?: T;
+  applyPageTitle?: T;
+  applyPageIntro?: T;
+  applyFormEmail?: T;
   showContactForm?: T;
   contactEmail?: T;
   showNewsletterForm?: T;
@@ -4220,6 +4316,54 @@ export interface FormsSelect<T extends boolean = true> {
   confirmationMessage?: T;
   emailTo?: T;
   redirectUrl?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "mai-tri-applications_select".
+ */
+export interface MaiTriApplicationsSelect<T extends boolean = true> {
+  status?: T;
+  fullName?: T;
+  email?: T;
+  phone?: T;
+  dateOfBirth?: T;
+  country?: T;
+  city?: T;
+  mohanjiConnection?: T;
+  yearsWithMohanji?: T;
+  attendedRetreats?: T;
+  practicesFollowed?: T;
+  meditationPractice?: T;
+  dietaryPractice?: T;
+  smokingAlcohol?: T;
+  healthConditions?: T;
+  hoursPerWeek?: T;
+  sessionMode?: T;
+  languages?: T;
+  whyMaiTri?: T;
+  innerMotivation?: T;
+  previousHealingExperience?: T;
+  signatureDate?: T;
+  signaturePlace?: T;
+  signatureName?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "kriya-applications_select".
+ */
+export interface KriyaApplicationsSelect<T extends boolean = true> {
+  status?: T;
+  fullName?: T;
+  phone?: T;
+  gender?: T;
+  country?: T;
+  age?: T;
+  email?: T;
+  needsAssistance?: T;
   updatedAt?: T;
   createdAt?: T;
 }

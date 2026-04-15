@@ -4,6 +4,7 @@ import * as migration_20260415_140309_meditations_cms_fields from './20260415_14
 import * as migration_20260415_144726_pages_meditations_listing_enum from './20260415_144726_pages_meditations_listing_enum';
 import * as migration_20260415_150000_practices_restructure from './20260415_150000_practices_restructure';
 import * as migration_20260415_160000_mai_tri_content from './20260415_160000_mai_tri_content';
+import * as migration_20260415_170000_application_collections from './20260415_170000_application_collections';
 
 export const migrations = [
   {
@@ -35,5 +36,10 @@ export const migrations = [
     up: migration_20260415_160000_mai_tri_content.up,
     down: migration_20260415_160000_mai_tri_content.down,
     name: '20260415_160000_mai_tri_content',
+  },
+  {
+    up: migration_20260415_170000_application_collections.up,
+    down: migration_20260415_170000_application_collections.down,
+    name: '20260415_170000_application_collections',
   },
 ];

@@ -137,6 +137,26 @@ export const Practices: CollectionConfig = {
       admin: { description: 'Direct URL to a downloadable brochure PDF.' },
     },
 
+    // ── Apply page content ────────────────────────────────────────────────────
+    {
+      name: 'applyPageTitle',
+      type: 'text',
+      label: 'Apply Page — Title',
+      admin: { description: 'Heading shown at the top of the /apply page. Leave blank to use the default.' },
+    },
+    {
+      name: 'applyPageIntro',
+      type: 'textarea',
+      label: 'Apply Page — Intro Text',
+      admin: { description: 'Subtitle / intro paragraph shown below the apply page heading.' },
+    },
+    {
+      name: 'applyFormEmail',
+      type: 'email',
+      label: 'Apply Form — Recipient Email',
+      admin: { description: 'Application submissions will be forwarded to this address (once email service is configured).' },
+    },
+
     // ── Contact form ──────────────────────────────────────────────────────────
     {
       name: 'showContactForm',
