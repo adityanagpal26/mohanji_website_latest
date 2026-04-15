@@ -10,6 +10,7 @@ import { seedGoldenPath } from './goldenPath'
 import { seedGlobalAmbassador } from './globalAmbassador'
 import { seedAwardsPage } from './awardsPage'
 import { seedAwardsCollection } from './awardsCollection'
+import { seedMeditations } from './meditations'
 
 /**
  * Runs all seed functions on server startup.
@@ -17,7 +18,10 @@ import { seedAwardsCollection } from './awardsCollection'
  * so this is safe to run on every deploy (idempotent).
  */
 export async function seedIfNeeded(payload: Payload): Promise<void> {
-  const pool = new Pool({ connectionString: process.env.DATABASE_URL })
+  const pool = new Pool({
+    connectionString: process.env.DATABASE_URL,
+    ssl: { rejectUnauthorized: false },
+  })
 
   const seedPage = async (slug: string, label: string, fn: (p: Payload, pool: Pool) => Promise<void>) => {
     const { docs } = await payload.find({
@@ -52,6 +56,10 @@ export async function seedIfNeeded(payload: Payload): Promise<void> {
     } else {
       console.log('[seed] Awards collection already has data — skipping.')
     }
+
+    // Seed meditations
+    console.log('[seed] Seeding meditations...')
+    await seedMeditations(payload)
   } finally {
     await pool.end()
   }

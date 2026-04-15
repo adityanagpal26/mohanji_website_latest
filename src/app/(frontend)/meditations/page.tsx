@@ -8,7 +8,17 @@ export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
   title: 'Free Guided Meditations | Mohanji',
-  description: 'Download free guided meditations by Mohanji, available in multiple languages. Eight meditations to cleanse, heal and raise awareness.',
+  description:
+    'Eight meditations, translated into many languages, helping hundreds of thousands of people around the world to cleanse, heal and raise awareness.',
+}
+
+function getDescriptionText(richText: any): string {
+  if (!richText?.root?.children) return ''
+  return richText.root.children
+    .filter((n: any) => n.type === 'paragraph')
+    .map((n: any) => n.children?.map((c: any) => c.text || '').join('') || '')
+    .filter(Boolean)
+    .join(' ')
 }
 
 export default async function MeditationsPage() {
@@ -23,7 +33,7 @@ export default async function MeditationsPage() {
 
   return (
     <div>
-      {/* Hero with background image */}
+      {/* Hero */}
       <section className="relative py-24 text-center overflow-hidden">
         <div className="absolute inset-0">
           <Image
@@ -37,8 +47,8 @@ export default async function MeditationsPage() {
           <div className="absolute inset-0 bg-[#16697A]/80" />
         </div>
         <div className="relative z-10 container">
-          <h1 className="text-white font-heading text-4xl md:text-6xl font-semibold mb-2">
-            DOWNLOAD FREE GUIDED MEDITATION
+          <h1 className="text-white font-heading text-4xl md:text-5xl font-semibold mb-2">
+            FREE GUIDED MEDITATIONS
           </h1>
           <span className="block w-14 h-0.5 bg-[#E2B748] mx-auto my-5" />
           <p className="text-white/90 text-lg max-w-2xl mx-auto leading-relaxed">
@@ -59,11 +69,10 @@ export default async function MeditationsPage() {
       {/* Intro */}
       <section className="py-10 bg-white">
         <div className="container max-w-3xl text-center">
-          <h2 className="font-heading text-3xl text-[#16697A] mb-1">Choose a Meditation</h2>
-          <span className="block w-14 h-0.5 bg-[#E2B748] mx-auto my-4" />
-          <p className="text-gray-600 leading-relaxed">
-            Each meditation is a gift from Mohanji to help you connect with your true self.
-            Select a practice below to learn more and access downloads in your language.
+          <p className="text-gray-600 leading-relaxed text-lg">
+            Mohanji&apos;s transformative free guided meditations play a significant role in
+            creating a better daily life. Simply download them, find a quiet space to sit, relax
+            with the soothing background music and let yourself be guided.
           </p>
         </div>
       </section>
@@ -83,16 +92,15 @@ export default async function MeditationsPage() {
                     ? meditation.featuredImage.url
                     : null
                 const downloadCount = meditation.downloads?.length ?? 0
+                const descText = getDescriptionText(meditation.description)
 
                 return (
                   <div
                     key={meditation.id}
                     className="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow overflow-hidden flex flex-col"
                   >
-                    <Link
-                      href={`/meditations/${meditation.slug}`}
-                      className="group block"
-                    >
+                    {/* Image */}
+                    <Link href={`/meditations/${meditation.slug}`} className="group block">
                       <div className="relative h-52 bg-gradient-to-br from-[#16697A]/20 to-[#5B2D8E]/20 overflow-hidden">
                         {imageUrl ? (
                           <Image
@@ -107,28 +115,47 @@ export default async function MeditationsPage() {
                             <span className="text-5xl opacity-30">☯</span>
                           </div>
                         )}
+                        {/* Duration badge */}
+                        {meditation.duration && (
+                          <div className="absolute top-3 left-3 bg-black/50 text-white text-xs font-semibold px-2 py-1 rounded uppercase tracking-wide">
+                            {meditation.duration}
+                          </div>
+                        )}
+                        {/* Language count badge */}
                         {downloadCount > 0 && (
                           <div className="absolute bottom-3 right-3 bg-[#E2B748] text-[#191919] text-xs font-semibold px-2 py-1 rounded">
                             {downloadCount} language{downloadCount !== 1 ? 's' : ''}
                           </div>
                         )}
                       </div>
-                      <div className="p-5 flex flex-col flex-1">
+                    </Link>
+
+                    {/* Content */}
+                    <div className="p-5 flex flex-col flex-1">
+                      <Link href={`/meditations/${meditation.slug}`} className="group">
                         <h3 className="font-heading text-xl text-[#16697A] leading-snug mb-2 group-hover:text-[#C95D63] transition-colors">
                           {meditation.title}
                         </h3>
-                        <span className="text-sm font-semibold text-[#C95D63] group-hover:underline">
-                          Learn more &rarr;
-                        </span>
-                      </div>
-                    </Link>
-                    <div className="px-5 pb-5">
-                      <Link
-                        href={`/meditations/${meditation.slug}/download`}
-                        className="block text-center text-sm bg-[#16697A] text-white py-2 rounded hover:bg-[#125567] transition-colors font-medium"
-                      >
-                        Download
                       </Link>
+                      {descText && (
+                        <p className="text-sm text-gray-600 leading-relaxed mb-4 line-clamp-3">
+                          {descText}
+                        </p>
+                      )}
+                      <div className="mt-auto flex gap-3">
+                        <Link
+                          href={`/meditations/${meditation.slug}`}
+                          className="flex-1 text-center text-sm border-2 border-[#16697A] text-[#16697A] py-2 rounded hover:bg-[#16697A] hover:text-white transition-colors font-medium"
+                        >
+                          Read More
+                        </Link>
+                        <Link
+                          href={`/meditations/${meditation.slug}/download`}
+                          className="flex-1 text-center text-sm bg-[#C95D63] text-white py-2 rounded hover:bg-[#f4442e] transition-colors font-medium"
+                        >
+                          Download
+                        </Link>
+                      </div>
                     </div>
                   </div>
                 )

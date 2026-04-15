@@ -54,19 +54,15 @@ export const Pages: CollectionConfig = {
       },
     } as any,
 
-    // ── Shared: featured image + meta ─────────────────────────────────────────
-    {
-      name: 'featuredImage',
-      type: 'upload',
-      relationTo: 'media',
-    },
+    // ── SEO / social meta ─────────────────────────────────────────────────────
     {
       name: 'meta',
       type: 'group',
+      label: 'SEO & Social Sharing',
       fields: [
-        { name: 'title', type: 'text' },
-        { name: 'description', type: 'textarea' },
-        { name: 'image', type: 'upload', relationTo: 'media' },
+        { name: 'title', type: 'text', label: 'SEO Title', admin: { description: 'Overrides the page title in browser tab and search results.' } },
+        { name: 'description', type: 'textarea', label: 'SEO Description', admin: { description: 'Shown in Google search results below the title.' } },
+        { name: 'image', type: 'upload', relationTo: 'media', label: 'Social Share Image', admin: { description: 'Shown as the preview image when this page is shared on WhatsApp, Twitter, Facebook etc. Not displayed on the page itself.' } },
       ],
     },
 
@@ -133,9 +129,9 @@ export const Pages: CollectionConfig = {
           type: 'array',
           label: 'Animated Stats (Counter Bar)',
           fields: [
-            { name: 'value', type: 'text', required: true },
-            { name: 'label', type: 'text', required: true },
-            { name: 'numeric', type: 'number', required: true },
+            { name: 'value', type: 'text', required: true, admin: { description: 'Display text e.g. "290+"' } },
+            { name: 'label', type: 'text', required: true, admin: { description: 'e.g. "Group Activities"' } },
+            { name: 'numeric', type: 'number', required: true, admin: { description: 'The number the animated counter counts up to (e.g. 290)' } },
           ],
         },
 

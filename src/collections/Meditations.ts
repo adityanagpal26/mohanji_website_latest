@@ -41,25 +41,34 @@ export const Meditations: CollectionConfig = {
       editor: lexicalEditor(),
     },
     {
+      name: 'duration',
+      type: 'text',
+      label: 'Duration',
+      admin: { description: 'e.g. "50 minutes" — shown on the listing card', position: 'sidebar' },
+    },
+    {
       name: 'audioPreview',
       type: 'upload',
       relationTo: 'media',
+      label: 'Audio Preview (optional short clip)',
     },
     blocksField,
     {
       name: 'downloads',
       type: 'array',
       label: 'Download Links by Language',
+      admin: { description: 'Add one row per language. Upload the audio file and enter the duration.' },
       fields: [
         {
           name: 'language',
           type: 'text',
           required: true,
+          admin: { description: 'e.g. English, Hindi, French' },
         },
         {
           name: 'languageCode',
           type: 'text',
-          admin: { description: 'e.g. en, hi, de, fr' },
+          admin: { description: 'e.g. en, hi, fr — optional' },
         },
         {
           name: 'audioFile',
@@ -69,6 +78,8 @@ export const Meditations: CollectionConfig = {
         {
           name: 'fileSize',
           type: 'text',
+          label: 'Duration',
+          admin: { description: 'e.g. 52:52 — shown next to the language name' },
         },
       ],
     },

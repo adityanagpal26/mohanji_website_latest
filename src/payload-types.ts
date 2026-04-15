@@ -527,10 +527,18 @@ export interface Page {
           }
       )[]
     | null;
-  featuredImage?: (number | null) | Media;
   meta?: {
+    /**
+     * Overrides the page title in browser tab and search results.
+     */
     title?: string | null;
+    /**
+     * Shown in Google search results below the title.
+     */
     description?: string | null;
+    /**
+     * Shown as the preview image when this page is shared on WhatsApp, Twitter, Facebook etc. Not displayed on the page itself.
+     */
     image?: (number | null) | Media;
   };
   /**
@@ -565,8 +573,17 @@ export interface Page {
       | null;
     activityStats?:
       | {
+          /**
+           * Display text e.g. "290+"
+           */
           value: string;
+          /**
+           * e.g. "Group Activities"
+           */
           label: string;
+          /**
+           * The number the animated counter counts up to (e.g. 290)
+           */
           numeric: number;
           id?: string | null;
         }[]
@@ -946,6 +963,10 @@ export interface Meditation {
     };
     [k: string]: unknown;
   } | null;
+  /**
+   * e.g. "50 minutes" — shown on the listing card
+   */
+  duration?: string | null;
   audioPreview?: (number | null) | Media;
   layout?:
     | (
@@ -1218,14 +1239,23 @@ export interface Meditation {
           }
       )[]
     | null;
+  /**
+   * Add one row per language. Upload the audio file and enter the duration.
+   */
   downloads?:
     | {
+        /**
+         * e.g. English, Hindi, French
+         */
         language: string;
         /**
-         * e.g. en, hi, de, fr
+         * e.g. en, hi, fr — optional
          */
         languageCode?: string | null;
         audioFile?: (number | null) | Media;
+        /**
+         * e.g. 52:52 — shown next to the language name
+         */
         fileSize?: string | null;
         id?: string | null;
       }[]
@@ -2572,7 +2602,6 @@ export interface PagesSelect<T extends boolean = true> {
               blockName?: T;
             };
       };
-  featuredImage?: T;
   meta?:
     | T
     | {
@@ -2912,6 +2941,7 @@ export interface MeditationsSelect<T extends boolean = true> {
   featuredImage?: T;
   benefits?: T;
   instructions?: T;
+  duration?: T;
   audioPreview?: T;
   layout?:
     | T

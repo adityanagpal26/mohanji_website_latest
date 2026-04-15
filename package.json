@@ -13,7 +13,8 @@
     "generate:importmap": "cross-env NODE_OPTIONS=--no-deprecation payload generate:importmap",
     "migrate:json": "npx tsx scripts/migrate-json-templates.ts",
     "migrate:wp": "npx tsx scripts/migrate-wp-rest.ts",
-    "migrate:media": "npx tsx scripts/migrate-media.ts"
+    "migrate:media": "npx tsx scripts/migrate-media.ts",
+    "seed": "cross-env NODE_OPTIONS=--no-deprecation NODE_ENV=development tsx -r dotenv/config src/seed/seed.ts"
   },
   "dependencies": {
     "@payloadcms/db-postgres": "^3.82.1",

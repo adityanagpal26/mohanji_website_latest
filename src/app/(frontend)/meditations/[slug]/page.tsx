@@ -4,6 +4,7 @@ import type { Metadata } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
 import { getPayloadClient } from '@/lib/payload'
+import { MeditationPlayerClient } from '@/components/meditations/MeditationPlayerClient'
 
 export const dynamic = 'force-dynamic'
 
@@ -70,6 +71,11 @@ export default async function MeditationDetailPage({ params }: Props) {
   const benefitsHtml = meditation.benefits ? renderRichText(meditation.benefits) : ''
   const instructionsHtml = meditation.instructions ? renderRichText(meditation.instructions) : ''
   const downloads: any[] = meditation.downloads ?? []
+  const playerDownloads = downloads.map((dl: any) => ({
+    language: dl.language,
+    url: typeof dl.audioFile === 'object' && dl.audioFile?.url ? dl.audioFile.url : null,
+    duration: dl.fileSize ?? undefined,
+  }))
 
   return (
     <div>
@@ -93,9 +99,11 @@ export default async function MeditationDetailPage({ params }: Props) {
             {meditation.title}
           </h1>
           <span className="gold-divider gold-divider--center" />
-          {downloads.length > 0 && (
+          {(downloads.length > 0 || (meditation as any).duration) && (
             <p className="text-white/80 text-sm">
-              Available in {downloads.length} language{downloads.length !== 1 ? 's' : ''}
+              {(meditation as any).duration && <span>{(meditation as any).duration}</span>}
+              {(meditation as any).duration && downloads.length > 0 && <span className="mx-2">·</span>}
+              {downloads.length > 0 && <span>Available in {downloads.length} language{downloads.length !== 1 ? 's' : ''}</span>}
             </p>
           )}
         </div>
@@ -149,53 +157,25 @@ export default async function MeditationDetailPage({ params }: Props) {
             {/* Right: downloads */}
             <aside>
               <div className="bg-white rounded-lg shadow-sm p-6 sticky top-24">
-                <h3 className="font-heading text-xl text-[#16697A] mb-1">Download</h3>
+                <h3 className="font-heading text-xl text-[#16697A] mb-1">
+                  {downloads.length > 0 ? `Play or Download (${downloads.length} languages)` : 'Downloads'}
+                </h3>
                 <span className="gold-divider" />
                 {downloads.length === 0 ? (
                   <p className="text-sm text-gray-500 mt-4">Downloads coming soon.</p>
                 ) : (
-                  <div className="space-y-3 mt-4">
-                    {downloads.map((dl: any, idx: number) => {
-                      const fileUrl =
-                        typeof dl.audioFile === 'object' && dl.audioFile?.url
-                          ? dl.audioFile.url
-                          : null
-                      return (
-                        <div
-                          key={idx}
-                          className="flex items-center justify-between border border-gray-100 rounded p-3 hover:border-[#16697A]/30 transition-colors"
-                        >
-                          <div>
-                            <p className="text-sm font-semibold text-gray-800">{dl.language}</p>
-                            {dl.fileSize && (
-                              <p className="text-xs text-gray-400">{dl.fileSize}</p>
-                            )}
-                          </div>
-                          {fileUrl ? (
-                            <a
-                              href={fileUrl}
-                              download
-                              className="text-xs bg-[#C95D63] text-white px-3 py-1.5 rounded hover:bg-[#f4442e] transition-colors whitespace-nowrap"
-                            >
-                              Download
-                            </a>
-                          ) : (
-                            <span className="text-xs text-gray-400">N/A</span>
-                          )}
-                        </div>
-                      )
-                    })}
+                  <div className="mt-4">
+                    <MeditationPlayerClient downloads={playerDownloads} title={meditation.title} />
                   </div>
                 )}
-                {typeof meditation.audioPreview === 'object' &&
-                  meditation.audioPreview?.url && (
-                    <div className="mt-6">
-                      <p className="text-xs text-gray-500 uppercase tracking-wide font-semibold mb-2">
-                        Audio Preview
-                      </p>
-                      <audio controls src={meditation.audioPreview.url} className="w-full" />
-                    </div>
-                  )}
+                {typeof meditation.audioPreview === 'object' && meditation.audioPreview?.url && (
+                  <div className="mt-6 pt-4 border-t border-gray-100">
+                    <p className="text-xs text-gray-500 uppercase tracking-wide font-semibold mb-2">
+                      Audio Preview
+                    </p>
+                    <audio controls src={meditation.audioPreview.url} className="w-full" />
+                  </div>
+                )}
               </div>
               <div className="mt-4">
                 <Link
