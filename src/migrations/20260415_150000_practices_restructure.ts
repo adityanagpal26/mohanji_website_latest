@@ -36,9 +36,11 @@ export async function up({ db }: MigrateUpArgs): Promise<void> {
     );
   `)
   await db.execute(sql`
-    ALTER TABLE "practices_benefits"
-      ADD CONSTRAINT "practices_benefits_parent_id_fk"
-      FOREIGN KEY ("_parent_id") REFERENCES "practices"("id") ON DELETE cascade ON UPDATE no action;
+    DO $$ BEGIN
+      ALTER TABLE "practices_benefits"
+        ADD CONSTRAINT "practices_benefits_parent_id_fk"
+        FOREIGN KEY ("_parent_id") REFERENCES "practices"("id") ON DELETE cascade ON UPDATE no action;
+    EXCEPTION WHEN duplicate_object THEN NULL; END $$;
   `)
 
   // ── 4. Create practices_how_it_works array table ──────────────────────────
@@ -51,9 +53,11 @@ export async function up({ db }: MigrateUpArgs): Promise<void> {
     );
   `)
   await db.execute(sql`
-    ALTER TABLE "practices_how_it_works"
-      ADD CONSTRAINT "practices_how_it_works_parent_id_fk"
-      FOREIGN KEY ("_parent_id") REFERENCES "practices"("id") ON DELETE cascade ON UPDATE no action;
+    DO $$ BEGIN
+      ALTER TABLE "practices_how_it_works"
+        ADD CONSTRAINT "practices_how_it_works_parent_id_fk"
+        FOREIGN KEY ("_parent_id") REFERENCES "practices"("id") ON DELETE cascade ON UPDATE no action;
+    EXCEPTION WHEN duplicate_object THEN NULL; END $$;
   `)
 
   // ── 5. Add 'practices-listing' to the pages pageType enum ─────────────────
@@ -79,9 +83,11 @@ export async function up({ db }: MigrateUpArgs): Promise<void> {
       ADD COLUMN IF NOT EXISTS "practices_listing_content_cta_link_url"     varchar;
   `)
   await db.execute(sql`
-    ALTER TABLE "pages"
-      ADD CONSTRAINT "pages_practices_listing_content_hero_image_id_media_id_fk"
-      FOREIGN KEY ("practices_listing_content_hero_image_id") REFERENCES "media"("id") ON DELETE set null ON UPDATE no action;
+    DO $$ BEGIN
+      ALTER TABLE "pages"
+        ADD CONSTRAINT "pages_practices_listing_content_hero_image_id_media_id_fk"
+        FOREIGN KEY ("practices_listing_content_hero_image_id") REFERENCES "media"("id") ON DELETE set null ON UPDATE no action;
+    EXCEPTION WHEN duplicate_object THEN NULL; END $$;
   `)
 
   // ── 7. Same columns on _pages_v (versions/drafts) ─────────────────────────
@@ -97,9 +103,11 @@ export async function up({ db }: MigrateUpArgs): Promise<void> {
       ADD COLUMN IF NOT EXISTS "version_practices_listing_content_cta_link_url"     varchar;
   `)
   await db.execute(sql`
-    ALTER TABLE "_pages_v"
-      ADD CONSTRAINT "_pages_v_version_practices_listing_content_hero_image_id_media_id_fk"
-      FOREIGN KEY ("version_practices_listing_content_hero_image_id") REFERENCES "media"("id") ON DELETE set null ON UPDATE no action;
+    DO $$ BEGIN
+      ALTER TABLE "_pages_v"
+        ADD CONSTRAINT "_pages_v_version_practices_listing_content_hero_image_id_media_id_fk"
+        FOREIGN KEY ("version_practices_listing_content_hero_image_id") REFERENCES "media"("id") ON DELETE set null ON UPDATE no action;
+    EXCEPTION WHEN duplicate_object THEN NULL; END $$;
   `)
 }
 

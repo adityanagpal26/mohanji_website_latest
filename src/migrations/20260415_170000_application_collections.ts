@@ -59,16 +59,20 @@ export async function up({ db }: MigrateUpArgs): Promise<void> {
       ADD COLUMN IF NOT EXISTS "kriya_applications_id"   integer;
   `)
   await db.execute(sql`
-    ALTER TABLE "payload_locked_documents_rels"
-      ADD CONSTRAINT "payload_locked_documents_rels_mai_tri_applications_fk"
-      FOREIGN KEY ("mai_tri_applications_id") REFERENCES "mai_tri_applications"("id")
-      ON DELETE cascade ON UPDATE no action;
+    DO $$ BEGIN
+      ALTER TABLE "payload_locked_documents_rels"
+        ADD CONSTRAINT "payload_locked_documents_rels_mai_tri_applications_fk"
+        FOREIGN KEY ("mai_tri_applications_id") REFERENCES "mai_tri_applications"("id")
+        ON DELETE cascade ON UPDATE no action;
+    EXCEPTION WHEN duplicate_object THEN NULL; END $$;
   `)
   await db.execute(sql`
-    ALTER TABLE "payload_locked_documents_rels"
-      ADD CONSTRAINT "payload_locked_documents_rels_kriya_applications_fk"
-      FOREIGN KEY ("kriya_applications_id") REFERENCES "kriya_applications"("id")
-      ON DELETE cascade ON UPDATE no action;
+    DO $$ BEGIN
+      ALTER TABLE "payload_locked_documents_rels"
+        ADD CONSTRAINT "payload_locked_documents_rels_kriya_applications_fk"
+        FOREIGN KEY ("kriya_applications_id") REFERENCES "kriya_applications"("id")
+        ON DELETE cascade ON UPDATE no action;
+    EXCEPTION WHEN duplicate_object THEN NULL; END $$;
   `)
 
   // ── 4. Add apply page fields to practices ────────────────────────────────

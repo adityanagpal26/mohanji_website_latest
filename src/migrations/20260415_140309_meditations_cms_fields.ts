@@ -12,9 +12,11 @@ export async function up({ db }: MigrateUpArgs): Promise<void> {
     );
   `)
   await db.execute(sql`
-    ALTER TABLE "meditations_how_to_use"
-      ADD CONSTRAINT "meditations_how_to_use_parent_id_fk"
-      FOREIGN KEY ("_parent_id") REFERENCES "meditations"("id") ON DELETE cascade ON UPDATE no action;
+    DO $$ BEGIN
+      ALTER TABLE "meditations_how_to_use"
+        ADD CONSTRAINT "meditations_how_to_use_parent_id_fk"
+        FOREIGN KEY ("_parent_id") REFERENCES "meditations"("id") ON DELETE cascade ON UPDATE no action;
+    EXCEPTION WHEN duplicate_object THEN NULL; END $$;
   `)
 
   // 2. Meditations listing content columns on pages table
@@ -29,9 +31,11 @@ export async function up({ db }: MigrateUpArgs): Promise<void> {
       ADD COLUMN IF NOT EXISTS "meditations_listing_content_cta_text"        varchar;
   `)
   await db.execute(sql`
-    ALTER TABLE "pages"
-      ADD CONSTRAINT "pages_meditations_listing_content_hero_image_id_media_id_fk"
-      FOREIGN KEY ("meditations_listing_content_hero_image_id") REFERENCES "media"("id") ON DELETE set null ON UPDATE no action;
+    DO $$ BEGIN
+      ALTER TABLE "pages"
+        ADD CONSTRAINT "pages_meditations_listing_content_hero_image_id_media_id_fk"
+        FOREIGN KEY ("meditations_listing_content_hero_image_id") REFERENCES "media"("id") ON DELETE set null ON UPDATE no action;
+    EXCEPTION WHEN duplicate_object THEN NULL; END $$;
   `)
 
   // 3. Same columns on _pages_v (versions/drafts table)
@@ -46,9 +50,11 @@ export async function up({ db }: MigrateUpArgs): Promise<void> {
       ADD COLUMN IF NOT EXISTS "version_meditations_listing_content_cta_text"        varchar;
   `)
   await db.execute(sql`
-    ALTER TABLE "_pages_v"
-      ADD CONSTRAINT "_pages_v_version_meditations_listing_content_hero_image_id_media_id_fk"
-      FOREIGN KEY ("version_meditations_listing_content_hero_image_id") REFERENCES "media"("id") ON DELETE set null ON UPDATE no action;
+    DO $$ BEGIN
+      ALTER TABLE "_pages_v"
+        ADD CONSTRAINT "_pages_v_version_meditations_listing_content_hero_image_id_media_id_fk"
+        FOREIGN KEY ("version_meditations_listing_content_hero_image_id") REFERENCES "media"("id") ON DELETE set null ON UPDATE no action;
+    EXCEPTION WHEN duplicate_object THEN NULL; END $$;
   `)
 
   // 4. Drop orphaned featured_image_id column (field was removed from Pages collection)

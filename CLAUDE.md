@@ -1,5 +1,5 @@
 # Mohanji.org — Migration Implementation Guide
-> **Last updated:** April 2026 — reflects actual current state of the codebase.
+> **Last updated:** April 2026 (session 3) — reflects actual current state of the codebase.
 
 ---
 
@@ -25,28 +25,116 @@ Full migration of mohanji.org from WordPress to **Next.js + Payload CMS + Postgr
 
 ---
 
+## Databases
+
+| Environment | URL |
+|-------------|-----|
+| Staging (used for local dev) | `postgresql://mohanji:aCsHoHQqhlTidW0hOOHK@mohanji-staging-db.cexfbga3kdxv.us-east-1.rds.amazonaws.com:5432/mohanji_db` |
+| Production | `postgresql://mohanji:pujPCmhDqem9Zn3GIQvU@mohanji-production-db.cexfbga3kdxv.us-east-1.rds.amazonaws.com:5432/mohanji_db` |
+
+The `.env` file points to **staging** — this is intentional. All local dev and seed work happens against staging so tests are real.
+
+---
+
 ## How to Run Locally
 
 ```bash
-# 1. Start PostgreSQL (Docker required)
-docker-compose up -d
-
-# 2. Install dependencies
+# 1. Install dependencies
 npm install
 
-# 3. Start dev server (must use --webpack on Apple Silicon)
-npm run dev        # or: next dev --webpack
+# 2. Start dev server — .env already points to staging RDS
+npm run dev
 
-# 4. Seed the CMS with demo data + reset admin password
-curl http://localhost:3000/api/dev-seed
-
-# 5. Visit the site
+# 3. Visit the site
 open http://localhost:3000          # Public site
 open http://localhost:3000/admin    # Payload CMS admin panel
-# Login: admin@mohanji.org / Mohanji@2026
+# Login: admin@mohanji.org / Mohanji@20
 ```
 
+**No Docker needed** — local dev uses the staging RDS directly (credentials are in `.env`).
+
 **Important:** The `--webpack` flag is required on Apple Silicon (ARM64) because Turbopack is incompatible. This is already set in `.vscode/launch.json`.
+
+---
+
+## Migrations
+
+All schema changes are in `src/migrations/`. They are tracked in the `payload_migrations` table and run **once** per database.
+
+### Migration files (in order)
+
+| Migration | What it does |
+|-----------|-------------|
+| `20260414_104413_initial` | Full initial schema — all tables, enums, FKs |
+| `20260415_134023_meditations_duration` | Adds `duration` column to `meditations` |
+| `20260415_140309_meditations_cms_fields` | `meditations_how_to_use` array table; meditations-listing content columns on `pages` + `_pages_v` |
+| `20260415_144726_pages_meditations_listing_enum` | Adds `meditations-listing` to `enum_pages_page_type` |
+| `20260415_150000_practices_restructure` | Restructures practices fields; adds `practices_benefits` + `practices_how_it_works` array tables; adds `practices-listing` enum value + listing content columns |
+| `20260415_160000_mai_tri_content` | Adds `mai-tri-method` enum value; adds `mai_tri_content_*` scalar columns; creates benefits/faqs/testimonials array tables for pages and `_pages_v` |
+| `20260415_170000_application_collections` | Creates `mai_tri_applications` + `kriya_applications` tables; adds relation columns to `payload_locked_documents_rels`; adds apply page fields to `practices` + `pages` |
+| `20260415_180000_traditional_yoga_page` | Adds `traditional-yoga` enum value; adds `traditional_yoga_content_*` scalar columns; creates `programs` array tables for pages and `_pages_v` |
+
+### Rules for writing new migrations
+
+- **All `CREATE TABLE` must use `IF NOT EXISTS`**
+- **All `ADD COLUMN` must use `IF NOT EXISTS`**
+- **All `ADD VALUE` to enums must use `IF NOT EXISTS`**
+- **All `ADD CONSTRAINT ... FOREIGN KEY` must be wrapped in `DO $$ BEGIN ... EXCEPTION WHEN duplicate_object THEN NULL; END $$;`** — Payload tracks migrations but this protects against retries
+- Non-version array tables use `"id" varchar PRIMARY KEY NOT NULL` (Payload supplies UUID)
+- Version array tables (`_pages_v_version_*`) use `"id" serial PRIMARY KEY NOT NULL` + `"_uuid" varchar` column — Payload passes DEFAULT for id in version inserts
+- Every new collection needs `{slug_with_underscores}_id integer` + FK in `payload_locked_documents_rels` (Payload document locking)
+- After writing a migration file, **always add it to `src/migrations/index.ts`**
+
+### Running migrations
+
+```bash
+# Against staging (uses .env)
+npx payload migrate
+
+# Against production (from amplify.yml during deploy — runs automatically)
+DATABASE_URI=$DATABASE_URI npx payload migrate
+```
+
+Amplify runs `DATABASE_URI=$DATABASE_URI npx payload migrate` as part of `preBuild` — migrations auto-apply on every deploy.
+
+---
+
+## Seeding
+
+The seed script (`src/seed/seed.ts`) populates all globals, pages, practices, and meditations. It is **idempotent** — safe to run multiple times (skips existing records).
+
+### Run seed against staging
+
+```bash
+DATABASE_URI="postgresql://mohanji:aCsHoHQqhlTidW0hOOHK@mohanji-staging-db.cexfbga3kdxv.us-east-1.rds.amazonaws.com:5432/mohanji_db" \
+DATABASE_URL="postgresql://mohanji:aCsHoHQqhlTidW0hOOHK@mohanji-staging-db.cexfbga3kdxv.us-east-1.rds.amazonaws.com:5432/mohanji_db" \
+PAYLOAD_SECRET="cfed63112c7b1c59eb470da42c423df637d2af4e35b597fe7996aa3cc28eaf04" \
+npm run seed
+```
+
+### Run seed against production (first deploy only)
+
+```bash
+DATABASE_URI="postgresql://mohanji:pujPCmhDqem9Zn3GIQvU@mohanji-production-db.cexfbga3kdxv.us-east-1.rds.amazonaws.com:5432/mohanji_db" \
+DATABASE_URL="postgresql://mohanji:pujPCmhDqem9Zn3GIQvU@mohanji-production-db.cexfbga3kdxv.us-east-1.rds.amazonaws.com:5432/mohanji_db" \
+PAYLOAD_SECRET="<production-secret-from-amplify-env-vars>" \
+npm run seed
+```
+
+**Seed is NOT run automatically on deploy.** It must be run manually once after first production deployment.
+
+### What the seed creates
+
+1. Admin user (`admin@mohanji.org` / `Mohanji@20`)
+2. Header global (full 3-level navigation)
+3. Footer global (columns + social links)
+4. SiteSettings global
+5. All pages (homepage, about pages, etc.) via `seedIfNeeded()`
+6. Meditations listing page
+7. Practices listing page
+8. Mai-Tri Method page (with benefits, FAQs, testimonials)
+9. Traditional Yoga (HSTY) page
+10. `howToUse` steps on all meditations
 
 ---
 
@@ -215,7 +303,7 @@ mohanji-website/
 | Homepage | `/` | ✅ Hero slider, about section, stats, awards, events |
 | About | `/about/*` (10 pages) | ✅ All pages: who-is-mohanji, foundation, life-journey, global-council, acharyas, spaces, golden-path, global-ambassador, awards |
 | Meditations | `/meditations`, `/meditations/[slug]`, `/meditations/[slug]/download` | ✅ 8 meditations + download pages with 26 languages |
-| Practices | `/practices`, `/practices/[slug]`, `/practices/mai-tri-method` | ✅ All practices including dedicated Mai-Tri page with session form |
+| Practices | `/practices`, `/practices/[slug]`, `/practices/mai-tri-method`, `/practices/traditional-yoga`, `/practices/mai-tri-method/apply`, `/practices/consciousness-kriya/apply` | ✅ All practices; dedicated Mai-Tri and Traditional Yoga pages; apply forms for Mai-Tri and Consciousness Kriya |
 | Courses | `/courses`, `/courses/[slug]` | ✅ Empowered 1.0–5.0 series |
 | Events | `/events`, `/events/past`, `/events/[slug]` | ✅ Upcoming + past |
 | Kailash | 6 pages including application form | ✅ Full pilgrimage section |
@@ -232,26 +320,29 @@ mohanji-website/
 
 ### All Forms — Implemented
 
-| Form | Location | Backend |
-|------|----------|---------|
-| Contact form | `/contact` | `POST /api/contact` |
-| Mai-Tri session request | `/practices/mai-tri-method` | `POST /api/contact` |
-| Consciousness Kriya newsletter | `/practices/consciousness-kriya` | `POST /api/newsletter` |
-| Kailash application | `/kailash/application` | `POST /api/contact` |
-| Footer newsletter | Footer component | `POST /api/newsletter` |
-| Volunteer | `/join/volunteer` | External Google Form link |
+| Form | Location | Backend | Stored in DB |
+|------|----------|---------|--------------|
+| Contact form | `/contact` | `POST /api/contact` | No (logs to console) |
+| Mai-Tri session request | `/practices/mai-tri-method` | `POST /api/contact` | No (logs to console) |
+| Mai-Tri practitioner application | `/practices/mai-tri-method/apply` | `POST /api/mai-tri-apply` | ✅ `mai_tri_applications` table |
+| Consciousness Kriya application | `/practices/consciousness-kriya/apply` | `POST /api/kriya-apply` | ✅ `kriya_applications` table |
+| Consciousness Kriya newsletter | `/practices/consciousness-kriya` | `POST /api/newsletter` | No (logs to console) |
+| Kailash application | `/kailash/application` | `POST /api/contact` | No (logs to console) |
+| Footer newsletter | Footer component | `POST /api/newsletter` | No (logs to console) |
+| Volunteer | `/join/volunteer` | External Google Form link | — |
 
-> **TODO:** All form API routes log to console. Need to connect an email service (Resend.com recommended) before go-live.
+> **TODO:** Contact, newsletter, and session request routes log to console. Connect Resend.com before go-live. Application forms (Mai-Tri + Kriya) save to DB and are viewable in the admin panel under "Applications".
 
 ### All CMS Infrastructure — Implemented
 
-- ✅ 17 Payload collections configured
+- ✅ 19 Payload collections configured (17 content + `mai_tri_applications` + `kriya_applications`)
 - ✅ 3 Payload globals (Header, Footer, SiteSettings)
 - ✅ 18 block types defined and rendered
-- ✅ Dev-seed endpoint (`/api/dev-seed`) populates all globals
+- ✅ `npm run seed` populates all globals, pages, practices, meditations
 - ✅ ISR caching (`revalidate = 3600`) on all static pages
 - ✅ SEO: `generateMetadata()` on every page, sitemap.ts, robots.ts
 - ✅ JSON-LD structured data on homepage
+- ✅ 8 migrations — all safe with `IF NOT EXISTS` / `DO/EXCEPTION` patterns
 
 ---
 
@@ -264,6 +355,11 @@ mohanji-website/
 | PostGIS geometry error | `Venues.ts type: 'point'` requires PostGIS extension | Replaced with `latitude`/`longitude` number fields + `googleMapsUrl` |
 | `Invalid src prop does not match localPatterns` | next/image requires `/images/**` in `localPatterns` | Added `{ pathname: '/images/**' }` to `next.config.ts` |
 | Turbopack ARM64 crash | Turbopack incompatible with Apple Silicon | Always use `next dev --webpack` |
+| `column "_uuid" does not exist` on version array tables | Payload's versioning requires `_uuid varchar` on every `_pages_v_version_*` array table | Added `"_uuid" varchar` to all version array table CREATE TABLE statements |
+| `null value in column "id"` on version array tables | Payload passes `DEFAULT` for id in version array inserts — requires `serial` (auto-increment), not `varchar` | All `_pages_v_version_*` array tables use `"id" serial PRIMARY KEY NOT NULL` |
+| Admin 500 after adding new collection | `payload_locked_documents_rels` requires `{slug}_id integer` column for every registered collection | Every new collection migration adds the FK column to `payload_locked_documents_rels` |
+| Staging DB SSL connection error | Staging RDS doesn't require SSL; `npm run seed` was forcing SSL via pool config | SSL detection in `payload.config.ts` checks `isBuilding` only — migrate CLI uses DATABASE_URI directly without pool SSL |
+| `npm run seed` SSL failure | `npm run seed` loads `.env` via dotenv but the DATABASE_URI triggers SSL when pool option is set | Must pass `DATABASE_URI` / `DATABASE_URL` / `PAYLOAD_SECRET` explicitly on the command line (not via `.env`) for seeding |
 
 ---
 
@@ -299,10 +395,10 @@ Max container width: 1200px, centered
 
 | Collection | Purpose | Key Fields |
 |-----------|---------|-----------|
-| `pages` | Generic CMS pages (page builder) | title, slug, parent, layout (blocks array), meta, status |
+| `pages` | Generic CMS pages (page builder) | title, slug, parent, layout (blocks array), pageType, structured content groups, status |
 | `posts` | News + blog + press articles | title, slug, content, postType, categories, author |
-| `meditations` | Guided meditation files | title, slug, description, downloads (language + audioFile array) |
-| `practices` | Spiritual practices | title, slug, description, benefits, howItWorks, applicationFormUrl |
+| `meditations` | Guided meditation files | title, slug, description, downloads (language + audioFile array), howToUse steps |
+| `practices` | Spiritual practices | title, slug, description, benefits[], howItWorks[], tagline, applyPageTitle/Intro, applyFormEmail |
 | `courses` | Empowered course series | title, slug, description, level, lessons, registrationUrl |
 | `lessons` | Individual course lessons | title, course (relation), order, content, videoUrl |
 | `events` | Upcoming + past events | title, startDate, endDate, venue, eventType, registrationUrl, isPast |
@@ -316,6 +412,8 @@ Max container width: 1200px, centered
 | `tags` | Flat tags | title, slug |
 | `venues` | Event locations | name, address, city, country, latitude, longitude, googleMapsUrl |
 | `forms` | Dynamic form builder | title, fields array, emailTo, confirmationMessage |
+| `mai_tri_applications` | Practitioner apply form submissions | fullName, email, status, all 6 form sections (viewable in admin under "Applications") |
+| `kriya_applications` | Consciousness Kriya apply form submissions | fullName, phone, gender, country, age, email, needsAssistance, status |
 
 ## CMS Globals (3) — site-wide singletons ONLY
 
@@ -523,3 +621,18 @@ npx ts-node scripts/migrate-media.ts
 7. **Page pattern:** Try CMS first → fall back to static hardcoded data → `notFound()` if neither exists.
 
 8. **Drizzle relation naming:** Never have two arrays with the same `name` at different nesting levels in a Payload global/collection — it causes a duplicate relation name error.
+
+9. **Pages `pageType` content groups:** Structured content for special pages lives in conditional groups on the `pages` collection, not in globals. Current groups:
+   - `homeContent` — Homepage
+   - `wimContent` — Who Is Mohanji
+   - `mediationsListingContent` — Meditations listing
+   - `practicesListingContent` — Practices listing
+   - `maiTriContent` — Mai-Tri Method page (hero, intro, benefits, FAQs, testimonials, apply page fields, booking)
+   - `traditionalYogaContent` — Traditional Yoga (HSTY) page (hero, tagline, intro, why section, programs, visitUsUrl)
+
+10. **Server component + client component split:** Pages that need forms must be split: `page.tsx` is a Server Component that fetches CMS data and passes it as props; the form itself is a `'use client'` component. **Never put event handlers (`onClick`, `onError`, etc.) directly on `next/image` or other elements in Server Components.**
+
+11. **Migration schema rules for Payload 3.x + Drizzle:**
+    - `enum_pages_page_type` and `enum__pages_v_version_page_type` must both be updated when adding new `pageType` values
+    - Version array tables need `serial` PK + `_uuid varchar` column
+    - Non-version array tables use `varchar` PK (Payload supplies UUID at insert time)

@@ -33,11 +33,18 @@ export async function up({ db }: MigrateUpArgs): Promise<void> {
       ADD COLUMN IF NOT EXISTS "mai_tri_content_booking_form_email"      varchar;
   `)
   await db.execute(sql`
-    ALTER TABLE "pages"
-      ADD CONSTRAINT "pages_mai_tri_content_hero_image_id_media_id_fk"
-        FOREIGN KEY ("mai_tri_content_hero_image_id") REFERENCES "media"("id") ON DELETE set null ON UPDATE no action,
-      ADD CONSTRAINT "pages_mai_tri_content_meaning_image_id_media_id_fk"
-        FOREIGN KEY ("mai_tri_content_meaning_image_id") REFERENCES "media"("id") ON DELETE set null ON UPDATE no action;
+    DO $$ BEGIN
+      ALTER TABLE "pages"
+        ADD CONSTRAINT "pages_mai_tri_content_hero_image_id_media_id_fk"
+          FOREIGN KEY ("mai_tri_content_hero_image_id") REFERENCES "media"("id") ON DELETE set null ON UPDATE no action;
+    EXCEPTION WHEN duplicate_object THEN NULL; END $$;
+  `)
+  await db.execute(sql`
+    DO $$ BEGIN
+      ALTER TABLE "pages"
+        ADD CONSTRAINT "pages_mai_tri_content_meaning_image_id_media_id_fk"
+          FOREIGN KEY ("mai_tri_content_meaning_image_id") REFERENCES "media"("id") ON DELETE set null ON UPDATE no action;
+    EXCEPTION WHEN duplicate_object THEN NULL; END $$;
   `)
 
   // ── 3. Same columns on _pages_v ───────────────────────────────────────────
@@ -62,11 +69,18 @@ export async function up({ db }: MigrateUpArgs): Promise<void> {
       ADD COLUMN IF NOT EXISTS "version_mai_tri_content_booking_form_email"      varchar;
   `)
   await db.execute(sql`
-    ALTER TABLE "_pages_v"
-      ADD CONSTRAINT "_pages_v_version_mai_tri_content_hero_image_id_media_id_fk"
-        FOREIGN KEY ("version_mai_tri_content_hero_image_id") REFERENCES "media"("id") ON DELETE set null ON UPDATE no action,
-      ADD CONSTRAINT "_pages_v_version_mai_tri_content_meaning_image_id_media_id_fk"
-        FOREIGN KEY ("version_mai_tri_content_meaning_image_id") REFERENCES "media"("id") ON DELETE set null ON UPDATE no action;
+    DO $$ BEGIN
+      ALTER TABLE "_pages_v"
+        ADD CONSTRAINT "_pages_v_version_mai_tri_content_hero_image_id_media_id_fk"
+          FOREIGN KEY ("version_mai_tri_content_hero_image_id") REFERENCES "media"("id") ON DELETE set null ON UPDATE no action;
+    EXCEPTION WHEN duplicate_object THEN NULL; END $$;
+  `)
+  await db.execute(sql`
+    DO $$ BEGIN
+      ALTER TABLE "_pages_v"
+        ADD CONSTRAINT "_pages_v_version_mai_tri_content_meaning_image_id_media_id_fk"
+          FOREIGN KEY ("version_mai_tri_content_meaning_image_id") REFERENCES "media"("id") ON DELETE set null ON UPDATE no action;
+    EXCEPTION WHEN duplicate_object THEN NULL; END $$;
   `)
 
   // ── 4. Create pages_mai_tri_content_benefits array table ──────────────────
@@ -79,9 +93,11 @@ export async function up({ db }: MigrateUpArgs): Promise<void> {
     );
   `)
   await db.execute(sql`
-    ALTER TABLE "pages_mai_tri_content_benefits"
-      ADD CONSTRAINT "pages_mai_tri_content_benefits_parent_id_fk"
-      FOREIGN KEY ("_parent_id") REFERENCES "pages"("id") ON DELETE cascade ON UPDATE no action;
+    DO $$ BEGIN
+      ALTER TABLE "pages_mai_tri_content_benefits"
+        ADD CONSTRAINT "pages_mai_tri_content_benefits_parent_id_fk"
+        FOREIGN KEY ("_parent_id") REFERENCES "pages"("id") ON DELETE cascade ON UPDATE no action;
+    EXCEPTION WHEN duplicate_object THEN NULL; END $$;
   `)
 
   // ── 5. Create pages_mai_tri_content_faqs array table ─────────────────────
@@ -95,9 +111,11 @@ export async function up({ db }: MigrateUpArgs): Promise<void> {
     );
   `)
   await db.execute(sql`
-    ALTER TABLE "pages_mai_tri_content_faqs"
-      ADD CONSTRAINT "pages_mai_tri_content_faqs_parent_id_fk"
-      FOREIGN KEY ("_parent_id") REFERENCES "pages"("id") ON DELETE cascade ON UPDATE no action;
+    DO $$ BEGIN
+      ALTER TABLE "pages_mai_tri_content_faqs"
+        ADD CONSTRAINT "pages_mai_tri_content_faqs_parent_id_fk"
+        FOREIGN KEY ("_parent_id") REFERENCES "pages"("id") ON DELETE cascade ON UPDATE no action;
+    EXCEPTION WHEN duplicate_object THEN NULL; END $$;
   `)
 
   // ── 6. Create pages_mai_tri_content_testimonials array table ──────────────
@@ -112,9 +130,11 @@ export async function up({ db }: MigrateUpArgs): Promise<void> {
     );
   `)
   await db.execute(sql`
-    ALTER TABLE "pages_mai_tri_content_testimonials"
-      ADD CONSTRAINT "pages_mai_tri_content_testimonials_parent_id_fk"
-      FOREIGN KEY ("_parent_id") REFERENCES "pages"("id") ON DELETE cascade ON UPDATE no action;
+    DO $$ BEGIN
+      ALTER TABLE "pages_mai_tri_content_testimonials"
+        ADD CONSTRAINT "pages_mai_tri_content_testimonials_parent_id_fk"
+        FOREIGN KEY ("_parent_id") REFERENCES "pages"("id") ON DELETE cascade ON UPDATE no action;
+    EXCEPTION WHEN duplicate_object THEN NULL; END $$;
   `)
 
   // ── 7. Create _pages_v version array tables ────────────────────────────────
@@ -128,9 +148,11 @@ export async function up({ db }: MigrateUpArgs): Promise<void> {
     );
   `)
   await db.execute(sql`
-    ALTER TABLE "_pages_v_version_mai_tri_content_benefits"
-      ADD CONSTRAINT "_pages_v_version_mai_tri_content_benefits_parent_id_fk"
-      FOREIGN KEY ("_parent_id") REFERENCES "_pages_v"("id") ON DELETE cascade ON UPDATE no action;
+    DO $$ BEGIN
+      ALTER TABLE "_pages_v_version_mai_tri_content_benefits"
+        ADD CONSTRAINT "_pages_v_version_mai_tri_content_benefits_parent_id_fk"
+        FOREIGN KEY ("_parent_id") REFERENCES "_pages_v"("id") ON DELETE cascade ON UPDATE no action;
+    EXCEPTION WHEN duplicate_object THEN NULL; END $$;
   `)
 
   await db.execute(sql`
@@ -144,9 +166,11 @@ export async function up({ db }: MigrateUpArgs): Promise<void> {
     );
   `)
   await db.execute(sql`
-    ALTER TABLE "_pages_v_version_mai_tri_content_faqs"
-      ADD CONSTRAINT "_pages_v_version_mai_tri_content_faqs_parent_id_fk"
-      FOREIGN KEY ("_parent_id") REFERENCES "_pages_v"("id") ON DELETE cascade ON UPDATE no action;
+    DO $$ BEGIN
+      ALTER TABLE "_pages_v_version_mai_tri_content_faqs"
+        ADD CONSTRAINT "_pages_v_version_mai_tri_content_faqs_parent_id_fk"
+        FOREIGN KEY ("_parent_id") REFERENCES "_pages_v"("id") ON DELETE cascade ON UPDATE no action;
+    EXCEPTION WHEN duplicate_object THEN NULL; END $$;
   `)
 
   await db.execute(sql`
@@ -161,9 +185,11 @@ export async function up({ db }: MigrateUpArgs): Promise<void> {
     );
   `)
   await db.execute(sql`
-    ALTER TABLE "_pages_v_version_mai_tri_content_testimonials"
-      ADD CONSTRAINT "_pages_v_version_mai_tri_content_testimonials_parent_id_fk"
-      FOREIGN KEY ("_parent_id") REFERENCES "_pages_v"("id") ON DELETE cascade ON UPDATE no action;
+    DO $$ BEGIN
+      ALTER TABLE "_pages_v_version_mai_tri_content_testimonials"
+        ADD CONSTRAINT "_pages_v_version_mai_tri_content_testimonials_parent_id_fk"
+        FOREIGN KEY ("_parent_id") REFERENCES "_pages_v"("id") ON DELETE cascade ON UPDATE no action;
+    EXCEPTION WHEN duplicate_object THEN NULL; END $$;
   `)
 }
 
