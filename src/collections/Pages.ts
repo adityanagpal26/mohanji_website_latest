@@ -537,21 +537,60 @@ export const Pages: CollectionConfig = {
       label: 'Meditations Listing Page Content',
       admin: { condition: (data: any) => data?.pageType === 'meditations-listing' },
       fields: [
-        { name: 'heroTitle', type: 'text', defaultValue: 'FREE GUIDED MEDITATIONS' },
-        { name: 'heroSubtitle', type: 'textarea', label: 'Hero Subtitle', admin: { description: 'Text shown below the title in the hero banner.' } },
-        { name: 'heroImage', type: 'upload', relationTo: 'media', label: 'Hero Background Image' },
+        {
+          name: 'heroTitle',
+          type: 'text',
+          validate: (val: any, { data }: any) =>
+            data?.pageType === 'meditations-listing' && !val ? 'Hero title is required' : true,
+          admin: { description: '★ Required. Main heading shown in the hero banner.' },
+        },
+        {
+          name: 'heroSubtitle',
+          type: 'textarea',
+          label: 'Hero Subtitle',
+          validate: (val: any, { data }: any) =>
+            data?.pageType === 'meditations-listing' && !val ? 'Hero subtitle is required' : true,
+          admin: { description: '★ Required. Text shown below the title in the hero banner.' },
+        },
+        {
+          name: 'heroImage',
+          type: 'upload',
+          relationTo: 'media',
+          label: 'Hero Background Image',
+          validate: (val: any, { data }: any) =>
+            data?.pageType === 'meditations-listing' && !val ? 'Hero background image is required' : true,
+          admin: { description: '★ Required. Full-width background image for the hero section.' },
+        },
         {
           name: 'brochureUrl',
           type: 'text',
           label: 'Brochure PDF URL',
-          admin: { description: 'Link for the "Download Brochure" button. Upload the PDF to media and paste its URL here.' },
+          admin: { description: 'Optional. Link for the "Download Brochure" button. Upload the PDF to Media and paste its URL here.' },
         },
-        { name: 'introText', type: 'textarea', label: 'Intro Paragraph', admin: { description: 'Shown below the hero section.' } },
         {
-          name: 'ctaHeading', type: 'text', label: 'CTA Section Heading',
-          defaultValue: 'Deepen Your Practice',
+          name: 'introText',
+          type: 'textarea',
+          label: 'Intro Paragraph',
+          validate: (val: any, { data }: any) =>
+            data?.pageType === 'meditations-listing' && !val ? 'Intro paragraph is required' : true,
+          admin: { description: '★ Required. Shown below the hero section.' },
         },
-        { name: 'ctaText', type: 'textarea', label: 'CTA Section Text' },
+        {
+          name: 'ctaHeading',
+          type: 'text',
+          label: 'CTA Section Heading',
+          validate: (val: any, { data }: any) =>
+            data?.pageType === 'meditations-listing' && !val ? 'CTA heading is required' : true,
+          admin: { description: '★ Required. Heading for the call-to-action section at the bottom.' },
+        },
+        {
+          name: 'ctaText',
+          type: 'textarea',
+          label: 'CTA Section Text',
+          validate: (val: any, { data }: any) =>
+            data?.pageType === 'meditations-listing' && !val ? 'CTA text is required' : true,
+          admin: { description: '★ Required. Description text in the call-to-action section.' },
+        },
       ],
     },
 
