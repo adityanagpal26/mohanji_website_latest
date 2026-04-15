@@ -122,7 +122,7 @@ export async function up({ db }: MigrateUpArgs): Promise<void> {
     CREATE TABLE IF NOT EXISTS "_pages_v_version_mai_tri_content_benefits" (
       "_order"     integer NOT NULL,
       "_parent_id" integer NOT NULL,
-      "id"         varchar PRIMARY KEY NOT NULL,
+      "id"         serial PRIMARY KEY NOT NULL,
       "benefit"    varchar NOT NULL,
       "_uuid"      varchar
     );
@@ -137,7 +137,7 @@ export async function up({ db }: MigrateUpArgs): Promise<void> {
     CREATE TABLE IF NOT EXISTS "_pages_v_version_mai_tri_content_faqs" (
       "_order"     integer NOT NULL,
       "_parent_id" integer NOT NULL,
-      "id"         varchar PRIMARY KEY NOT NULL,
+      "id"         serial PRIMARY KEY NOT NULL,
       "question"   varchar NOT NULL,
       "answer"     varchar NOT NULL,
       "_uuid"      varchar
@@ -153,7 +153,7 @@ export async function up({ db }: MigrateUpArgs): Promise<void> {
     CREATE TABLE IF NOT EXISTS "_pages_v_version_mai_tri_content_testimonials" (
       "_order"     integer NOT NULL,
       "_parent_id" integer NOT NULL,
-      "id"         varchar PRIMARY KEY NOT NULL,
+      "id"         serial PRIMARY KEY NOT NULL,
       "quote"      varchar NOT NULL,
       "name"       varchar NOT NULL,
       "location"   varchar,
