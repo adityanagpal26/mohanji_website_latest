@@ -256,6 +256,7 @@ export interface Page {
         | 'awards'
         | 'meditations-listing'
         | 'practices-listing'
+        | 'mai-tri-method'
       )
     | null;
   layout?:
@@ -873,6 +874,106 @@ export interface Page {
      * e.g. "/meditations"
      */
     ctaLinkUrl?: string | null;
+  };
+  maiTriContent?: {
+    /**
+     * ★ Required. Page heading (e.g. "What is Mai-Tri Method?").
+     */
+    heroTitle?: string | null;
+    /**
+     * Tagline shown below the hero title.
+     */
+    heroSubtitle?: string | null;
+    /**
+     * Full-width hero banner image. Falls back to a teal gradient.
+     */
+    heroImage?: (number | null) | Media;
+    /**
+     * URL for the "Apply Now" button (practitioner application). Default: /practices/mai-tri-method/apply
+     */
+    applyNowUrl?: string | null;
+    /**
+     * Direct link to the Mai-Tri Method brochure PDF.
+     */
+    brochureUrl?: string | null;
+    /**
+     * Main introductory content. Separate paragraphs with a blank line (\n\n).
+     */
+    introText?: string | null;
+    /**
+     * Embed URL for the YouTube video (e.g. https://www.youtube.com/embed/VIDEO_ID).
+     */
+    youtubeUrl?: string | null;
+    /**
+     * Explanation of the word meaning. Separate paragraphs with a blank line.
+     */
+    meaningText?: string | null;
+    /**
+     * Optional image shown alongside the meaning text.
+     */
+    meaningImage?: (number | null) | Media;
+    /**
+     * The quote block attributed to Mohanji on self-healing.
+     */
+    mohanjiQuote?: string | null;
+    /**
+     * Text shown above the benefits list.
+     */
+    benefitsIntro?: string | null;
+    /**
+     * Each item shown as a numbered benefit.
+     */
+    benefits?:
+      | {
+          benefit: string;
+          id?: string | null;
+        }[]
+      | null;
+    /**
+     * Text shown below the benefits list (e.g. group sessions info).
+     */
+    benefitsExtra?: string | null;
+    /**
+     * Shown in the Individual Sessions card.
+     */
+    individualSessionText?: string | null;
+    /**
+     * Shown in the Group Sessions card.
+     */
+    groupSessionText?: string | null;
+    /**
+     * Explanation of the energy exchange / pricing model.
+     */
+    energyExchangeText?: string | null;
+    /**
+     * Questions and answers shown in the FAQ accordion.
+     */
+    faqs?:
+      | {
+          question: string;
+          answer: string;
+          id?: string | null;
+        }[]
+      | null;
+    /**
+     * Testimonial quotes shown in the testimonials section.
+     */
+    testimonials?:
+      | {
+          quote: string;
+          name: string;
+          location?: string | null;
+          id?: string | null;
+        }[]
+      | null;
+    /**
+     * Intro text above the session booking form.
+     */
+    bookingText?: string | null;
+    /**
+     * Session booking requests are forwarded to this address.
+     */
+    bookingFormEmail?: string | null;
   };
   status?: ('draft' | 'published') | null;
   publishedAt?: string | null;
@@ -3052,6 +3153,48 @@ export interface PagesSelect<T extends boolean = true> {
         ctaText?: T;
         ctaLinkLabel?: T;
         ctaLinkUrl?: T;
+      };
+  maiTriContent?:
+    | T
+    | {
+        heroTitle?: T;
+        heroSubtitle?: T;
+        heroImage?: T;
+        applyNowUrl?: T;
+        brochureUrl?: T;
+        introText?: T;
+        youtubeUrl?: T;
+        meaningText?: T;
+        meaningImage?: T;
+        mohanjiQuote?: T;
+        benefitsIntro?: T;
+        benefits?:
+          | T
+          | {
+              benefit?: T;
+              id?: T;
+            };
+        benefitsExtra?: T;
+        individualSessionText?: T;
+        groupSessionText?: T;
+        energyExchangeText?: T;
+        faqs?:
+          | T
+          | {
+              question?: T;
+              answer?: T;
+              id?: T;
+            };
+        testimonials?:
+          | T
+          | {
+              quote?: T;
+              name?: T;
+              location?: T;
+              id?: T;
+            };
+        bookingText?: T;
+        bookingFormEmail?: T;
       };
   status?: T;
   publishedAt?: T;

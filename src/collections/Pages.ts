@@ -44,6 +44,7 @@ export const Pages: CollectionConfig = {
         { label: 'Awards & Recognition', value: 'awards' },
         { label: 'Free Guided Meditations (listing)', value: 'meditations-listing' },
         { label: 'Practices (listing)', value: 'practices-listing' },
+        { label: 'Mai-Tri Method', value: 'mai-tri-method' },
       ],
     },
 
@@ -655,6 +656,171 @@ export const Pages: CollectionConfig = {
           type: 'text',
           label: 'CTA Button URL',
           admin: { description: 'e.g. "/meditations"' },
+        },
+      ],
+    },
+
+    // ─────────────────────────────────────────────────────────────────────────
+    // MAI-TRI METHOD (pageType === 'mai-tri-method')
+    // ─────────────────────────────────────────────────────────────────────────
+    {
+      name: 'maiTriContent',
+      type: 'group',
+      label: 'Mai-Tri Method Page Content',
+      admin: { condition: (data: any) => data?.pageType === 'mai-tri-method' },
+      fields: [
+        // ── Hero ──────────────────────────────────────────────────────────────
+        {
+          name: 'heroTitle',
+          type: 'text',
+          validate: (val: any, { data }: any) =>
+            data?.pageType === 'mai-tri-method' && !val ? 'Hero title is required' : true,
+          admin: { description: '★ Required. Page heading (e.g. "What is Mai-Tri Method?").' },
+        },
+        {
+          name: 'heroSubtitle',
+          type: 'text',
+          admin: { description: 'Tagline shown below the hero title.' },
+        },
+        {
+          name: 'heroImage',
+          type: 'upload',
+          relationTo: 'media',
+          label: 'Hero Background Image',
+          admin: { description: 'Full-width hero banner image. Falls back to a teal gradient.' },
+        },
+        {
+          name: 'applyNowUrl',
+          type: 'text',
+          label: 'Apply Now Button URL',
+          admin: { description: 'URL for the "Apply Now" button (practitioner application). Default: /practices/mai-tri-method/apply' },
+        },
+        {
+          name: 'brochureUrl',
+          type: 'text',
+          label: 'Brochure PDF URL',
+          admin: { description: 'Direct link to the Mai-Tri Method brochure PDF.' },
+        },
+
+        // ── What is section ───────────────────────────────────────────────────
+        {
+          name: 'introText',
+          type: 'textarea',
+          label: 'Introduction Text',
+          admin: { description: 'Main introductory content. Separate paragraphs with a blank line (\\n\\n).' },
+        },
+        {
+          name: 'youtubeUrl',
+          type: 'text',
+          label: 'YouTube Video URL',
+          admin: { description: 'Embed URL for the YouTube video (e.g. https://www.youtube.com/embed/VIDEO_ID).' },
+        },
+
+        // ── Meaning of the word ───────────────────────────────────────────────
+        {
+          name: 'meaningText',
+          type: 'textarea',
+          label: 'Meaning of "Mai-Tri" Text',
+          admin: { description: 'Explanation of the word meaning. Separate paragraphs with a blank line.' },
+        },
+        {
+          name: 'meaningImage',
+          type: 'upload',
+          relationTo: 'media',
+          label: 'Meaning Section Image',
+          admin: { description: 'Optional image shown alongside the meaning text.' },
+        },
+
+        // ── Mohanji quote ──────────────────────────────────────────────────────
+        {
+          name: 'mohanjiQuote',
+          type: 'textarea',
+          label: 'Mohanji On Self-Healing Quote',
+          admin: { description: 'The quote block attributed to Mohanji on self-healing.' },
+        },
+
+        // ── Benefits ──────────────────────────────────────────────────────────
+        {
+          name: 'benefitsIntro',
+          type: 'textarea',
+          label: 'Benefits — Intro Text',
+          admin: { description: 'Text shown above the benefits list.' },
+        },
+        {
+          name: 'benefits',
+          type: 'array',
+          label: 'Benefits',
+          admin: { description: 'Each item shown as a numbered benefit.' },
+          fields: [
+            { name: 'benefit', type: 'text', required: true },
+          ],
+        },
+        {
+          name: 'benefitsExtra',
+          type: 'textarea',
+          label: 'Benefits — Additional Text',
+          admin: { description: 'Text shown below the benefits list (e.g. group sessions info).' },
+        },
+
+        // ── Individual / Group sessions ────────────────────────────────────────
+        {
+          name: 'individualSessionText',
+          type: 'textarea',
+          label: 'Individual Sessions Description',
+          admin: { description: 'Shown in the Individual Sessions card.' },
+        },
+        {
+          name: 'groupSessionText',
+          type: 'textarea',
+          label: 'Group Sessions Description',
+          admin: { description: 'Shown in the Group Sessions card.' },
+        },
+
+        // ── Energy exchange ───────────────────────────────────────────────────
+        {
+          name: 'energyExchangeText',
+          type: 'textarea',
+          label: 'Energy Exchange Text',
+          admin: { description: 'Explanation of the energy exchange / pricing model.' },
+        },
+
+        // ── FAQs ──────────────────────────────────────────────────────────────
+        {
+          name: 'faqs',
+          type: 'array',
+          label: 'FAQs',
+          admin: { description: 'Questions and answers shown in the FAQ accordion.' },
+          fields: [
+            { name: 'question', type: 'text', required: true },
+            { name: 'answer', type: 'textarea', required: true },
+          ],
+        },
+
+        // ── Testimonials ──────────────────────────────────────────────────────
+        {
+          name: 'testimonials',
+          type: 'array',
+          label: 'Testimonials',
+          admin: { description: 'Testimonial quotes shown in the testimonials section.' },
+          fields: [
+            { name: 'quote', type: 'textarea', required: true },
+            { name: 'name', type: 'text', required: true, label: 'Person Name' },
+            { name: 'location', type: 'text', label: 'Location (e.g. USA, UK)' },
+          ],
+        },
+
+        // ── Booking ───────────────────────────────────────────────────────────
+        {
+          name: 'bookingText',
+          type: 'textarea',
+          label: 'How To Book — Text',
+          admin: { description: 'Intro text above the session booking form.' },
+        },
+        {
+          name: 'bookingFormEmail',
+          type: 'email',
+          label: 'Session Booking Form — Recipient Email',
+          admin: { description: 'Session booking requests are forwarded to this address.' },
         },
       ],
     },
