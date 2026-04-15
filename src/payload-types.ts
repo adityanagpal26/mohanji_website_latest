@@ -255,6 +255,7 @@ export interface Page {
         | 'global-ambassador'
         | 'awards'
         | 'meditations-listing'
+        | 'practices-listing'
       )
     | null;
   layout?:
@@ -810,22 +811,68 @@ export interface Page {
     closingQuote?: string | null;
   };
   meditationsListingContent?: {
+    /**
+     * ★ Required. Main heading shown in the hero banner.
+     */
     heroTitle?: string | null;
     /**
-     * Text shown below the title in the hero banner.
+     * ★ Required. Text shown below the title in the hero banner.
      */
     heroSubtitle?: string | null;
+    /**
+     * Optional. Full-width background image for the hero banner. Falls back to a teal gradient if not set.
+     */
     heroImage?: (number | null) | Media;
     /**
-     * Link for the "Download Brochure" button. Upload the PDF to media and paste its URL here.
+     * Optional. Link for the "Download Brochure" button. Upload the PDF to Media and paste its URL here.
      */
     brochureUrl?: string | null;
     /**
-     * Shown below the hero section.
+     * ★ Required. Shown below the hero section.
      */
     introText?: string | null;
+    /**
+     * ★ Required. Heading for the call-to-action section at the bottom.
+     */
     ctaHeading?: string | null;
+    /**
+     * ★ Required. Description text in the call-to-action section.
+     */
     ctaText?: string | null;
+  };
+  practicesListingContent?: {
+    /**
+     * ★ Required. Main heading in the hero banner.
+     */
+    heroTitle?: string | null;
+    /**
+     * ★ Required. Subheading below the hero title.
+     */
+    heroSubtitle?: string | null;
+    /**
+     * Full-width background image for the hero banner. Falls back to gradient if not set.
+     */
+    heroImage?: (number | null) | Media;
+    /**
+     * ★ Required. Shown below the hero in a white section.
+     */
+    introText?: string | null;
+    /**
+     * Heading for the call-to-action section at the bottom of the page.
+     */
+    ctaHeading?: string | null;
+    /**
+     * Body text in the call-to-action section.
+     */
+    ctaText?: string | null;
+    /**
+     * e.g. "Explore Meditations"
+     */
+    ctaLinkLabel?: string | null;
+    /**
+     * e.g. "/meditations"
+     */
+    ctaLinkUrl?: string | null;
   };
   status?: ('draft' | 'published') | null;
   publishedAt?: string | null;
@@ -1359,6 +1406,21 @@ export interface Practice {
   id: number;
   title: string;
   slug?: string | null;
+  /**
+   * Short badge shown on listing cards, e.g. "Energy Transfer", "Movement Practice".
+   */
+  category?: string | null;
+  /**
+   * One-line tagline shown under the title on listing cards.
+   */
+  tagline?: string | null;
+  /**
+   * e.g. "60 minutes", "Ongoing daily practice".
+   */
+  duration?: string | null;
+  /**
+   * Main descriptive text shown on the practice detail page.
+   */
   description?: {
     root: {
       type: string;
@@ -1375,36 +1437,34 @@ export interface Practice {
     [k: string]: unknown;
   } | null;
   featuredImage?: (number | null) | Media;
-  benefits?: {
-    root: {
-      type: string;
-      children: {
-        type: any;
-        version: number;
-        [k: string]: unknown;
-      }[];
-      direction: ('ltr' | 'rtl') | null;
-      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-      indent: number;
-      version: number;
-    };
-    [k: string]: unknown;
-  } | null;
-  howItWorks?: {
-    root: {
-      type: string;
-      children: {
-        type: any;
-        version: number;
-        [k: string]: unknown;
-      }[];
-      direction: ('ltr' | 'rtl') | null;
-      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-      indent: number;
-      version: number;
-    };
-    [k: string]: unknown;
-  } | null;
+  /**
+   * Optional YouTube embed URL. Shown as a video embed on the detail page.
+   */
+  youtubeUrl?: string | null;
+  /**
+   * Each item shown as a bullet point in the "Benefits" section.
+   */
+  benefits?:
+    | {
+        /**
+         * e.g. "Relieves deep-seated stress and trauma"
+         */
+        benefit: string;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Each item shown as a numbered step in the "How It Works" section.
+   */
+  howItWorks?:
+    | {
+        /**
+         * e.g. "Sit comfortably and close your eyes"
+         */
+        step: string;
+        id?: string | null;
+      }[]
+    | null;
   layout?:
     | (
         | {
@@ -1677,12 +1737,53 @@ export interface Practice {
       )[]
     | null;
   /**
-   * External link to registration/application form
+   * Main call-to-action button — e.g. "Register Now" for events/programs.
+   */
+  primaryCta?: {
+    /**
+     * e.g. "Register Now", "Apply Here"
+     */
+    label?: string | null;
+    /**
+     * Full URL or internal path.
+     */
+    url?: string | null;
+  };
+  /**
+   * Deprecated — use Primary CTA above. Kept for backwards compatibility.
    */
   applicationFormUrl?: string | null;
+  /**
+   * Direct URL to a downloadable brochure PDF.
+   */
+  brochureUrl?: string | null;
+  /**
+   * Show a contact/enquiry form at the bottom of this practice page.
+   */
+  showContactForm?: boolean | null;
+  /**
+   * Enquiries submitted via this form will be sent to this address.
+   */
+  contactEmail?: string | null;
+  showNewsletterForm?: boolean | null;
+  /**
+   * e.g. "Sign up for the Consciousness Kriya Newsletter"
+   */
+  newsletterLabel?: string | null;
+  /**
+   * Tick if this practice lives on an external site (e.g. mohanjiprocess.mohanji.org). The detail page will show a prominent "Visit" link instead of inline content.
+   */
+  isExternalPractice?: boolean | null;
+  /**
+   * Full URL of the external practice page. Required when "Links to External Website" is ticked.
+   */
+  externalPageUrl?: string | null;
   meta?: {
     title?: string | null;
     description?: string | null;
+    /**
+     * Not displayed on the page itself — only for social sharing.
+     */
     image?: (number | null) | Media;
   };
   updatedAt: string;
@@ -2940,6 +3041,18 @@ export interface PagesSelect<T extends boolean = true> {
         ctaHeading?: T;
         ctaText?: T;
       };
+  practicesListingContent?:
+    | T
+    | {
+        heroTitle?: T;
+        heroSubtitle?: T;
+        heroImage?: T;
+        introText?: T;
+        ctaHeading?: T;
+        ctaText?: T;
+        ctaLinkLabel?: T;
+        ctaLinkUrl?: T;
+      };
   status?: T;
   publishedAt?: T;
   updatedAt?: T;
@@ -3255,10 +3368,24 @@ export interface MeditationsSelect<T extends boolean = true> {
 export interface PracticesSelect<T extends boolean = true> {
   title?: T;
   slug?: T;
+  category?: T;
+  tagline?: T;
+  duration?: T;
   description?: T;
   featuredImage?: T;
-  benefits?: T;
-  howItWorks?: T;
+  youtubeUrl?: T;
+  benefits?:
+    | T
+    | {
+        benefit?: T;
+        id?: T;
+      };
+  howItWorks?:
+    | T
+    | {
+        step?: T;
+        id?: T;
+      };
   layout?:
     | T
     | {
@@ -3495,7 +3622,20 @@ export interface PracticesSelect<T extends boolean = true> {
               blockName?: T;
             };
       };
+  primaryCta?:
+    | T
+    | {
+        label?: T;
+        url?: T;
+      };
   applicationFormUrl?: T;
+  brochureUrl?: T;
+  showContactForm?: T;
+  contactEmail?: T;
+  showNewsletterForm?: T;
+  newsletterLabel?: T;
+  isExternalPractice?: T;
+  externalPageUrl?: T;
   meta?:
     | T
     | {
