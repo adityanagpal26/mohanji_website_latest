@@ -51,7 +51,27 @@ export async function up({ db }: MigrateUpArgs): Promise<void> {
     );
   `)
 
-  // ── 3. Add apply page fields to practices ────────────────────────────────
+  // ── 3. Register new collections in payload_locked_documents_rels ─────────
+  // Payload expects a relation column per registered collection for document locking.
+  await db.execute(sql`
+    ALTER TABLE "payload_locked_documents_rels"
+      ADD COLUMN IF NOT EXISTS "mai_tri_applications_id" integer,
+      ADD COLUMN IF NOT EXISTS "kriya_applications_id"   integer;
+  `)
+  await db.execute(sql`
+    ALTER TABLE "payload_locked_documents_rels"
+      ADD CONSTRAINT "payload_locked_documents_rels_mai_tri_applications_fk"
+      FOREIGN KEY ("mai_tri_applications_id") REFERENCES "mai_tri_applications"("id")
+      ON DELETE cascade ON UPDATE no action;
+  `)
+  await db.execute(sql`
+    ALTER TABLE "payload_locked_documents_rels"
+      ADD CONSTRAINT "payload_locked_documents_rels_kriya_applications_fk"
+      FOREIGN KEY ("kriya_applications_id") REFERENCES "kriya_applications"("id")
+      ON DELETE cascade ON UPDATE no action;
+  `)
+
+  // ── 4. Add apply page fields to practices ────────────────────────────────
   await db.execute(sql`
     ALTER TABLE "practices"
       ADD COLUMN IF NOT EXISTS "apply_page_title" varchar,
@@ -77,6 +97,8 @@ export async function up({ db }: MigrateUpArgs): Promise<void> {
 }
 
 export async function down({ db }: MigrateDownArgs): Promise<void> {
+  await db.execute(sql`ALTER TABLE "payload_locked_documents_rels" DROP COLUMN IF EXISTS "mai_tri_applications_id";`)
+  await db.execute(sql`ALTER TABLE "payload_locked_documents_rels" DROP COLUMN IF EXISTS "kriya_applications_id";`)
   await db.execute(sql`DROP TABLE IF EXISTS "mai_tri_applications";`)
   await db.execute(sql`DROP TABLE IF EXISTS "kriya_applications";`)
 
