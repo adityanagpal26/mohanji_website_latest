@@ -21,11 +21,11 @@ export async function upsertMedia(
     }
     const mime = mimeMap[ext] ?? 'image/jpeg'
 
-    // Insert or ignore if URL already exists
+    // Insert or ignore if filename already exists (media_filename_idx is the unique constraint)
     const result = await pool.query(
       `INSERT INTO media (alt, url, filename, mime_type, filesize, width, height, updated_at, created_at)
        VALUES ($1, $2, $3, $4, 0, 1200, 800, NOW(), NOW())
-       ON CONFLICT DO NOTHING RETURNING id`,
+       ON CONFLICT (filename) DO NOTHING RETURNING id`,
       [alt, imageUrl, filename, mime],
     )
     if (result.rows[0]) return result.rows[0].id as number

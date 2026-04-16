@@ -19,9 +19,12 @@ import { seedPractices } from './practices'
  * so this is safe to run on every deploy (idempotent).
  */
 export async function seedIfNeeded(payload: Payload): Promise<void> {
+  const dbUrl = process.env.DATABASE_URL || ''
+  const isLocal = dbUrl.includes('localhost') || dbUrl.includes('127.0.0.1')
+  const isStaging = dbUrl.includes('staging')
   const pool = new Pool({
-    connectionString: process.env.DATABASE_URL,
-    ssl: { rejectUnauthorized: false },
+    connectionString: dbUrl,
+    ssl: (isLocal || isStaging) ? false : { rejectUnauthorized: false },
   })
 
   const seedPage = async (slug: string, label: string, fn: (p: Payload, pool: Pool) => Promise<void>) => {

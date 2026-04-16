@@ -14,9 +14,8 @@ import { seedIfNeeded } from './index'
 const seed = async () => {
   console.log('🌱 Starting Mohanji seed...')
 
-  const payload = await getPayload({ config })
-
   try {
+  const payload = await getPayload({ config })
     // ── 1. Create / update super-admin user ─────────────────────────────────
     console.log('👤 Setting up admin user...')
     const adminEmail = 'admin@mohanji.org'
@@ -421,10 +420,11 @@ const seed = async () => {
     }
 
     console.log('')
+    const appUrl = process.env.NEXT_PUBLIC_SERVER_URL || process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'
     console.log('✅ Seed complete!')
     console.log('   Admin:    admin@mohanji.org')
     console.log('   Password: Mohanji@20')
-    console.log('   Admin UI: http://localhost:3000/admin')
+    console.log(`   Admin UI: ${appUrl}/admin`)
 
     process.exit(0)
   } catch (error) {
