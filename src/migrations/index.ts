@@ -7,6 +7,7 @@ import * as migration_20260415_160000_mai_tri_content from './20260415_160000_ma
 import * as migration_20260415_170000_application_collections from './20260415_170000_application_collections';
 import * as migration_20260415_180000_traditional_yoga_page from './20260415_180000_traditional_yoga_page';
 import * as migration_20260416_190000_awakening_yoga_nidra_page from './20260416_190000_awakening_yoga_nidra_page';
+import * as migration_20260416_200000_youth_club_page from './20260416_200000_youth_club_page';
 
 export const migrations = [
   {
@@ -53,5 +54,10 @@ export const migrations = [
     up: migration_20260416_190000_awakening_yoga_nidra_page.up,
     down: migration_20260416_190000_awakening_yoga_nidra_page.down,
     name: '20260416_190000_awakening_yoga_nidra_page',
+  },
+  {
+    up: migration_20260416_200000_youth_club_page.up,
+    down: migration_20260416_200000_youth_club_page.down,
+    name: '20260416_200000_youth_club_page',
   },
 ];

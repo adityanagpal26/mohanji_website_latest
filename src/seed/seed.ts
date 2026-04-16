@@ -440,7 +440,64 @@ const seed = async () => {
       console.log('   ✓ Awakening Yoga Nidra page already exists — skipping')
     }
 
-    // ── 11. Add howToUse steps to all meditations (idempotent) ─────────────
+    // ── 11. Seed Mohanji Youth Club page ────────────────────────────────────
+    console.log('🌟 Seeding Mohanji Youth Club page...')
+    const { docs: existingYC } = await payload.find({
+      collection: 'pages',
+      where: { pageType: { equals: 'youth-club' } },
+      limit: 1,
+    })
+    if (existingYC.length === 0) {
+      await payload.create({
+        collection: 'pages',
+        data: {
+          title: 'Mohanji Youth Club',
+          slug: 'youth-club',
+          pageType: 'youth-club',
+          status: 'published',
+          youthClubContent: {
+            heroTitle: 'Mohanji Youth Club',
+            introText:
+              "Mohanji Youth Club is a global youth network which exists to empower and inspire fellow youngsters to live authentic, positive and purpose-driven lives.\n\nIt is inspired by the work and teachings of Mohanji to 'Be good. Do Good.'\n\nWe serve as a platform for youth to break their boundaries. Our aim is to empower youth to explore and express their full potential beyond the limitations of the mind.",
+            pullQuote: 'Break your boundaries !!',
+            activitiesTitle: 'What We Do',
+            activities: [
+              {
+                title: 'Educational Programs & Trainings',
+                description:
+                  "Youth-focused workshops, seminars, and training sessions grounded in Mohanji's teachings. Programs cover leadership, mindfulness, and conscious living to equip young people with tools for purposeful growth.",
+              },
+              {
+                title: 'Picnics & Festivals',
+                description:
+                  'Joyful outdoor gatherings and cultural celebrations that bring young people together in a spirit of fun, friendship, and community. These events nurture bonds across backgrounds, cultures, and borders.',
+              },
+              {
+                title: 'Selfless Service',
+                description:
+                  "Volunteering and seva (selfless service) activities — from feeding the hungry to environmental care and community support. Service is the heart of MYC, reflecting the principle of 'Be good. Do Good.'",
+              },
+            ],
+            awardsTitle: 'MYC Awards & Areas of Interest',
+            awardsText:
+              'The MYC Awards recognize exceptional contributions by young members who demonstrate outstanding commitment to service, leadership, and personal development. Each year, youth clubs from around the world are celebrated for their impactful activities and initiatives that uplift communities and inspire others.',
+            areasTitle: 'Areas of Interest',
+            areasText:
+              'Arts & Culture\nEnvironment & Sustainability\nHealth & Wellness\nEducation & Mentoring\nAnimal Welfare\nCommunity Development\nSpirituality & Inner Growth',
+            eligibilityText:
+              'All youngsters (aged 14-29) are welcome to join existing youth clubs and therefore join the global family-like community.',
+            joinButtonLabel: 'Join the Youth Club',
+            joinButtonUrl:
+              'https://docs.google.com/forms/d/e/1FAIpQLSd8v541hsenk652wuQnmhjS6XyTJNmRKa-bb6i9vRdKjRZpSQ/viewform',
+          },
+        } as any,
+      })
+      console.log('   ✓ Youth Club page created')
+    } else {
+      console.log('   ✓ Youth Club page already exists — skipping')
+    }
+
+    // ── 12. Add howToUse steps to all meditations (idempotent) ─────────────
     console.log('📝 Adding howToUse steps to meditations...')
     const defaultSteps = [
       { title: 'Find a Quiet Space', description: 'Sit or lie comfortably in a place where you will not be disturbed.' },

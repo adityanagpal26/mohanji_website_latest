@@ -261,6 +261,9 @@ export interface Page {
         | 'meditations-listing'
         | 'practices-listing'
         | 'mai-tri-method'
+        | 'traditional-yoga'
+        | 'awakening-yoga-nidra'
+        | 'youth-club'
       )
     | null;
   layout?:
@@ -990,6 +993,158 @@ export interface Page {
      * Session booking requests are forwarded to this address.
      */
     bookingFormEmail?: string | null;
+  };
+  traditionalYogaContent?: {
+    /**
+     * Main heading on the page.
+     */
+    heroTitle?: string | null;
+    /**
+     * Short quote shown under hero and as a pull quote section.
+     */
+    tagline?: string | null;
+    heroImage?: (number | null) | Media;
+    /**
+     * What HSTY is — the mission statement paragraph.
+     */
+    introText?: string | null;
+    /**
+     * e.g. "Why Himalayan School Of Traditional Yoga?"
+     */
+    whySectionTitle?: string | null;
+    /**
+     * Paragraphs for the Why section. Separate with a blank line (\n\n).
+     */
+    whySectionText?: string | null;
+    whySectionImage?: (number | null) | Media;
+    /**
+     * Optional CTA below the Why section. Leave blank to hide the button.
+     */
+    downloadMeditationUrl?: string | null;
+    /**
+     * Each entry is one numbered program item.
+     */
+    programs?:
+      | {
+          text: string;
+          id?: string | null;
+        }[]
+      | null;
+    /**
+     * Defaults to https://himalayanschool.com/yoga
+     */
+    visitUsUrl?: string | null;
+    /**
+     * Defaults to "Visit Us"
+     */
+    visitUsLabel?: string | null;
+  };
+  awakeningYogaNidraContent?: {
+    /**
+     * Main page heading.
+     */
+    heroTitle?: string | null;
+    /**
+     * Shown under the hero and repeated as a teal pull-quote section.
+     */
+    tagline?: string | null;
+    heroImage?: (number | null) | Media;
+    /**
+     * Opening paragraph — what Awakening Yoga Nidra is.
+     */
+    introText?: string | null;
+    /**
+     * Linked from "Devi Mohan" in the intro. Default: https://www.devimohan.com
+     */
+    deviMohanUrl?: string | null;
+    /**
+     * e.g. "Why Awakening Yoga Nidra Meditation"
+     */
+    whySectionTitle?: string | null;
+    /**
+     * Paragraphs explaining how it works. Separate with \n\n.
+     */
+    whySectionText?: string | null;
+    whySectionImage?: (number | null) | Media;
+    /**
+     * URL for "HSTY" link in the Why section. Default: https://himalayanschool.com
+     */
+    hstyUrl?: string | null;
+    /**
+     * Leave blank to hide the button.
+     */
+    downloadMeditationUrl?: string | null;
+    /**
+     * e.g. "Benefits"
+     */
+    benefitsSectionTitle?: string | null;
+    /**
+     * Paragraphs above the benefits list. Separate with \n\n.
+     */
+    benefitsText?: string | null;
+    /**
+     * Each item is one bullet point.
+     */
+    benefitsList?:
+      | {
+          benefit: string;
+          id?: string | null;
+        }[]
+      | null;
+    /**
+     * Default: "Contact Us"
+     */
+    ctaLabel?: string | null;
+    /**
+     * Default: /contact
+     */
+    ctaUrl?: string | null;
+  };
+  youthClubContent?: {
+    heroTitle?: string | null;
+    heroImage?: (number | null) | Media;
+    /**
+     * Opening paragraphs. Separate with \n\n.
+     */
+    introText?: string | null;
+    /**
+     * e.g. "Break your boundaries !!"
+     */
+    pullQuote?: string | null;
+    activitiesTitle?: string | null;
+    /**
+     * Each card in the Activities grid.
+     */
+    activities?:
+      | {
+          title: string;
+          description: string;
+          image?: (number | null) | Media;
+          id?: string | null;
+        }[]
+      | null;
+    awardsTitle?: string | null;
+    awardsText?: string | null;
+    awardsImage?: (number | null) | Media;
+    areasTitle?: string | null;
+    areasText?: string | null;
+    areasImage?: (number | null) | Media;
+    /**
+     * e.g. "All youngsters (aged 14-29) are welcome..."
+     */
+    eligibilityText?: string | null;
+    /**
+     * Default: "Join the Youth Club"
+     */
+    joinButtonLabel?: string | null;
+    /**
+     * Google Form URL — opens in a new tab.
+     */
+    joinButtonUrl?: string | null;
+    /**
+     * PDF URL. Leave blank to hide the button.
+     */
+    brochureUrl?: string | null;
   };
   status?: ('draft' | 'published') | null;
   publishedAt?: string | null;
@@ -3288,6 +3443,77 @@ export interface PagesSelect<T extends boolean = true> {
         applyFormEmail?: T;
         bookingText?: T;
         bookingFormEmail?: T;
+      };
+  traditionalYogaContent?:
+    | T
+    | {
+        heroTitle?: T;
+        tagline?: T;
+        heroImage?: T;
+        introText?: T;
+        whySectionTitle?: T;
+        whySectionText?: T;
+        whySectionImage?: T;
+        downloadMeditationUrl?: T;
+        programs?:
+          | T
+          | {
+              text?: T;
+              id?: T;
+            };
+        visitUsUrl?: T;
+        visitUsLabel?: T;
+      };
+  awakeningYogaNidraContent?:
+    | T
+    | {
+        heroTitle?: T;
+        tagline?: T;
+        heroImage?: T;
+        introText?: T;
+        deviMohanUrl?: T;
+        whySectionTitle?: T;
+        whySectionText?: T;
+        whySectionImage?: T;
+        hstyUrl?: T;
+        downloadMeditationUrl?: T;
+        benefitsSectionTitle?: T;
+        benefitsText?: T;
+        benefitsList?:
+          | T
+          | {
+              benefit?: T;
+              id?: T;
+            };
+        ctaLabel?: T;
+        ctaUrl?: T;
+      };
+  youthClubContent?:
+    | T
+    | {
+        heroTitle?: T;
+        heroImage?: T;
+        introText?: T;
+        pullQuote?: T;
+        activitiesTitle?: T;
+        activities?:
+          | T
+          | {
+              title?: T;
+              description?: T;
+              image?: T;
+              id?: T;
+            };
+        awardsTitle?: T;
+        awardsText?: T;
+        awardsImage?: T;
+        areasTitle?: T;
+        areasText?: T;
+        areasImage?: T;
+        eligibilityText?: T;
+        joinButtonLabel?: T;
+        joinButtonUrl?: T;
+        brochureUrl?: T;
       };
   status?: T;
   publishedAt?: T;

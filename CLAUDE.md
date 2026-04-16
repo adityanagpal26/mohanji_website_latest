@@ -73,6 +73,8 @@ All schema changes are in `src/migrations/`. They are tracked in the `payload_mi
 | `20260415_160000_mai_tri_content` | Adds `mai-tri-method` enum value; adds `mai_tri_content_*` scalar columns; creates benefits/faqs/testimonials array tables for pages and `_pages_v` |
 | `20260415_170000_application_collections` | Creates `mai_tri_applications` + `kriya_applications` tables; adds relation columns to `payload_locked_documents_rels`; adds apply page fields to `practices` + `pages` |
 | `20260415_180000_traditional_yoga_page` | Adds `traditional-yoga` enum value; adds `traditional_yoga_content_*` scalar columns; creates `programs` array tables for pages and `_pages_v` |
+| `20260416_190000_awakening_yoga_nidra_page` | Adds `awakening-yoga-nidra` enum value; adds `awakening_yoga_nidra_content_*` scalar columns; creates `benefits_list` array tables for pages and `_pages_v` |
+| `20260416_200000_youth_club_page` | Adds `youth-club` enum value; adds `youth_club_content_*` scalar columns; creates `activities` array tables for pages and `_pages_v` |
 
 ### Rules for writing new migrations
 
@@ -134,7 +136,9 @@ npm run seed
 7. Practices listing page
 8. Mai-Tri Method page (with benefits, FAQs, testimonials)
 9. Traditional Yoga (HSTY) page
-10. `howToUse` steps on all meditations
+10. Awakening Yoga Nidra page
+11. Mohanji Youth Club page
+12. `howToUse` steps on all meditations
 
 ---
 
@@ -303,7 +307,7 @@ mohanji-website/
 | Homepage | `/` | ✅ Hero slider, about section, stats, awards, events |
 | About | `/about/*` (10 pages) | ✅ All pages: who-is-mohanji, foundation, life-journey, global-council, acharyas, spaces, golden-path, global-ambassador, awards |
 | Meditations | `/meditations`, `/meditations/[slug]`, `/meditations/[slug]/download` | ✅ 8 meditations + download pages with 26 languages |
-| Practices | `/practices`, `/practices/[slug]`, `/practices/mai-tri-method`, `/practices/traditional-yoga`, `/practices/mai-tri-method/apply`, `/practices/consciousness-kriya/apply` | ✅ All practices; dedicated Mai-Tri and Traditional Yoga pages; apply forms for Mai-Tri and Consciousness Kriya |
+| Practices | `/practices`, `/practices/[slug]`, `/practices/mai-tri-method`, `/practices/traditional-yoga`, `/practices/awakening-yoga-nidra`, `/practices/mai-tri-method/apply`, `/practices/consciousness-kriya/apply` | ✅ All practices; dedicated Mai-Tri, Traditional Yoga, and Awakening Yoga Nidra pages; apply forms for Mai-Tri and Consciousness Kriya |
 | Courses | `/courses`, `/courses/[slug]` | ✅ Empowered 1.0–5.0 series |
 | Events | `/events`, `/events/past`, `/events/[slug]` | ✅ Upcoming + past |
 | Kailash | 6 pages including application form | ✅ Full pilgrimage section |

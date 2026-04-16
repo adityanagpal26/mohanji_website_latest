@@ -47,6 +47,7 @@ export const Pages: CollectionConfig = {
         { label: 'Mai-Tri Method', value: 'mai-tri-method' },
         { label: 'Traditional Yoga (HSTY)', value: 'traditional-yoga' },
         { label: 'Awakening Yoga Nidra', value: 'awakening-yoga-nidra' },
+        { label: 'Mohanji Youth Club', value: 'youth-club' },
       ],
     },
 
@@ -1025,6 +1026,102 @@ export const Pages: CollectionConfig = {
           type: 'text',
           label: 'CTA Button URL',
           admin: { description: 'Default: /contact' },
+        },
+      ],
+    },
+
+    // ── Mohanji Youth Club Page Content ──────────────────────────────────────
+    {
+      name: 'youthClubContent',
+      type: 'group',
+      label: 'Mohanji Youth Club Page Content',
+      admin: { condition: (data: any) => data?.pageType === 'youth-club' },
+      fields: [
+        { name: 'heroTitle', type: 'text', label: 'Hero Title' },
+        { name: 'heroImage', type: 'upload', relationTo: 'media', label: 'Hero Background Image' },
+        {
+          name: 'introText',
+          type: 'textarea',
+          label: 'Intro Paragraphs',
+          admin: { description: 'Opening paragraphs. Separate with \\n\\n.' },
+        },
+        {
+          name: 'pullQuote',
+          type: 'text',
+          label: 'Pull Quote',
+          admin: { description: 'e.g. "Break your boundaries !!"' },
+        },
+        {
+          name: 'activitiesTitle',
+          type: 'text',
+          label: 'Activities Section — Title',
+        },
+        {
+          name: 'activities',
+          type: 'array',
+          label: 'Activities',
+          admin: { description: 'Each card in the Activities grid.' },
+          fields: [
+            { name: 'title', type: 'text', required: true },
+            { name: 'description', type: 'textarea', required: true },
+            { name: 'image', type: 'upload', relationTo: 'media', label: 'Activity Image' },
+          ],
+        },
+        {
+          name: 'awardsTitle',
+          type: 'text',
+          label: 'Awards & Interests — Section Title',
+        },
+        {
+          name: 'awardsText',
+          type: 'textarea',
+          label: 'MYC Awards — Description',
+        },
+        {
+          name: 'awardsImage',
+          type: 'upload',
+          relationTo: 'media',
+          label: 'MYC Awards — Image',
+        },
+        {
+          name: 'areasTitle',
+          type: 'text',
+          label: 'Areas of Interest — Sub-title',
+        },
+        {
+          name: 'areasText',
+          type: 'textarea',
+          label: 'Areas of Interest — Text',
+        },
+        {
+          name: 'areasImage',
+          type: 'upload',
+          relationTo: 'media',
+          label: 'Areas of Interest — Image',
+        },
+        {
+          name: 'eligibilityText',
+          type: 'textarea',
+          label: 'Eligibility Text',
+          admin: { description: 'e.g. "All youngsters (aged 14-29) are welcome..."' },
+        },
+        {
+          name: 'joinButtonLabel',
+          type: 'text',
+          label: 'Join Button — Label',
+          admin: { description: 'Default: "Join the Youth Club"' },
+        },
+        {
+          name: 'joinButtonUrl',
+          type: 'text',
+          label: 'Join Button — URL',
+          admin: { description: 'Google Form URL — opens in a new tab.' },
+        },
+        {
+          name: 'brochureUrl',
+          type: 'text',
+          label: 'Download Brochure — URL',
+          admin: { description: 'PDF URL. Leave blank to hide the button.' },
         },
       ],
     },

@@ -1,224 +1,234 @@
 import React from 'react'
-import type { Metadata } from 'next'
-import Link from 'next/link'
+import Image from 'next/image'
+import { getPayloadClient } from '@/lib/payload'
 
-export const dynamic = 'force-dynamic'
+export const revalidate = 3600
 
-export const metadata: Metadata = {
+export const metadata = {
   title: 'Mohanji Youth Club | Mohanji',
   description:
-    'Mohanji Youth Club is a global youth network which exists to empower and inspire fellow youngsters to live authentic, positive and purpose-driven lives. Inspired by the teachings of Mohanji to "Be good. Do Good."',
+    'Mohanji Youth Club is a global youth network which exists to empower and inspire fellow youngsters to live authentic, positive and purpose-driven lives.',
 }
 
-const activities = [
+const DEFAULT_HERO_TITLE = 'Mohanji Youth Club'
+
+const DEFAULT_INTRO =
+  "Mohanji Youth Club is a global youth network which exists to empower and inspire fellow youngsters to live authentic, positive and purpose-driven lives.\n\nIt is inspired by the work and teachings of Mohanji to 'Be good. Do Good.'\n\nWe serve as a platform for youth to break their boundaries. Our aim is to empower youth to explore and express their full potential beyond the limitations of the mind."
+
+const DEFAULT_PULL_QUOTE = 'Break your boundaries !!'
+
+const DEFAULT_ACTIVITIES_TITLE = 'What We Do'
+
+const DEFAULT_ACTIVITIES = [
   {
     title: 'Educational Programs & Trainings',
     description:
-      'Seminars, workshops, and trainings in unique skills — including mid-brain activation, communication, and personal growth — designed to unlock youth potential.',
-    icon: '🎓',
-  },
-  {
-    title: 'Summits & Meetings',
-    description:
-      'Working on personal growth and spreading awareness about sustainable living through summits, group meetings, and collaborative projects.',
-    icon: '🌟',
+      "Youth-focused workshops, seminars, and training sessions grounded in Mohanji's teachings. Programs cover leadership, mindfulness, and conscious living to equip young people with tools for purposeful growth.",
   },
   {
     title: 'Picnics & Festivals',
     description:
-      'On the basis of compassion and non-violence, opening doors to fresh knowledge, vegan food, and lots of fun — celebrating life consciously.',
-    icon: '🌿',
+      'Joyful outdoor gatherings and cultural celebrations that bring young people together in a spirit of fun, friendship, and community. These events nurture bonds across backgrounds, cultures, and borders.',
   },
   {
     title: 'Selfless Service',
     description:
-      'Learning to give more than we take — creating good people through acts of kindness, humanitarian service, and compassionate action.',
-    icon: '🤝',
-  },
-  {
-    title: 'MYC Awards',
-    description:
-      'MYC Awards are given to youngsters excelling and innovating in writing, acting, and film-making — based on compassion, kindness, and selflessness.',
-    icon: '🏆',
-  },
-  {
-    title: 'Global Community',
-    description:
-      'All youngsters aged 14–29 are welcome to join existing youth clubs around the world and become part of this global family-like community.',
-    icon: '🌍',
+      "Volunteering and seva (selfless service) activities — from feeding the hungry to environmental care and community support. Service is the heart of MYC, reflecting the principle of 'Be good. Do Good.'",
   },
 ]
 
-const areasOfInterest = [
-  'Education', 'Social Impact', 'Non-Violence', 'Yoga', 'Meditation',
-  'Communication', 'Organic Agriculture', 'Recycling', 'Nutrition', 'Sports',
-  'Ecology', 'Natural Cosmetics', 'Social Games', 'Technology', 'Spiritual Literature',
-  'Networking', 'Dancing', 'Languages', 'Leadership', 'Journalism',
-  'Creative Writing', 'Music',
-]
+const DEFAULT_AWARDS_TITLE = 'MYC Awards & Areas of Interest'
 
-export default function YouthClubPage() {
+const DEFAULT_AWARDS_TEXT =
+  'The MYC Awards recognize exceptional contributions by young members who demonstrate outstanding commitment to service, leadership, and personal development. Each year, youth clubs from around the world are celebrated for their impactful activities and initiatives that uplift communities and inspire others.'
+
+const DEFAULT_AREAS_TITLE = 'Areas of Interest'
+
+const DEFAULT_AREAS_TEXT =
+  'Arts & Culture\nEnvironment & Sustainability\nHealth & Wellness\nEducation & Mentoring\nAnimal Welfare\nCommunity Development\nSpirituality & Inner Growth'
+
+const DEFAULT_ELIGIBILITY =
+  'All youngsters (aged 14-29) are welcome to join existing youth clubs and therefore join the global family-like community.'
+
+const DEFAULT_JOIN_LABEL = 'Join the Youth Club'
+const DEFAULT_JOIN_URL =
+  'https://docs.google.com/forms/d/e/1FAIpQLSd8v541hsenk652wuQnmhjS6XyTJNmRKa-bb6i9vRdKjRZpSQ/viewform'
+
+export default async function YouthClubPage() {
+  const payload = await getPayloadClient()
+  const { docs } = await payload.find({
+    collection: 'pages',
+    where: { pageType: { equals: 'youth-club' } },
+    depth: 1,
+    limit: 1,
+  })
+  const cms = (docs[0] as any)?.youthClubContent ?? {}
+
+  const heroTitle: string = cms.heroTitle || DEFAULT_HERO_TITLE
+  const heroImageUrl: string | null = cms.heroImage?.url || null
+  const introText: string = cms.introText || DEFAULT_INTRO
+  const pullQuote: string = cms.pullQuote || DEFAULT_PULL_QUOTE
+  const activitiesTitle: string = cms.activitiesTitle || DEFAULT_ACTIVITIES_TITLE
+  const activities: { title: string; description: string; imageUrl?: string }[] =
+    cms.activities?.length
+      ? cms.activities.map((a: any) => ({
+          title: a.title,
+          description: a.description,
+          imageUrl: a.image?.url as string | undefined,
+        }))
+      : DEFAULT_ACTIVITIES
+  const awardsTitle: string = cms.awardsTitle || DEFAULT_AWARDS_TITLE
+  const awardsText: string = cms.awardsText || DEFAULT_AWARDS_TEXT
+  const areasTitle: string = cms.areasTitle || DEFAULT_AREAS_TITLE
+  const areasText: string = cms.areasText || DEFAULT_AREAS_TEXT
+  const eligibilityText: string = cms.eligibilityText || DEFAULT_ELIGIBILITY
+  const joinButtonLabel: string = cms.joinButtonLabel || DEFAULT_JOIN_LABEL
+  const joinButtonUrl: string = cms.joinButtonUrl || DEFAULT_JOIN_URL
+  const brochureUrl: string | null = cms.brochureUrl || null
+
+  const introParagraphs = introText.split('\n\n').filter(Boolean)
+  const areasList = areasText.split('\n').filter(Boolean)
+
   return (
     <div>
-      {/* Hero */}
-      <section className="hero-gradient py-20 text-center text-white">
-        <div className="container">
-          <h1 className="font-heading text-4xl md:text-5xl font-semibold mb-3">
-            Mohanji Youth Club
-          </h1>
+      {/* ── Hero ──────────────────────────────────────────────────────────────── */}
+      <section
+        className="relative bg-gradient-to-r from-[#16697A] to-[#0d4a56] py-20 text-center text-white overflow-hidden"
+        style={
+          heroImageUrl
+            ? {
+                backgroundImage: `url(${heroImageUrl})`,
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+              }
+            : {}
+        }
+      >
+        {heroImageUrl && <div className="absolute inset-0 bg-[#16697A]/70" />}
+        <div className="container relative z-10">
+          <h1 className="font-heading text-4xl md:text-5xl font-semibold mb-4">{heroTitle}</h1>
           <span className="gold-divider gold-divider--center" />
-          <p className="text-white/90 text-lg max-w-2xl mx-auto mt-4">
-            A global youth network empowering youngsters to live authentic, positive, and
-            purpose-driven lives. Inspired by Mohanji&apos;s teaching: &ldquo;Be good. Do Good.&rdquo;
-          </p>
-          <div className="mt-8">
-            <a
-              href="https://mohanji.org/youth-club/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="bg-[#C95D63] text-white hover:bg-[#f4442e] px-8 py-3 rounded font-medium transition-colors"
-            >
-              Join the Youth Club
-            </a>
-          </div>
         </div>
       </section>
 
-      {/* About */}
+      {/* ── Intro ─────────────────────────────────────────────────────────────── */}
       <section className="py-16 bg-white">
-        <div className="container max-w-3xl">
-          <h2 className="font-heading text-3xl text-[#16697A] text-center mb-2">
-            Who We Are
-          </h2>
-          <span className="gold-divider gold-divider--center" />
-          <p className="text-gray-700 leading-relaxed mt-6">
-            Mohanji Youth Club (MYC) is a global youth network which exists to empower and inspire
-            fellow youngsters to live authentic, positive and purpose-driven lives. It is inspired
-            by the work and teachings of Mohanji to &ldquo;Be good. Do Good.&rdquo;
-          </p>
-          <p className="text-gray-700 leading-relaxed mt-4">
-            We serve as a platform for youth to break their boundaries. Our aim is to empower youth
-            to explore and express their full potential beyond the limitations of the mind.
-          </p>
-          <blockquote className="mt-6 border-l-4 border-[#E2B748] pl-6 py-2">
-            <p className="font-heading text-xl text-[#16697A] italic">
-              &ldquo;Break your boundaries!!&rdquo;
+        <div className="container max-w-3xl text-center space-y-4">
+          {introParagraphs.map((para, i) => (
+            <p key={i} className="text-[#2B2828] leading-relaxed text-[15px]">
+              {para}
             </p>
-            <p className="text-gray-500 text-sm mt-1">— Mohanji Youth Club</p>
-          </blockquote>
-          <p className="text-gray-700 leading-relaxed mt-4">
-            All youngsters aged 14–29 are welcome to join existing youth clubs and become part of
-            this global family-like community.
+          ))}
+        </div>
+      </section>
+
+      {/* ── Pull Quote ────────────────────────────────────────────────────────── */}
+      <section className="py-14 bg-[#16697A] text-white text-center">
+        <div className="container max-w-3xl">
+          <p className="font-heading text-2xl md:text-3xl italic leading-relaxed">
+            &ldquo;{pullQuote}&rdquo;
           </p>
         </div>
       </section>
 
-      {/* Stats */}
-      <section className="py-12 bg-[#16697A] text-white">
-        <div className="container">
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8 text-center">
-            {[
-              { value: '60+', label: 'Active Countries' },
-              { value: '14–29', label: 'Age Range' },
-              { value: '500+', label: 'Projects Completed' },
-              { value: '22+', label: 'Areas of Interest' },
-            ].map((stat) => (
-              <div key={stat.label}>
-                <p className="font-heading text-5xl font-semibold text-[#E2B748]">{stat.value}</p>
-                <p className="text-white/80 mt-1">{stat.label}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Activities */}
+      {/* ── Activities ────────────────────────────────────────────────────────── */}
       <section className="py-16 bg-[#F5F5F5]">
         <div className="container">
-          <h2 className="font-heading text-3xl text-[#16697A] text-center mb-2">
-            What We Do
+          <h2 className="font-heading text-3xl text-[#16697A] font-semibold text-center mb-2">
+            {activitiesTitle}
           </h2>
           <span className="gold-divider gold-divider--center" />
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8 mt-10">
-            {activities.map((activity) => (
-              <div
-                key={activity.title}
-                className="bg-white rounded-lg shadow-sm p-6 hover:shadow-md transition-shadow"
-              >
-                <span className="text-4xl block mb-4">{activity.icon}</span>
-                <h3 className="font-heading text-xl text-[#16697A] mb-2">{activity.title}</h3>
-                <p className="text-gray-600 text-sm leading-relaxed">{activity.description}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* How to join */}
-      <section className="py-16 bg-white">
-        <div className="container max-w-3xl">
-          <h2 className="font-heading text-3xl text-[#16697A] text-center mb-2">
-            How to Join
-          </h2>
-          <span className="gold-divider gold-divider--center" />
-          <div className="grid sm:grid-cols-3 gap-8 mt-10 text-center">
-            {[
-              { step: '1', title: 'Express Interest', description: 'Send us a message with your name, age, country, and why you want to join MYC.' },
-              { step: '2', title: 'Connect with Your Chapter', description: 'We\'ll connect you with the MYC chapter in your region — or help you start one!' },
-              { step: '3', title: 'Get Involved', description: 'Start attending events, joining projects, and building lifelong friendships.' },
-            ].map((s) => (
-              <div key={s.step}>
-                <div className="w-12 h-12 rounded-full bg-[#5B2D8E] text-white font-heading font-semibold text-xl flex items-center justify-center mx-auto mb-4">
-                  {s.step}
+          <div className="mt-10 grid md:grid-cols-3 gap-8">
+            {activities.map((act, i) => (
+              <div key={i} className="bg-white rounded-lg shadow-sm overflow-hidden">
+                {act.imageUrl ? (
+                  <div className="relative aspect-[4/3]">
+                    <Image src={act.imageUrl} alt={act.title} fill className="object-cover" />
+                  </div>
+                ) : (
+                  <div className="aspect-[4/3] bg-[#16697A]/10 flex items-center justify-center">
+                    <span className="text-[#16697A] font-heading text-4xl font-semibold">
+                      {i + 1}
+                    </span>
+                  </div>
+                )}
+                <div className="p-6">
+                  <h3 className="font-heading text-xl text-[#16697A] font-semibold mb-3">
+                    {act.title}
+                  </h3>
+                  <p className="text-[#2B2828] text-[15px] leading-relaxed">{act.description}</p>
                 </div>
-                <h3 className="font-heading text-lg text-[#16697A] mb-2">{s.title}</h3>
-                <p className="text-gray-600 text-sm leading-relaxed">{s.description}</p>
               </div>
             ))}
           </div>
-
-          <div className="text-center mt-10">
-            <Link
-              href="/contact"
-              className="bg-[#5B2D8E] text-white hover:bg-[#4a2275] px-8 py-4 rounded font-medium transition-colors text-lg"
-            >
-              Join Mohanji Youth Club
-            </Link>
-          </div>
         </div>
       </section>
 
-      {/* Areas of interest */}
-      <section className="py-14 bg-[#F5F5F5]">
-        <div className="container max-w-4xl text-center">
-          <h2 className="font-heading text-3xl text-[#16697A] mb-2">Areas of Interest</h2>
+      {/* ── Awards & Areas of Interest ────────────────────────────────────────── */}
+      <section className="py-16 bg-white">
+        <div className="container">
+          <h2 className="font-heading text-3xl text-[#16697A] font-semibold text-center mb-2">
+            {awardsTitle}
+          </h2>
           <span className="gold-divider gold-divider--center" />
-          <p className="text-gray-600 mt-4 mb-8">
-            MYC embraces a wide range of interests to support every young person&apos;s unique path.
-          </p>
-          <div className="flex flex-wrap gap-3 justify-center">
-            {areasOfInterest.map((area) => (
-              <span
-                key={area}
-                className="bg-white border border-[#16697A]/20 text-[#16697A] text-sm font-medium px-4 py-2 rounded-full hover:bg-[#16697A] hover:text-white transition-colors cursor-default"
-              >
-                {area}
-              </span>
-            ))}
+          <div className="mt-10 grid md:grid-cols-2 gap-12 items-start max-w-4xl mx-auto">
+            {/* Awards */}
+            <div>
+              <p className="text-[#2B2828] leading-relaxed text-[15px]">{awardsText}</p>
+            </div>
+            {/* Areas */}
+            <div>
+              <h3 className="font-heading text-xl text-[#16697A] font-semibold mb-4">
+                {areasTitle}
+              </h3>
+              <ul className="space-y-2">
+                {areasList.map((area, i) => (
+                  <li key={i} className="flex items-start gap-3">
+                    <span className="mt-1 flex-shrink-0 w-5 h-5 rounded-full bg-[#E2B748] flex items-center justify-center">
+                      <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 12 12">
+                        <path
+                          d="M10 3L5 8.5 2 5.5"
+                          stroke="white"
+                          strokeWidth="1.5"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          fill="none"
+                        />
+                      </svg>
+                    </span>
+                    <span className="text-[#2B2828] text-[15px] leading-relaxed">{area}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* Quote */}
-      <section className="py-12 hero-gradient text-white text-center">
+      {/* ── Eligibility + CTA ─────────────────────────────────────────────────── */}
+      <section className="py-16 bg-[#F5F5F5] text-center">
         <div className="container max-w-2xl">
-          <blockquote className="font-heading text-xl italic leading-relaxed text-white/90">
-            &ldquo;Be good. Do Good.&rdquo;
-          </blockquote>
-          <p className="mt-3 text-[#E2B748] text-sm font-semibold uppercase tracking-widest">— Mohanji</p>
-          <p className="text-white/80 mt-4 text-sm">
-            The guiding philosophy of Mohanji Youth Club worldwide.
-          </p>
+          <p className="text-[#2B2828] leading-relaxed text-[15px] mb-8">{eligibilityText}</p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+            <a
+              href={joinButtonUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-block bg-[#C95D63] text-white px-10 py-3 rounded font-semibold text-sm uppercase tracking-wide hover:bg-[#f4442e] transition-colors"
+            >
+              {joinButtonLabel}
+            </a>
+            {brochureUrl && (
+              <a
+                href={brochureUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-block border-2 border-[#16697A] text-[#16697A] px-10 py-3 rounded font-semibold text-sm uppercase tracking-wide hover:bg-[#16697A] hover:text-white transition-colors"
+              >
+                Download Brochure
+              </a>
+            )}
+          </div>
         </div>
       </section>
     </div>
