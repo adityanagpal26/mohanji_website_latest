@@ -131,12 +131,11 @@ const seed = async () => {
             label: 'Courses',
             link: '/courses',
             children: [
-              { label: 'Empowered 1.0', link: '/courses/empowered-1-0' },
-              { label: 'Empowered 2.0', link: '/courses/empowered-2-0' },
-              { label: 'Empowered 3.0', link: '/courses/empowered-3-0' },
-              { label: 'Empowered 4.0', link: '/courses/empowered-4-0' },
-              { label: 'Empowered 5.0', link: '/courses/empowered-5-0' },
-              { label: 'Mastery Program', link: '/courses/mastery' },
+              { label: 'Empowered 1.0', link: 'https://mohanji.org/courses/courses/empowered-1-0/', openInNewTab: true },
+              { label: 'Empowered 2.0', link: 'https://mohanji.org/courses/courses/empowered-2-0/', openInNewTab: true },
+              { label: 'Empowered 3.0', link: 'https://mohanji.org/courses/courses/empowered-3-0/', openInNewTab: true },
+              { label: 'Empowered 4.0', link: 'https://mohanji.org/courses/empowered-4-0/', openInNewTab: true },
+              { label: 'Empowered 1.0 – 4.0', link: 'https://mohanji.org/courses/empowered-1-4/', openInNewTab: true },
             ],
           },
           {
@@ -649,7 +648,113 @@ const seed = async () => {
       }
     }
 
-    // ── 14. Add howToUse steps to all meditations (idempotent) ──────────────
+    // ── 14. Seed Courses landing page ───────────────────────────────────────
+    console.log('📚 Seeding Courses landing page...')
+    const { docs: existingCourses } = await payload.find({
+      collection: 'pages',
+      where: { pageType: { equals: 'courses-landing' } },
+      limit: 1,
+    })
+    if (existingCourses.length === 0) {
+    await payload.create({
+      collection: 'pages',
+      data: {
+      title: 'Courses',
+      slug: 'courses',
+      pageType: 'courses-landing',
+      status: 'published',
+      coursesLandingContent: {
+        heroTagline: 'Online Courses & Workshops',
+        heroTitle: 'EMPOWERED!',
+        heroSubtitle: 'Make your life more purposeful. YOU CAN. Reinvent yourself. YOU CAN. Do not just let hours laze by and regret in the days ahead. Every moment is precious. It will never happen again.',
+        heroCtaLabel: 'View All Courses',
+        heroCtaUrl: 'https://mohanji.org/courses/',
+        whatToExpectTitle: 'What to Expect',
+        whatToExpectItems: [
+          { title: 'Connection to Self', description: 'Gain stability and an ability to respond (and not react) to situations.' },
+          { title: 'Awareness', description: 'Becoming aware of your limiting beliefs, habits and patterns.' },
+          { title: 'Unhooking', description: 'Consciously unhooking from binding attachments.' },
+          { title: 'Rewiring', description: 'Gaining clarity and rewiring your inner software.' },
+          { title: 'Know Your Purpose', description: 'Understanding the role of purpose in leading a meaningful life and realising your full potential.' },
+          { title: 'Inner Awakening', description: 'Awakening to the higher consciousness and experiencing true and lasting changes within.' },
+        ],
+        pathStripTitle: 'Choose Your Path',
+        pathStripBody: 'Each course is carefully designed to guide you step by step — from Empowered 1.0 online recordings to the Empowered 5.0 in-person retreat with Mohanji in India.',
+        courseCards: [
+          {
+            title: 'Empowered 1.0',
+            courseType: 'Course',
+            format: 'Video recording of an interactive Live Online Workshop',
+            level: 'beginner',
+            description: 'Begin your journey from fear to freedom. A foundational workshop connecting you with yourself through the manual of human life.',
+            externalUrl: 'https://mohanji.org/courses/courses/empowered-1-0/',
+          },
+          {
+            title: 'Empowered 2.0',
+            courseType: 'Course',
+            format: 'Video recording of an interactive online workshop',
+            level: 'intermediate',
+            description: 'Continue deepening awareness and unhooking from binding patterns — a natural progression from Empowered 1.0.',
+            externalUrl: 'https://mohanji.org/courses/courses/empowered-2-0/',
+          },
+          {
+            title: 'Empowered 3.0',
+            courseType: 'Course',
+            format: 'Video recording of an interactive online workshop',
+            level: 'intermediate',
+            description: 'Deepen your inner rewiring and gain clarity on purpose — building on the foundation of earlier Empowered levels.',
+            externalUrl: 'https://mohanji.org/courses/courses/empowered-3-0/',
+          },
+          {
+            title: 'Empowered 4.0',
+            courseType: 'Course',
+            format: 'Video recording of an interactive online workshop',
+            level: 'advanced',
+            description: 'Advanced inner work for consistent practitioners — exploring subtler dimensions of consciousness and liberation.',
+            externalUrl: 'https://mohanji.org/courses/empowered-4-0/',
+          },
+          {
+            title: 'Empowered 1.0 – 4.0',
+            courseType: 'Bundle',
+            format: 'Complete online workshop bundle',
+            level: 'beginner',
+            description: 'The complete Empowered series in one bundle — all four courses from 1.0 to 4.0 at a special combined price.',
+            externalUrl: 'https://mohanji.org/courses/empowered-1-4/',
+          },
+        ],
+        testimonialsTitle: 'What Participants Say',
+        testimonials: [
+          {
+            quote: 'Thank you Mohanji, great learnings taking place here within me. I am so grateful for being included in this journey with you!',
+            name: 'Carina Elizabeth Szabo',
+            course: 'Empowered 1.0',
+          },
+          {
+            quote: 'A very powerful event. I have the feeling like every answer is for me and cannot put the pen down, trying to write down everything.',
+            name: 'Andrijana Ristovska',
+            course: 'Empowered 1.0 — Macedonia',
+          },
+          {
+            quote: 'These past four days have been such an immense blessing. So many patterns are being revealed, so many unconscious fears coming to forth. This is truly a journey within.',
+            name: 'Arushi',
+            course: 'Empowered 1.0 — India',
+          },
+        ],
+        ctaTitle: 'Not Sure Where to Start?',
+        ctaBody: 'Begin with Empowered 1.0 — a video recording of an interactive live online workshop that has transformed thousands of lives around the world.',
+        ctaPrimaryLabel: 'Start with Empowered 1.0',
+        ctaPrimaryUrl: 'https://mohanji.org/courses/courses/empowered-1-0/',
+        ctaSecondaryLabel: 'Free Meditations',
+        ctaSecondaryUrl: '/meditations',
+      },
+      } as any,
+    })
+      console.log('   ✓ Courses landing page created')
+    } else {
+      console.log('   ✓ Courses landing page already exists — skipping')
+    }
+
+    // ── 15. Add howToUse steps to all meditations (idempotent) ──────────────
     console.log('📝 Adding howToUse steps to meditations...')
     const defaultSteps = [
       { title: 'Find a Quiet Space', description: 'Sit or lie comfortably in a place where you will not be disturbed.' },

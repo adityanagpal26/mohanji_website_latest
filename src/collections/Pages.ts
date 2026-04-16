@@ -49,6 +49,7 @@ export const Pages: CollectionConfig = {
         { label: 'Awakening Yoga Nidra', value: 'awakening-yoga-nidra' },
         { label: 'Mohanji Youth Club', value: 'youth-club' },
         { label: 'Volunteer', value: 'volunteer' },
+        { label: 'Courses (landing)', value: 'courses-landing' },
       ],
     },
 
@@ -1188,6 +1189,80 @@ export const Pages: CollectionConfig = {
       name: 'publishedAt',
       type: 'date',
       admin: { position: 'sidebar' },
+    },
+
+    // ─────────────────────────────────────────────────────────────────────────
+    // COURSES LANDING (pageType === 'courses-landing')
+    // ─────────────────────────────────────────────────────────────────────────
+    {
+      name: 'coursesLandingContent',
+      type: 'group',
+      label: 'Courses Landing Content',
+      admin: {
+        condition: (data: any) => data?.pageType === 'courses-landing',
+        description: 'All content for the Courses landing page.',
+      },
+      fields: [
+        // Hero
+        { name: 'heroTagline', type: 'text', label: 'Hero Tagline', admin: { description: 'Small uppercase label above the title.' } },
+        { name: 'heroTitle', type: 'text', label: 'Hero Title' },
+        { name: 'heroSubtitle', type: 'textarea', label: 'Hero Subtitle' },
+        { name: 'heroCtaLabel', type: 'text', label: 'Hero CTA Button Label' },
+        { name: 'heroCtaUrl', type: 'text', label: 'Hero CTA Button URL' },
+
+        // What to Expect
+        { name: 'whatToExpectTitle', type: 'text', label: 'What to Expect — Section Title' },
+        {
+          name: 'whatToExpectItems',
+          type: 'array',
+          label: 'What to Expect Items',
+          fields: [
+            { name: 'title', type: 'text', required: true },
+            { name: 'description', type: 'textarea' },
+          ],
+        },
+
+        // Path strip
+        { name: 'pathStripTitle', type: 'text', label: 'Choose Your Path — Title' },
+        { name: 'pathStripBody', type: 'textarea', label: 'Choose Your Path — Body' },
+
+        // Course cards
+        {
+          name: 'courseCards',
+          type: 'array',
+          label: 'Course Cards',
+          admin: { description: 'Each card links out to the external WP course page.' },
+          fields: [
+            { name: 'title', type: 'text', required: true },
+            { name: 'courseType', type: 'text', label: 'Type (e.g. Course, Workshop)' },
+            { name: 'format', type: 'text', label: 'Format (e.g. Video recording, Live Zoom)' },
+            { name: 'level', type: 'text', label: 'Level (beginner / intermediate / advanced)', admin: { description: 'Use: beginner, intermediate, or advanced' } },
+            { name: 'description', type: 'textarea' },
+            { name: 'externalUrl', type: 'text', label: 'External URL', admin: { description: 'Full URL to the course page on the old WP site.' } },
+          ],
+        },
+
+        // Testimonials
+        { name: 'testimonialsTitle', type: 'text', label: 'Testimonials Section Title' },
+        {
+          name: 'testimonials',
+          type: 'array',
+          label: 'Testimonials',
+          fields: [
+            { name: 'quote', type: 'textarea', required: true },
+            { name: 'name', type: 'text', required: true },
+            { name: 'course', type: 'text', label: 'Course Name (shown below quote)' },
+          ],
+        },
+
+        // Bottom CTA
+        { name: 'ctaTitle', type: 'text', label: 'CTA Section Title' },
+        { name: 'ctaBody', type: 'textarea', label: 'CTA Section Body' },
+        { name: 'ctaPrimaryLabel', type: 'text', label: 'Primary Button Label' },
+        { name: 'ctaPrimaryUrl', type: 'text', label: 'Primary Button URL' },
+        { name: 'ctaSecondaryLabel', type: 'text', label: 'Secondary Button Label' },
+        { name: 'ctaSecondaryUrl', type: 'text', label: 'Secondary Button URL (internal)' },
+      ],
     },
   ],
 }

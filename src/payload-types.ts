@@ -265,6 +265,7 @@ export interface Page {
         | 'awakening-yoga-nidra'
         | 'youth-club'
         | 'volunteer'
+        | 'courses-landing'
       )
     | null;
   layout?:
@@ -1184,6 +1185,64 @@ export interface Page {
   };
   status?: ('draft' | 'published') | null;
   publishedAt?: string | null;
+  /**
+   * All content for the Courses landing page.
+   */
+  coursesLandingContent?: {
+    /**
+     * Small uppercase label above the title.
+     */
+    heroTagline?: string | null;
+    heroTitle?: string | null;
+    heroSubtitle?: string | null;
+    heroCtaLabel?: string | null;
+    heroCtaUrl?: string | null;
+    whatToExpectTitle?: string | null;
+    whatToExpectItems?:
+      | {
+          title: string;
+          description?: string | null;
+          id?: string | null;
+        }[]
+      | null;
+    pathStripTitle?: string | null;
+    pathStripBody?: string | null;
+    /**
+     * Each card links out to the external WP course page.
+     */
+    courseCards?:
+      | {
+          title: string;
+          courseType?: string | null;
+          format?: string | null;
+          /**
+           * Use: beginner, intermediate, or advanced
+           */
+          level?: string | null;
+          description?: string | null;
+          /**
+           * Full URL to the course page on the old WP site.
+           */
+          externalUrl?: string | null;
+          id?: string | null;
+        }[]
+      | null;
+    testimonialsTitle?: string | null;
+    testimonials?:
+      | {
+          quote: string;
+          name: string;
+          course?: string | null;
+          id?: string | null;
+        }[]
+      | null;
+    ctaTitle?: string | null;
+    ctaBody?: string | null;
+    ctaPrimaryLabel?: string | null;
+    ctaPrimaryUrl?: string | null;
+    ctaSecondaryLabel?: string | null;
+    ctaSecondaryUrl?: string | null;
+  };
   updatedAt: string;
   createdAt: string;
   _status?: ('draft' | 'published') | null;
@@ -3608,6 +3667,51 @@ export interface PagesSelect<T extends boolean = true> {
       };
   status?: T;
   publishedAt?: T;
+  coursesLandingContent?:
+    | T
+    | {
+        heroTagline?: T;
+        heroTitle?: T;
+        heroSubtitle?: T;
+        heroCtaLabel?: T;
+        heroCtaUrl?: T;
+        whatToExpectTitle?: T;
+        whatToExpectItems?:
+          | T
+          | {
+              title?: T;
+              description?: T;
+              id?: T;
+            };
+        pathStripTitle?: T;
+        pathStripBody?: T;
+        courseCards?:
+          | T
+          | {
+              title?: T;
+              courseType?: T;
+              format?: T;
+              level?: T;
+              description?: T;
+              externalUrl?: T;
+              id?: T;
+            };
+        testimonialsTitle?: T;
+        testimonials?:
+          | T
+          | {
+              quote?: T;
+              name?: T;
+              course?: T;
+              id?: T;
+            };
+        ctaTitle?: T;
+        ctaBody?: T;
+        ctaPrimaryLabel?: T;
+        ctaPrimaryUrl?: T;
+        ctaSecondaryLabel?: T;
+        ctaSecondaryUrl?: T;
+      };
   updatedAt?: T;
   createdAt?: T;
   _status?: T;
