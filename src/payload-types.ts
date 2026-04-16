@@ -2473,6 +2473,38 @@ export interface Event {
   id: number;
   title: string;
   slug?: string | null;
+  status?: ('draft' | 'published') | null;
+  /**
+   * Used to sort and filter upcoming vs past events.
+   */
+  startDate: string;
+  /**
+   * Leave blank for single-day events.
+   */
+  endDate?: string | null;
+  /**
+   * Free-form label shown on the page, e.g. "18 Aug – 3 Sep 2026, Batch options available".
+   */
+  displayDate?: string | null;
+  /**
+   * e.g. "Online", "Tibet / Nepal", "Kathmandu, Nepal"
+   */
+  location?: string | null;
+  /**
+   * Shown as thumbnail on listing cards and as hero background on detail page.
+   */
+  coverImage?: (number | null) | Media;
+  /**
+   * Short subtitle shown below the title in the hero.
+   */
+  tagline?: string | null;
+  /**
+   * Shown on listing cards (1–2 sentences).
+   */
+  shortDescription?: string | null;
+  /**
+   * Full event description — headings, lists, sections, etc.
+   */
   description?: {
     root: {
       type: string;
@@ -2488,35 +2520,20 @@ export interface Event {
     };
     [k: string]: unknown;
   } | null;
-  featuredImage?: (number | null) | Media;
-  startDate: string;
-  endDate?: string | null;
-  venue?: (number | null) | Venue;
-  eventType?: ('retreat' | 'satsang' | 'pilgrimage' | 'celebration' | 'workshop' | 'online') | null;
-  registrationUrl?: string | null;
-  registrationForm?: (number | null) | Form;
-  categories?: (number | Category)[] | null;
-  isPast?: boolean | null;
-  status?: ('draft' | 'published') | null;
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "venues".
- */
-export interface Venue {
-  id: number;
-  name: string;
-  address?: string | null;
-  city?: string | null;
-  country?: string | null;
-  latitude?: number | null;
-  longitude?: number | null;
   /**
-   * Google Maps link for this venue
+   * e.g. "Join Now", "Know More", "Register"
    */
-  googleMapsUrl?: string | null;
+  ctaLabel?: string | null;
+  /**
+   * Destination URL. Can be internal (/register-for-...) or external (https://kailash.mohanji.org).
+   */
+  ctaUrl?: string | null;
+  /**
+   * Check if the URL points to an external site.
+   */
+  ctaExternal?: boolean | null;
+  isPast?: boolean | null;
+  eventType?: ('retreat' | 'satsang' | 'pilgrimage' | 'celebration' | 'workshop' | 'online') | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -2594,6 +2611,25 @@ export interface Award {
   date?: string | null;
   image?: (number | null) | Media;
   organization?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "venues".
+ */
+export interface Venue {
+  id: number;
+  name: string;
+  address?: string | null;
+  city?: string | null;
+  country?: string | null;
+  latitude?: number | null;
+  longitude?: number | null;
+  /**
+   * Google Maps link for this venue
+   */
+  googleMapsUrl?: string | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -4460,17 +4496,20 @@ export interface LessonsSelect<T extends boolean = true> {
 export interface EventsSelect<T extends boolean = true> {
   title?: T;
   slug?: T;
-  description?: T;
-  featuredImage?: T;
+  status?: T;
   startDate?: T;
   endDate?: T;
-  venue?: T;
-  eventType?: T;
-  registrationUrl?: T;
-  registrationForm?: T;
-  categories?: T;
+  displayDate?: T;
+  location?: T;
+  coverImage?: T;
+  tagline?: T;
+  shortDescription?: T;
+  description?: T;
+  ctaLabel?: T;
+  ctaUrl?: T;
+  ctaExternal?: T;
   isPast?: T;
-  status?: T;
+  eventType?: T;
   updatedAt?: T;
   createdAt?: T;
 }

@@ -334,11 +334,10 @@ export async function GET() {
           startDate: event.startDate,
           endDate: event.endDate,
           eventType: event.eventType as 'retreat' | 'satsang' | 'pilgrimage' | 'celebration' | 'workshop' | 'online',
-          registrationUrl: event.registrationUrl,
+          ctaUrl: event.registrationUrl,
           status: 'published',
-          isPast: false,
-          ...(imageId ? { featuredImage: imageId } : {}),
-        },
+          ...(imageId ? { coverImage: imageId } : {}),
+        } as any,
       })
       eventsCount++
     } catch { /* skip */ }

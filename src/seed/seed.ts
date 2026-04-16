@@ -554,7 +554,102 @@ const seed = async () => {
       console.log('   ✓ Volunteer page already exists — skipping')
     }
 
-    // ── 13. Add howToUse steps to all meditations (idempotent) ─────────────
+    // ── 13. Seed Events ──────────────────────────────────────────────────────
+    console.log('🗓️  Seeding events...')
+    const eventsToSeed = [
+      // ── Upcoming ──────────────────────────────────────────────────────────
+      {
+        title: 'Silence with Mohanji',
+        slug: 'silence-with-mohanji',
+        startDate: '2026-04-16',
+        displayDate: 'Every week — date varies with Mohanji\'s schedule',
+        location: 'Online',
+        tagline: 'A weekly 30-minute structured silence practice',
+        shortDescription: 'A weekly opportunity to come together as a community and sit in silence with Mohanji, deepening inner connection through a shared practice of stillness.',
+        ctaLabel: 'Join Now',
+        ctaUrl: 'https://mohanji.org/register-for-silence-with-mohanji/',
+        ctaExternal: true,
+      },
+      {
+        title: 'Weekly Talk with Mohanji – Live Online Q&A Series',
+        slug: 'weekly-talk-with-mohanji-live-online-qa-series',
+        startDate: '2026-04-18',
+        location: 'Online',
+        tagline: 'Live online Q&A with Mohanji',
+        shortDescription: 'Join Mohanji live for an online question and answer session. Bring your questions on spirituality, life and consciousness.',
+        ctaLabel: 'Register',
+        ctaUrl: '/courses',
+        ctaExternal: false,
+      },
+      {
+        title: 'Kailash with Mohanji 2026',
+        slug: 'kailash-with-mohanji-2026',
+        startDate: '2026-08-18',
+        endDate: '2026-09-03',
+        displayDate: '18 August – 3 September 2026 · Batch options available',
+        location: 'Mount Kailash & Lake Manasarovar, Tibet',
+        tagline: 'Dev Kumbh · Mohanji\'s Physical Presence · Sacred Kailash Pilgrimage',
+        shortDescription: 'A once-in-12-years Dev Kumbh pilgrimage to Mount Kailash and Lake Manasarovar in the presence of Mohanji.',
+        ctaLabel: 'Know More',
+        ctaUrl: 'https://kailash.mohanji.org/',
+        ctaExternal: true,
+      },
+      {
+        title: 'Muktinath with Mohanji 2026',
+        slug: 'muktinath-with-mohanji-2026',
+        startDate: '2026-09-04',
+        endDate: '2026-09-07',
+        displayDate: '4 – 7 September 2026',
+        location: 'Muktinath, Nepal',
+        tagline: 'Sacred pilgrimage to Muktinath in the presence of Mohanji',
+        shortDescription: 'Join Mohanji for a sacred pilgrimage to the holy shrine of Muktinath in Nepal.',
+        ctaLabel: 'Find out more',
+        ctaUrl: 'https://mohanji.org/events/muktinath-with-mohanji-2026/',
+        ctaExternal: true,
+      },
+      // ── Past ──────────────────────────────────────────────────────────────
+      {
+        title: 'Maha Shivaratri with Mohanji 2026',
+        slug: 'maha-shivaratri-with-mohanji-2026',
+        startDate: '2026-02-15',
+        displayDate: '15 February 2026 · 11 am EST | 5 pm CET | 9.30 pm IST',
+        location: 'Online — 10 Mohanji Centres worldwide',
+        tagline: 'Awakening the silence within',
+        shortDescription: 'A global gathering honouring Shiva Consciousness: 20+ hours of continuous Homa, Abhishekham, and chanting across 10 Mohanji Centres worldwide.',
+        ctaLabel: 'Join Now',
+        ctaUrl: 'https://mohanji.org/apply-for-mahashivaratri-with-mohanji-2026',
+        ctaExternal: true,
+      },
+      {
+        title: "Mohanji's 61st Birthday Celebration",
+        slug: 'mohanjis-61st-birthday-celebration',
+        startDate: '2026-02-23',
+        location: 'Global',
+        shortDescription: "Global celebration of Mohanji's 61st birthday with satsangs, homas, and community gatherings around the world.",
+        ctaLabel: 'Find out more',
+        ctaUrl: 'https://mohanji.org/events/mohanjis-61st-birthday-celebration/',
+        ctaExternal: true,
+      },
+    ]
+
+    for (const eventData of eventsToSeed) {
+      const { docs: existing } = await payload.find({
+        collection: 'events',
+        where: { slug: { equals: eventData.slug } },
+        limit: 1,
+      })
+      if (existing.length === 0) {
+        await payload.create({
+          collection: 'events',
+          data: { ...eventData, status: 'published' } as any,
+        })
+        console.log(`   ✓ Event "${eventData.title}" created`)
+      } else {
+        console.log(`   ✓ Event "${eventData.title}" already exists — skipping`)
+      }
+    }
+
+    // ── 14. Add howToUse steps to all meditations (idempotent) ──────────────
     console.log('📝 Adding howToUse steps to meditations...')
     const defaultSteps = [
       { title: 'Find a Quiet Space', description: 'Sit or lie comfortably in a place where you will not be disturbed.' },

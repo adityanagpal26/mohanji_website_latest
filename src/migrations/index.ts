@@ -9,6 +9,7 @@ import * as migration_20260415_180000_traditional_yoga_page from './20260415_180
 import * as migration_20260416_190000_awakening_yoga_nidra_page from './20260416_190000_awakening_yoga_nidra_page';
 import * as migration_20260416_200000_youth_club_page from './20260416_200000_youth_club_page';
 import * as migration_20260416_210000_volunteer_page from './20260416_210000_volunteer_page';
+import * as migration_20260416_220000_events_content_fields from './20260416_220000_events_content_fields';
 
 export const migrations = [
   {
@@ -65,5 +66,10 @@ export const migrations = [
     up: migration_20260416_210000_volunteer_page.up,
     down: migration_20260416_210000_volunteer_page.down,
     name: '20260416_210000_volunteer_page',
+  },
+  {
+    up: migration_20260416_220000_events_content_fields.up,
+    down: migration_20260416_220000_events_content_fields.down,
+    name: '20260416_220000_events_content_fields',
   },
 ];

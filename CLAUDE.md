@@ -75,6 +75,8 @@ All schema changes are in `src/migrations/`. They are tracked in the `payload_mi
 | `20260415_180000_traditional_yoga_page` | Adds `traditional-yoga` enum value; adds `traditional_yoga_content_*` scalar columns; creates `programs` array tables for pages and `_pages_v` |
 | `20260416_190000_awakening_yoga_nidra_page` | Adds `awakening-yoga-nidra` enum value; adds `awakening_yoga_nidra_content_*` scalar columns; creates `benefits_list` array tables for pages and `_pages_v` |
 | `20260416_200000_youth_club_page` | Adds `youth-club` enum value; adds `youth_club_content_*` scalar columns; creates `activities` array tables for pages and `_pages_v` |
+| `20260416_210000_volunteer_page` | Adds `volunteer` enum value; adds `volunteer_content_*` scalar columns; creates `pages_volunteer_content_opportunities` array tables |
+| `20260416_220000_events_content_fields` | Adds new columns to `events` table: `display_date`, `location`, `cover_image_id`, `tagline`, `short_description`, `cta_label`, `cta_url`, `cta_external` |
 
 ### Rules for writing new migrations
 
@@ -138,7 +140,9 @@ npm run seed
 9. Traditional Yoga (HSTY) page
 10. Awakening Yoga Nidra page
 11. Mohanji Youth Club page
-12. `howToUse` steps on all meditations
+12. Volunteer page
+13. 6 seed events (Silence with Mohanji, Weekly Talk, Kailash 2026, Muktinath 2026, Maha Shivaratri 2026, 61st Birthday celebration)
+14. `howToUse` steps on all meditations
 
 ---
 
@@ -309,14 +313,14 @@ mohanji-website/
 | Meditations | `/meditations`, `/meditations/[slug]`, `/meditations/[slug]/download` | ✅ 8 meditations + download pages with 26 languages |
 | Practices | `/practices`, `/practices/[slug]`, `/practices/mai-tri-method`, `/practices/traditional-yoga`, `/practices/awakening-yoga-nidra`, `/practices/mai-tri-method/apply`, `/practices/consciousness-kriya/apply` | ✅ All practices; dedicated Mai-Tri, Traditional Yoga, and Awakening Yoga Nidra pages; apply forms for Mai-Tri and Consciousness Kriya |
 | Courses | `/courses`, `/courses/[slug]` | ✅ Empowered 1.0–5.0 series |
-| Events | `/events`, `/events/past`, `/events/[slug]` | ✅ Upcoming + past |
+| Events | `/events`, `/events/past`, `/events/[slug]` | ✅ Upcoming + past listings with date-based filtering; detail pages with richText body, cover image, CTA button, sidebar |
 | Kailash | 6 pages including application form | ✅ Full pilgrimage section |
 | Books | `/books`, `/books/[slug]` | ✅ 25+ books in 3 categories |
 | Audios | `/audios`, `/audios/[slug]` | ✅ Real album content |
 | Blog | `/blog`, `/blog/[slug]` | ✅ Satsang blogs |
 | News | `/news`, `/news/[slug]` | ✅ News articles |
 | Quotes | `/quotes` | ✅ 24 real quotes, 12 topics |
-| Join | `/join/volunteer`, `/join/youth-club` | ✅ |
+| Join | `/join/volunteer`, `/join/youth-club` | ✅ Volunteer page (CMS-driven with opportunities list + Google Form CTA); Youth Club page with brochure download |
 | Contact | `/contact` | ✅ Full form with 7 subject options |
 | Donate | `/donate` | ✅ 7 regions (needs real payment URLs in CMS) |
 | Search | `/search` | ✅ Full-text search + category browse |
@@ -405,7 +409,7 @@ Max container width: 1200px, centered
 | `practices` | Spiritual practices | title, slug, description, benefits[], howItWorks[], tagline, applyPageTitle/Intro, applyFormEmail |
 | `courses` | Empowered course series | title, slug, description, level, lessons, registrationUrl |
 | `lessons` | Individual course lessons | title, course (relation), order, content, videoUrl |
-| `events` | Upcoming + past events | title, startDate, endDate, venue, eventType, registrationUrl, isPast |
+| `events` | Upcoming + past events | title, slug, startDate, endDate, displayDate, location, coverImage, tagline, shortDescription, description (richText), ctaLabel, ctaUrl, ctaExternal, eventType, status |
 | `books` | Mohanji's books | title, slug, description, coverImage, purchaseUrl, bookType |
 | `audios` | Prayers, mantras, chants | title, audioFile, duration, audioType |
 | `quotes` | Mohanji quotes | text, topic, image |

@@ -19,13 +19,13 @@ function formatMonth(dateStr: string) {
   return new Date(dateStr).toLocaleDateString('en-GB', { month: 'short' }).toUpperCase()
 }
 
-function formatFullDate(dateStr: string) {
-  return new Date(dateStr).toLocaleDateString('en-GB', {
-    weekday: 'long',
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-  })
+function formatDateRange(startDate: string, endDate?: string | null, displayDate?: string | null): string {
+  if (displayDate) return displayDate
+  const opts: Intl.DateTimeFormatOptions = { day: 'numeric', month: 'long', year: 'numeric' }
+  const start = new Date(startDate).toLocaleDateString('en-GB', opts)
+  if (!endDate) return start
+  const end = new Date(endDate).toLocaleDateString('en-GB', opts)
+  return `${start} – ${end}`
 }
 
 function groupByMonth(events: any[]) {
@@ -60,10 +60,16 @@ export default async function EventsPage({
   const limit = 12
 
   const payload = await getPayloadClient()
+  const now = new Date().toISOString()
 
   const { docs: events, totalDocs } = await payload.find({
     collection: 'events',
-    where: { isPast: { equals: false } },
+    where: {
+      and: [
+        { startDate: { greater_than_equal: now } },
+        { status: { equals: 'published' } },
+      ],
+    },
     sort: 'startDate',
     depth: 1,
     limit,
@@ -104,14 +110,6 @@ export default async function EventsPage({
               <p className="text-gray-500 mb-4">
                 No upcoming events at this time. Please check back soon.
               </p>
-              <a
-                href="https://mohanji.org/events/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-block px-6 py-2 bg-[#C95D63] text-white rounded hover:bg-[#f4442e] transition-colors text-sm font-medium"
-              >
-                View Events on Mohanji.org
-              </a>
             </div>
           ) : (
             <>
@@ -122,13 +120,13 @@ export default async function EventsPage({
                   <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 mt-4">
                     {monthEvents.map((event: any) => {
                       const imageUrl =
-                        typeof event.featuredImage === 'object' && event.featuredImage?.url
+                        (typeof event.coverImage === 'object' && event.coverImage?.url)
+                          ? event.coverImage.url
+                          : (typeof event.featuredImage === 'object' && event.featuredImage?.url)
                           ? event.featuredImage.url
                           : null
-                      const venueName =
-                        typeof event.venue === 'object' && event.venue
-                          ? `${event.venue.name}${event.venue.city ? ', ' + event.venue.city : ''}${event.venue.country ? ', ' + event.venue.country : ''}`
-                          : null
+
+                      const dateLabel = formatDateRange(event.startDate, event.endDate, event.displayDate)
 
                       return (
                         <Link
@@ -168,23 +166,22 @@ export default async function EventsPage({
                             <h3 className="font-heading text-lg text-[#16697A] leading-snug mb-1 group-hover:text-[#C95D63] transition-colors">
                               {event.title}
                             </h3>
-                            <p className="text-sm text-gray-500 mb-1">{formatFullDate(event.startDate)}</p>
-                            {venueName && (
-                              <p className="text-sm text-gray-600 mb-3">
-                                <span className="mr-1">&#x1F4CD;</span>
-                                {venueName}
+                            <p className="text-sm text-gray-500 mb-1">{dateLabel}</p>
+                            {event.location && (
+                              <p className="text-sm text-gray-600 mb-2">
+                                <span className="mr-1">📍</span>
+                                {event.location}
+                              </p>
+                            )}
+                            {event.shortDescription && (
+                              <p className="text-sm text-gray-600 mb-3 line-clamp-2">
+                                {event.shortDescription}
                               </p>
                             )}
                             <div className="mt-auto">
-                              {event.registrationUrl ? (
-                                <span className="inline-block text-sm bg-[#C95D63] text-white px-4 py-1.5 rounded hover:bg-[#f4442e] transition-colors">
-                                  Register Now
-                                </span>
-                              ) : (
-                                <span className="inline-block text-sm text-[#16697A] border border-[#16697A] px-4 py-1.5 rounded">
-                                  View Details
-                                </span>
-                              )}
+                              <span className="inline-block text-sm bg-[#C95D63] text-white px-4 py-1.5 rounded hover:bg-[#f4442e] transition-colors">
+                                {event.ctaLabel || 'Find Out More'}
+                              </span>
                             </div>
                           </div>
                         </Link>

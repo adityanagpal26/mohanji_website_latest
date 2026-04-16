@@ -19,12 +19,13 @@ function formatMonth(dateStr: string) {
   return new Date(dateStr).toLocaleDateString('en-GB', { month: 'short' }).toUpperCase()
 }
 
-function formatFullDate(dateStr: string) {
-  return new Date(dateStr).toLocaleDateString('en-GB', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-  })
+function formatDateRange(startDate: string, endDate?: string | null, displayDate?: string | null): string {
+  if (displayDate) return displayDate
+  const opts: Intl.DateTimeFormatOptions = { day: 'numeric', month: 'long', year: 'numeric' }
+  const start = new Date(startDate).toLocaleDateString('en-GB', opts)
+  if (!endDate) return start
+  const end = new Date(endDate).toLocaleDateString('en-GB', opts)
+  return `${start} – ${end}`
 }
 
 function groupByYear(events: any[]) {
@@ -56,10 +57,16 @@ export default async function PastEventsPage({
   const limit = 12
 
   const payload = await getPayloadClient()
+  const now = new Date().toISOString()
 
   const { docs: events, totalDocs } = await payload.find({
     collection: 'events',
-    where: { isPast: { equals: true } },
+    where: {
+      and: [
+        { startDate: { less_than: now } },
+        { status: { equals: 'published' } },
+      ],
+    },
     sort: '-startDate',
     depth: 1,
     limit,
@@ -105,13 +112,13 @@ export default async function PastEventsPage({
                 <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 mt-4">
                   {yearEvents.map((event: any) => {
                     const imageUrl =
-                      typeof event.featuredImage === 'object' && event.featuredImage?.url
+                      (typeof event.coverImage === 'object' && event.coverImage?.url)
+                        ? event.coverImage.url
+                        : (typeof event.featuredImage === 'object' && event.featuredImage?.url)
                         ? event.featuredImage.url
                         : null
-                    const venueName =
-                      typeof event.venue === 'object' && event.venue
-                        ? `${event.venue.name}${event.venue.city ? ', ' + event.venue.city : ''}${event.venue.country ? ', ' + event.venue.country : ''}`
-                        : null
+
+                    const dateLabel = formatDateRange(event.startDate, event.endDate, event.displayDate)
 
                     return (
                       <Link
@@ -155,11 +162,16 @@ export default async function PastEventsPage({
                           <h3 className="font-heading text-lg text-[#16697A] leading-snug mb-1 group-hover:text-[#C95D63] transition-colors">
                             {event.title}
                           </h3>
-                          <p className="text-sm text-gray-500 mb-1">{formatFullDate(event.startDate)}</p>
-                          {venueName && (
+                          <p className="text-sm text-gray-500 mb-1">{dateLabel}</p>
+                          {event.location && (
                             <p className="text-sm text-gray-600">
-                              <span className="mr-1">&#x1F4CD;</span>
-                              {venueName}
+                              <span className="mr-1">📍</span>
+                              {event.location}
+                            </p>
+                          )}
+                          {event.shortDescription && (
+                            <p className="text-sm text-gray-500 mt-2 line-clamp-2">
+                              {event.shortDescription}
                             </p>
                           )}
                         </div>
