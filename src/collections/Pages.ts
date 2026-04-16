@@ -48,6 +48,7 @@ export const Pages: CollectionConfig = {
         { label: 'Traditional Yoga (HSTY)', value: 'traditional-yoga' },
         { label: 'Awakening Yoga Nidra', value: 'awakening-yoga-nidra' },
         { label: 'Mohanji Youth Club', value: 'youth-club' },
+        { label: 'Volunteer', value: 'volunteer' },
       ],
     },
 
@@ -1123,6 +1124,52 @@ export const Pages: CollectionConfig = {
           label: 'Download Brochure — URL',
           admin: { description: 'PDF URL. Leave blank to hide the button.' },
         },
+      ],
+    },
+
+    // ── Volunteer Page Content ────────────────────────────────────────────────
+    {
+      name: 'volunteerContent',
+      type: 'group',
+      label: 'Volunteer Page Content',
+      admin: { condition: (data: any) => data?.pageType === 'volunteer' },
+      fields: [
+        { name: 'heroTitle', type: 'text', label: 'Hero Title', admin: { description: 'e.g. "Volunteer for a Greater Good"' } },
+        { name: 'heroSubtitle', type: 'text', label: 'Hero Subtitle' },
+        { name: 'heroImage', type: 'upload', relationTo: 'media', label: 'Hero Background Image' },
+        {
+          name: 'whySectionTitle',
+          type: 'text',
+          label: 'Why Volunteer — Section Title',
+          admin: { description: 'Default: "Why Volunteer?"' },
+        },
+        {
+          name: 'whySectionText',
+          type: 'textarea',
+          label: 'Why Volunteer — Body Text',
+          admin: { description: 'Separate paragraphs with \\n\\n.' },
+        },
+        {
+          name: 'pullQuote',
+          type: 'text',
+          label: 'Pull Quote',
+        },
+        {
+          name: 'opportunitiesTitle',
+          type: 'text',
+          label: 'Current Opportunities — Section Title',
+        },
+        {
+          name: 'opportunities',
+          type: 'array',
+          label: 'Current Opportunities',
+          admin: { description: 'Each open volunteer role.' },
+          fields: [
+            { name: 'role', type: 'text', required: true, label: 'Role Title' },
+          ],
+        },
+        { name: 'joinButtonLabel', type: 'text', label: 'CTA Button — Label', admin: { description: 'Default: "Volunteer"' } },
+        { name: 'joinButtonUrl', type: 'text', label: 'CTA Button — URL', admin: { description: 'Google Form URL — opens in new tab.' } },
       ],
     },
 

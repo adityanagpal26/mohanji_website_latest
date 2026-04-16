@@ -264,6 +264,7 @@ export interface Page {
         | 'traditional-yoga'
         | 'awakening-yoga-nidra'
         | 'youth-club'
+        | 'volunteer'
       )
     | null;
   layout?:
@@ -1145,6 +1146,41 @@ export interface Page {
      * PDF URL. Leave blank to hide the button.
      */
     brochureUrl?: string | null;
+  };
+  volunteerContent?: {
+    /**
+     * e.g. "Volunteer for a Greater Good"
+     */
+    heroTitle?: string | null;
+    heroSubtitle?: string | null;
+    heroImage?: (number | null) | Media;
+    /**
+     * Default: "Why Volunteer?"
+     */
+    whySectionTitle?: string | null;
+    /**
+     * Separate paragraphs with \n\n.
+     */
+    whySectionText?: string | null;
+    pullQuote?: string | null;
+    opportunitiesTitle?: string | null;
+    /**
+     * Each open volunteer role.
+     */
+    opportunities?:
+      | {
+          role: string;
+          id?: string | null;
+        }[]
+      | null;
+    /**
+     * Default: "Volunteer"
+     */
+    joinButtonLabel?: string | null;
+    /**
+     * Google Form URL — opens in new tab.
+     */
+    joinButtonUrl?: string | null;
   };
   status?: ('draft' | 'published') | null;
   publishedAt?: string | null;
@@ -3514,6 +3550,25 @@ export interface PagesSelect<T extends boolean = true> {
         joinButtonLabel?: T;
         joinButtonUrl?: T;
         brochureUrl?: T;
+      };
+  volunteerContent?:
+    | T
+    | {
+        heroTitle?: T;
+        heroSubtitle?: T;
+        heroImage?: T;
+        whySectionTitle?: T;
+        whySectionText?: T;
+        pullQuote?: T;
+        opportunitiesTitle?: T;
+        opportunities?:
+          | T
+          | {
+              role?: T;
+              id?: T;
+            };
+        joinButtonLabel?: T;
+        joinButtonUrl?: T;
       };
   status?: T;
   publishedAt?: T;

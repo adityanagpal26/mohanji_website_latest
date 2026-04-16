@@ -497,7 +497,47 @@ const seed = async () => {
       console.log('   ✓ Youth Club page already exists — skipping')
     }
 
-    // ── 12. Add howToUse steps to all meditations (idempotent) ─────────────
+    // ── 12. Seed Volunteer page ──────────────────────────────────────────────
+    console.log('🤝 Seeding Volunteer page...')
+    const { docs: existingVol } = await payload.find({
+      collection: 'pages',
+      where: { pageType: { equals: 'volunteer' } },
+      limit: 1,
+    })
+    if (existingVol.length === 0) {
+      await payload.create({
+        collection: 'pages',
+        data: {
+          title: 'Volunteer for a Greater Good',
+          slug: 'volunteer',
+          pageType: 'volunteer',
+          status: 'published',
+          volunteerContent: {
+            heroTitle: 'Volunteer for a Greater Good',
+            heroSubtitle: 'Find out about opportunities to create a better tomorrow',
+            whySectionTitle: 'Why Volunteer?',
+            whySectionText:
+              "Giving selflessly to all beings, one's community, animals and birds, as well as serving the Earth with an attitude of gratitude is the pillar of Mohanji's teachings. Mohanji says that volunteering makes us complete only if it is done selflessly. Volunteering should become our lifestyle, then it truly becomes extremely powerful and uplifting.\n\nSocial service or selfless action of any kind gives us a chance to unhook from the accumulating dues and karmas of life and helps us live a more purposeful life.\n\nMohanji Foundation brings people together in a mission to make this world a better place. Guided by love and compassion, we strive to give our best to every living being who needs help and support, be it material, emotional or spiritual. We believe that in this way we contribute to the establishment of harmony in the society and the world.\n\nEveryone has something to give. It can be a skill (writing, translating, graphic design, video editing), a craft (knitting, embroidery), or our time, our smiles and hugs, or the willingness of our hands to pack or carry, etc. Your 'little' can mean a lot to someone! No matter how small our deeds may seem, when we do them with pure intention, their effect spreads through the entire universe.",
+            pullQuote:
+              'Believe in what you do, believe in volunteering, believe in being selfless, have no expectation – then, volunteering becomes your strength.',
+            opportunitiesTitle: 'Current Opportunities',
+            opportunities: [
+              { role: 'Microsoft Azure Administrator' },
+              { role: 'Digital Marketing Specialist (Podcasts)' },
+              { role: 'Web Copy Writer' },
+              { role: 'UI / UX Designer' },
+            ],
+            joinButtonLabel: 'Volunteer',
+            joinButtonUrl: 'https://forms.gle/f657nFpcmZqvooMu6',
+          },
+        } as any,
+      })
+      console.log('   ✓ Volunteer page created')
+    } else {
+      console.log('   ✓ Volunteer page already exists — skipping')
+    }
+
+    // ── 13. Add howToUse steps to all meditations (idempotent) ─────────────
     console.log('📝 Adding howToUse steps to meditations...')
     const defaultSteps = [
       { title: 'Find a Quiet Space', description: 'Sit or lie comfortably in a place where you will not be disturbed.' },
