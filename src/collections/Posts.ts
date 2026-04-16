@@ -60,6 +60,39 @@ export const Posts: CollectionConfig = {
       hasMany: true,
     },
     {
+      name: 'publicationName',
+      type: 'text',
+      admin: {
+        description: 'Name of the publication, channel, or platform (e.g. "Times of India", "PMC Channel")',
+      },
+    },
+    {
+      name: 'mediaType',
+      type: 'select',
+      options: [
+        { label: 'Newspaper / Magazine Article', value: 'article' },
+        { label: 'Podcast', value: 'podcast' },
+        { label: 'TV Coverage', value: 'tv-coverage' },
+        { label: 'Video', value: 'video' },
+        { label: 'Press Release', value: 'press-release' },
+        { label: 'Interview', value: 'interview' },
+      ],
+    },
+    {
+      name: 'externalUrl',
+      type: 'text',
+      admin: {
+        description: 'Link to the original article, podcast, or video',
+      },
+    },
+    {
+      name: 'embedCode',
+      type: 'textarea',
+      admin: {
+        description: 'HTML embed code for podcast player, YouTube video, etc.',
+      },
+    },
+    {
       name: 'author',
       type: 'relationship',
       relationTo: 'users',

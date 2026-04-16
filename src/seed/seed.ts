@@ -142,9 +142,9 @@ const seed = async () => {
             label: 'Media',
             link: '/media',
             children: [
-              { label: 'Blogs', link: '/blog' },
+              { label: 'Blogs', link: 'https://mohanji.org/blogs/satsangs/', openInNewTab: true },
               { label: 'News', link: '/news' },
-              { label: 'Press Coverage', link: '/news/press-coverage' },
+              { label: 'Press Coverage', link: '/press' },
               { label: 'Podcast', link: '/media#podcast' },
               { label: 'Videos', link: '/media#videos' },
             ],
@@ -770,6 +770,113 @@ const seed = async () => {
           data: { howToUse: defaultSteps } as any,
         })
         console.log(`   ✓ howToUse added to "${med.title}"`)
+      }
+    }
+
+    // ── 16. Seed Press Coverage articles ────────────────────────────────────
+    console.log('📰 Seeding press coverage articles...')
+    const pressArticles = [
+      {
+        title: 'Mohanji – Self-Discovery as the Most Mysterious and Most Joyful Process',
+        slug: 'mohanji-self-discovery-as-the-most-mysterious-and-most-joyful-process',
+        postType: 'press-coverage',
+        publicationName: 'The Times of Russia',
+        mediaType: 'interview',
+        publishedAt: '2026-03-23T00:00:00.000Z',
+        excerpt: 'A philosophical interview with Mohanji in The Times of Russia, exploring self-discovery as the most mysterious and joyful process available to every human being.',
+        externalUrl: 'https://thetimesofrussia.com/culture/mohanji-self-discovery-as-the-most-mysterious-and-most-joyful-process/',
+        status: 'published',
+      },
+      {
+        title: "Veganism and Future of Humanity: Mohanji's Insights on News 18 on World Vegan Day",
+        slug: 'veganism-and-future-of-humanity-mohanjis-insights-on-news-18-on-world-vegan-day',
+        postType: 'press-coverage',
+        publicationName: 'News 18',
+        mediaType: 'tv-coverage',
+        publishedAt: '2025-10-31T00:00:00.000Z',
+        excerpt: 'On World Vegan Day, Mohanji shares his insights on veganism as a culture and lifestyle — not just a diet — and its profound implications for the future of humanity.',
+        externalUrl: 'https://mohanji.org/press/veganism-and-future-of-humanity-mohanjis-insights-on-news-18-on-world-vegan-day/',
+        status: 'published',
+      },
+      {
+        title: 'PMC Channel: The PMC Show Podcast with Mohanji',
+        slug: 'pmc-channel-the-pmc-show-podcast',
+        postType: 'press-coverage',
+        publicationName: 'PMC Channel',
+        mediaType: 'podcast',
+        publishedAt: '2025-09-26T00:00:00.000Z',
+        excerpt: 'Mohanji joins The PMC Show for an in-depth conversation on spiritual journey, self-belief, root cause of violence, sacred balance in relationships, and breaking free from karmic patterns.',
+        externalUrl: 'https://mohanji.org/press/pmc-channel-the-pmc-show-podcast/',
+        status: 'published',
+      },
+      {
+        title: 'Mohanji Joins Rangoli Sharma on Speaking Tree – English',
+        slug: 'mohanji-joins-rangoli-sharma-on-speaking-tree-english',
+        postType: 'press-coverage',
+        publicationName: 'Speaking Tree',
+        mediaType: 'podcast',
+        publishedAt: '2025-10-10T00:00:00.000Z',
+        excerpt: 'Mohanji discusses ancestral karma, karmic curses, karmic healing, soul contracts, past life energies, and spiritual inheritance in this enlightening podcast with Rangoli Sharma.',
+        externalUrl: 'https://mohanji.org/press/mohanji-joins-rangoli-sharma-on-speaking-tree-english/',
+        status: 'published',
+      },
+      {
+        title: 'Janam TV Coverage on Surya Kaladi Mana',
+        slug: 'janam-tv-coverages-on-surya-kaladi-mana',
+        postType: 'press-coverage',
+        publicationName: 'Janam TV',
+        mediaType: 'tv-coverage',
+        publishedAt: '2025-08-27T00:00:00.000Z',
+        excerpt: "Janam TV's coverage of Mohanji's visit to Surya Kaladi Mana, capturing the sacred atmosphere and spiritual significance of the occasion.",
+        externalUrl: 'https://mohanji.org/press/janam-tv-coverages-on-surya-kaladi-mana/',
+        status: 'published',
+      },
+      {
+        title: 'Mohanji Honoured with Humanitarian Award by Sivananda World Peace Foundation, South Africa',
+        slug: 'mohanji-honoured-with-humanitarian-award-by-sivananda-world-peace-foundation-south-africa',
+        postType: 'press-coverage',
+        publicationName: 'PTI News',
+        mediaType: 'press-release',
+        publishedAt: '2024-09-27T00:00:00.000Z',
+        excerpt: 'Mohanji received a prestigious humanitarian award from the Sivananda World Peace Foundation in South Africa, honouring his decades of service to humanity, nature, and animal welfare.',
+        externalUrl: 'https://mohanji.org/news/mohanji-honoured-with-humanitarian-award-by-sivananda-world-peace-foundation-south-africa/',
+        status: 'published',
+      },
+      {
+        title: "Mohanji – The Man Behind the Movement",
+        slug: 'mohanji-the-man-behind-the-movement',
+        postType: 'press-coverage',
+        publicationName: '',
+        mediaType: 'article',
+        publishedAt: '2025-11-05T00:00:00.000Z',
+        excerpt: "An in-depth profile of Mohanji's journey from corporate professional to spiritual humanitarian — the story of the man behind a global movement.",
+        externalUrl: 'https://mohanji.org/press/mohanji-the-man-behind-the-movement/',
+        status: 'published',
+      },
+      {
+        title: 'Pacific University Honours Mohanji with Honorary Doctorate Degree',
+        slug: 'pacific-university-honours-mohanji-with-hon-doctorate-degree-dainik-bhaskar',
+        postType: 'press-coverage',
+        publicationName: 'Dainik Bhaskar',
+        mediaType: 'article',
+        publishedAt: '2024-06-01T00:00:00.000Z',
+        excerpt: 'Pacific University conferred an honorary doctorate upon Mohanji in recognition of his lifetime contribution to humanity, spirituality, and global service.',
+        externalUrl: 'https://mohanji.org/press/pacific-university-honours-mohanji-with-hon-doctorate-degree-dainik-bhaskar/',
+        status: 'published',
+      },
+    ]
+
+    for (const article of pressArticles) {
+      const { docs: existing } = await payload.find({
+        collection: 'posts',
+        where: { slug: { equals: article.slug } },
+        limit: 1,
+      })
+      if (existing.length === 0) {
+        await payload.create({ collection: 'posts', data: article as any })
+        console.log(`   ✓ Press article created: "${article.title.substring(0, 60)}..."`)
+      } else {
+        console.log(`   ✓ Press article already exists — skipping: "${article.title.substring(0, 50)}..."`)
       }
     }
 

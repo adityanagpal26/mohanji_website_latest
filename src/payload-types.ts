@@ -1742,6 +1742,19 @@ export interface Post {
   featuredImage?: (number | null) | Media;
   categories?: (number | Category)[] | null;
   tags?: (number | Tag)[] | null;
+  /**
+   * Name of the publication, channel, or platform (e.g. "Times of India", "PMC Channel")
+   */
+  publicationName?: string | null;
+  mediaType?: ('article' | 'podcast' | 'tv-coverage' | 'video' | 'press-release' | 'interview') | null;
+  /**
+   * Link to the original article, podcast, or video
+   */
+  externalUrl?: string | null;
+  /**
+   * HTML embed code for podcast player, YouTube video, etc.
+   */
+  embedCode?: string | null;
   author?: (number | null) | User;
   meta?: {
     title?: string | null;
@@ -3729,6 +3742,10 @@ export interface PostsSelect<T extends boolean = true> {
   featuredImage?: T;
   categories?: T;
   tags?: T;
+  publicationName?: T;
+  mediaType?: T;
+  externalUrl?: T;
+  embedCode?: T;
   author?: T;
   meta?:
     | T

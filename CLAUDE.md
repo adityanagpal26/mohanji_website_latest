@@ -77,6 +77,8 @@ All schema changes are in `src/migrations/`. They are tracked in the `payload_mi
 | `20260416_200000_youth_club_page` | Adds `youth-club` enum value; adds `youth_club_content_*` scalar columns; creates `activities` array tables for pages and `_pages_v` |
 | `20260416_210000_volunteer_page` | Adds `volunteer` enum value; adds `volunteer_content_*` scalar columns; creates `pages_volunteer_content_opportunities` array tables |
 | `20260416_220000_events_content_fields` | Adds new columns to `events` table: `display_date`, `location`, `cover_image_id`, `tagline`, `short_description`, `cta_label`, `cta_url`, `cta_external` |
+| `20260416_230000_courses_landing_page` | Adds `courses-landing` pageType enum value; adds `courses_landing_content_*` scalar columns + 6 array tables (whatToExpectItems, courseCards, testimonials) for pages and _pages_v |
+| `20260417_100000_press_coverage_fields` | Adds `publication_name`, `media_type` (enum), `external_url`, `embed_code` columns to `posts` and `_posts_v` |
 
 ### Rules for writing new migrations
 
@@ -142,7 +144,9 @@ npm run seed
 11. Mohanji Youth Club page
 12. Volunteer page
 13. 6 seed events (Silence with Mohanji, Weekly Talk, Kailash 2026, Muktinath 2026, Maha Shivaratri 2026, 61st Birthday celebration)
-14. `howToUse` steps on all meditations
+14. Courses landing page (CMS-driven, 5 Empowered course cards)
+15. `howToUse` steps on all meditations
+16. 8 press coverage articles (mix of article, podcast, TV, press-release, interview types)
 
 ---
 
@@ -211,6 +215,10 @@ mohanji-website/
 │   │   │   ├── news/                ← News articles
 │   │   │   │   ├── page.tsx
 │   │   │   │   └── [slug]/page.tsx
+│   │   │   │
+│   │   │   ├── press/               ← Press coverage (articles, podcasts, TV, video)
+│   │   │   │   ├── page.tsx         ← Listing with type filter tabs + card grid
+│   │   │   │   └── [slug]/page.tsx  ← Detail: image hero, embed, external CTA
 │   │   │   │
 │   │   │   ├── quotes/page.tsx      ← Mohanji quotes by topic
 │   │   │   ├── join/                ← Volunteer + Youth Club
@@ -319,6 +327,7 @@ mohanji-website/
 | Audios | `/audios`, `/audios/[slug]` | ✅ Real album content |
 | Blog | `/blog`, `/blog/[slug]` | ✅ Satsang blogs |
 | News | `/news`, `/news/[slug]` | ✅ News articles |
+| Press Coverage | `/press`, `/press/[slug]` | ✅ Card grid with type filter tabs; detail page with embed support and external link CTA; 8 seed articles |
 | Quotes | `/quotes` | ✅ 24 real quotes, 12 topics |
 | Join | `/join/volunteer`, `/join/youth-club` | ✅ Volunteer page (CMS-driven with opportunities list + Google Form CTA); Youth Club page with brochure download |
 | Contact | `/contact` | ✅ Full form with 7 subject options |
@@ -404,7 +413,7 @@ Max container width: 1200px, centered
 | Collection | Purpose | Key Fields |
 |-----------|---------|-----------|
 | `pages` | Generic CMS pages (page builder) | title, slug, parent, layout (blocks array), pageType, structured content groups, status |
-| `posts` | News + blog + press articles | title, slug, content, postType, categories, author |
+| `posts` | News + blog + press articles | title, slug, content, postType, publicationName, mediaType (article/podcast/tv-coverage/video/press-release/interview), externalUrl, embedCode, categories, author |
 | `meditations` | Guided meditation files | title, slug, description, downloads (language + audioFile array), howToUse steps |
 | `practices` | Spiritual practices | title, slug, description, benefits[], howItWorks[], tagline, applyPageTitle/Intro, applyFormEmail |
 | `courses` | Empowered course series | title, slug, description, level, lessons, registrationUrl |
@@ -520,7 +529,7 @@ HOME | ABOUT ▾ | LEARN ▾ | JOIN ▾ | EVENTS ▾ | COURSES ▾ | MEDIA ▾ |
 
 **COURSES** → Empowered 1.0–5.2 series
 
-**MEDIA** → Blogs, Press, Podcast, News, Videos, Annual Reports
+**MEDIA** → Blogs (external: mohanji.org/blogs/satsangs/), News (/news), Press Coverage (/press), Podcast, Videos
 
 ---
 
