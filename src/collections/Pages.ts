@@ -46,6 +46,7 @@ export const Pages: CollectionConfig = {
         { label: 'Practices (listing)', value: 'practices-listing' },
         { label: 'Mai-Tri Method', value: 'mai-tri-method' },
         { label: 'Traditional Yoga (HSTY)', value: 'traditional-yoga' },
+        { label: 'Awakening Yoga Nidra', value: 'awakening-yoga-nidra' },
       ],
     },
 
@@ -921,6 +922,109 @@ export const Pages: CollectionConfig = {
           type: 'text',
           label: 'Visit Us — Button Label',
           admin: { description: 'Defaults to "Visit Us"' },
+        },
+      ],
+    },
+
+    // ── Awakening Yoga Nidra Page Content ────────────────────────────────────
+    {
+      name: 'awakeningYogaNidraContent',
+      type: 'group',
+      label: 'Awakening Yoga Nidra Page Content',
+      admin: { condition: (data: any) => data?.pageType === 'awakening-yoga-nidra' },
+      fields: [
+        {
+          name: 'heroTitle',
+          type: 'text',
+          label: 'Hero Title',
+          admin: { description: 'Main page heading.' },
+        },
+        {
+          name: 'tagline',
+          type: 'textarea',
+          label: 'Tagline / Pull Quote',
+          admin: { description: 'Shown under the hero and repeated as a teal pull-quote section.' },
+        },
+        {
+          name: 'heroImage',
+          type: 'upload',
+          relationTo: 'media',
+          label: 'Hero Background Image',
+        },
+        {
+          name: 'introText',
+          type: 'textarea',
+          label: 'Intro Paragraph',
+          admin: { description: 'Opening paragraph — what Awakening Yoga Nidra is.' },
+        },
+        {
+          name: 'deviMohanUrl',
+          type: 'text',
+          label: 'Devi Mohan Website URL',
+          admin: { description: 'Linked from "Devi Mohan" in the intro. Default: https://www.devimohan.com' },
+        },
+        {
+          name: 'whySectionTitle',
+          type: 'text',
+          label: 'Why Section — Title',
+          admin: { description: 'e.g. "Why Awakening Yoga Nidra Meditation"' },
+        },
+        {
+          name: 'whySectionText',
+          type: 'textarea',
+          label: 'Why Section — Body Text',
+          admin: { description: 'Paragraphs explaining how it works. Separate with \\n\\n.' },
+        },
+        {
+          name: 'whySectionImage',
+          type: 'upload',
+          relationTo: 'media',
+          label: 'Why Section — Image',
+        },
+        {
+          name: 'hstyUrl',
+          type: 'text',
+          label: 'HSTY Link URL',
+          admin: { description: 'URL for "HSTY" link in the Why section. Default: https://himalayanschool.com' },
+        },
+        {
+          name: 'downloadMeditationUrl',
+          type: 'text',
+          label: 'Download Meditation Button URL',
+          admin: { description: 'Leave blank to hide the button.' },
+        },
+        {
+          name: 'benefitsSectionTitle',
+          type: 'text',
+          label: 'Benefits Section — Title',
+          admin: { description: 'e.g. "Benefits"' },
+        },
+        {
+          name: 'benefitsText',
+          type: 'textarea',
+          label: 'Benefits — Body Text',
+          admin: { description: 'Paragraphs above the benefits list. Separate with \\n\\n.' },
+        },
+        {
+          name: 'benefitsList',
+          type: 'array',
+          label: 'Benefits — Bullet List',
+          admin: { description: 'Each item is one bullet point.' },
+          fields: [
+            { name: 'benefit', type: 'text', required: true },
+          ],
+        },
+        {
+          name: 'ctaLabel',
+          type: 'text',
+          label: 'CTA Button Label',
+          admin: { description: 'Default: "Contact Us"' },
+        },
+        {
+          name: 'ctaUrl',
+          type: 'text',
+          label: 'CTA Button URL',
+          admin: { description: 'Default: /contact' },
         },
       ],
     },

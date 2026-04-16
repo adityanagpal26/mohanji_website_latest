@@ -400,7 +400,47 @@ const seed = async () => {
       console.log('   ✓ Traditional Yoga page already exists — skipping')
     }
 
-    // ── 10. Add howToUse steps to all meditations (idempotent) ──────────────
+    // ── 10. Seed Awakening Yoga Nidra page ──────────────────────────────────
+    console.log('🧘 Seeding Awakening Yoga Nidra page...')
+    const { docs: existingAYN } = await payload.find({
+      collection: 'pages',
+      where: { pageType: { equals: 'awakening-yoga-nidra' } },
+      limit: 1,
+    })
+    if (existingAYN.length === 0) {
+      await payload.create({
+        collection: 'pages',
+        data: {
+          title: 'Awakening Yoga Nidra Meditation',
+          slug: 'awakening-yoga-nidra',
+          pageType: 'awakening-yoga-nidra',
+          status: 'published',
+          awakeningYogaNidraContent: {
+            heroTitle: 'Awakening Yoga Nidra Meditation',
+            tagline: 'Experience deep gratitude, inner richness and get empowered to face any challenge of life more effectively',
+            introText: 'Awakening Yoga Nidra Meditation is a method guided by Mohanji and conducted by Devi Mohan. It is based on the ancient method of effective, progressive relaxation called Yoga Nidra (self-induced, conscious yogic sleep).',
+            deviMohanUrl: 'https://www.devimohan.com',
+            whySectionTitle: 'Why Awakening Yoga Nidra Meditation',
+            whySectionText: "Yoga Nidra is a beautiful method of inner cleansing, balancing and empowerment done in the alpha, receptive state of the mind.\n\nAwakening Yoga Nidra however goes a step further than the standard guided Yoga Nidra Meditation: the Grace of Guru Tattwa (the Guru Principle within) is invoked and, as Devi connects with the higher consciousness through her spiritual guide, Mohanji, she guides the group through a process of intense inner cleansing, bringing back the memory of the Soul's journey and the Light beyond all the veils of illusion.\n\nWhat emerges from the unconscious mind during the cleansing part of the process is exactly what one is ready to face, integrate and absorb at that moment in time.\n\nLove and gratitude which are experienced are immense and are the key to the inner healing process.\n\nIt is important to note that this is not a hypnotic state, as one is partially aware that he/she is lying on the floor in Shavasana (i.e. the \"corpse pose\") and following the guidance. However, a vivid and profound inner journey is experienced through the inner senses as they are fully active in this deeply relaxed state.\n\nThe process is very intense but completely safe.\n\nAwakening Yoga Nidra can be done comfortably by people of any age group and fitness level and requires no specific preparation. After light warm up exercises of Traditional Yoga (HSTY), one relaxes in the comfortable lying position of Shavasana and simply follows the guidance provided.",
+            hstyUrl: 'https://himalayanschool.com',
+            benefitsSectionTitle: 'Benefits',
+            benefitsText: "Through guided Awakening Yoga Nidra meditation one gets empowered to face any life challenges by strengthening the connection with the inner witness (sakshi bhaav), the key to our ability to rise above pain in any challenging moment of life.\n\nOther benefits include balancing of the left and right side of the brain and speeding up the process of self-healing and spiritual awakening.\n\nMost importantly, the intense inner thirst for spiritual liberation in this life is enhanced many times over!\n\nEven if one only briefly touches on the \"no-mind\" state (a timeless state devoid of thoughts), they may emerge from the Awakening Yoga Nidra session birthed into a new reality — blessed with a deep, palpable feeling of inner richness, gratitude and empowerment.",
+            benefitsList: [
+              { benefit: 'Sincere gratitude and calmness' },
+              { benefit: 'Increased awareness' },
+              { benefit: 'Integration with the Self' },
+            ],
+            ctaLabel: 'Contact Us',
+            ctaUrl: '/contact',
+          },
+        } as any,
+      })
+      console.log('   ✓ Awakening Yoga Nidra page created')
+    } else {
+      console.log('   ✓ Awakening Yoga Nidra page already exists — skipping')
+    }
+
+    // ── 11. Add howToUse steps to all meditations (idempotent) ─────────────
     console.log('📝 Adding howToUse steps to meditations...')
     const defaultSteps = [
       { title: 'Find a Quiet Space', description: 'Sit or lie comfortably in a place where you will not be disturbed.' },
