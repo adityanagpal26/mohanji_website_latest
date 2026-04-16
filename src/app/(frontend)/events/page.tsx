@@ -28,19 +28,6 @@ function formatDateRange(startDate: string, endDate?: string | null, displayDate
   return `${start} – ${end}`
 }
 
-function groupByMonth(events: any[]) {
-  const groups: Record<string, any[]> = {}
-  for (const event of events) {
-    const key = new Date(event.startDate).toLocaleDateString('en-GB', {
-      month: 'long',
-      year: 'numeric',
-    })
-    if (!groups[key]) groups[key] = []
-    groups[key].push(event)
-  }
-  return groups
-}
-
 const TYPE_LABELS: Record<string, string> = {
   retreat: 'Retreat',
   satsang: 'Satsang',
@@ -77,7 +64,6 @@ export default async function EventsPage({
   })
 
   const totalPages = Math.ceil(totalDocs / limit)
-  const grouped = groupByMonth(events as any[])
 
   return (
     <div>
@@ -113,83 +99,77 @@ export default async function EventsPage({
             </div>
           ) : (
             <>
-              {Object.entries(grouped).map(([month, monthEvents]) => (
-                <div key={month} className="mb-12">
-                  <h2 className="font-heading text-2xl text-[#16697A] mb-1">{month}</h2>
-                  <span className="block w-10 h-0.5 bg-[#E2B748] mb-5" />
-                  <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 mt-4">
-                    {monthEvents.map((event: any) => {
-                      const imageUrl =
-                        (typeof event.coverImage === 'object' && event.coverImage?.url)
-                          ? event.coverImage.url
-                          : (typeof event.featuredImage === 'object' && event.featuredImage?.url)
-                          ? event.featuredImage.url
-                          : null
+              <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+                {(events as any[]).map((event: any) => {
+                  const imageUrl =
+                    (typeof event.coverImage === 'object' && event.coverImage?.url)
+                      ? event.coverImage.url
+                      : (typeof event.featuredImage === 'object' && event.featuredImage?.url)
+                      ? event.featuredImage.url
+                      : null
 
-                      const dateLabel = formatDateRange(event.startDate, event.endDate, event.displayDate)
+                  const dateLabel = formatDateRange(event.startDate, event.endDate, event.displayDate)
 
-                      return (
-                        <Link
-                          key={event.id}
-                          href={`/events/${event.slug}`}
-                          className="group bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow overflow-hidden flex flex-col"
-                        >
-                          <div className="relative h-44 bg-[#16697A]/10 overflow-hidden">
-                            {imageUrl ? (
-                              <Image
-                                src={imageUrl}
-                                alt={event.title}
-                                fill
-                                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                                className="object-cover group-hover:scale-105 transition-transform duration-300"
-                              />
-                            ) : (
-                              <div className="absolute inset-0 flex items-center justify-center">
-                                <span className="text-[#16697A] text-4xl opacity-30">✦</span>
-                              </div>
-                            )}
-                            <div className="absolute top-3 left-3 bg-white rounded shadow px-3 py-1 text-center min-w-[52px]">
-                              <span className="block font-heading font-bold text-[#C95D63] text-xl leading-none">
-                                {formatDay(event.startDate)}
-                              </span>
-                              <span className="block text-xs text-[#16697A] font-semibold tracking-wide">
-                                {formatMonth(event.startDate)}
-                              </span>
-                            </div>
-                            {event.eventType && (
-                              <div className="absolute top-3 right-3 bg-[#16697A] text-white text-xs px-2 py-0.5 rounded">
-                                {TYPE_LABELS[event.eventType] ?? event.eventType}
-                              </div>
-                            )}
+                  return (
+                    <Link
+                      key={event.id}
+                      href={`/events/${event.slug}`}
+                      className="group bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow overflow-hidden flex flex-col"
+                    >
+                      <div className="relative h-44 bg-[#16697A]/10 overflow-hidden">
+                        {imageUrl ? (
+                          <Image
+                            src={imageUrl}
+                            alt={event.title}
+                            fill
+                            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                            className="object-cover group-hover:scale-105 transition-transform duration-300"
+                          />
+                        ) : (
+                          <div className="absolute inset-0 flex items-center justify-center">
+                            <span className="text-[#16697A] text-4xl opacity-30">✦</span>
                           </div>
-                          <div className="p-4 flex flex-col flex-1">
-                            <h3 className="font-heading text-lg text-[#16697A] leading-snug mb-1 group-hover:text-[#C95D63] transition-colors">
-                              {event.title}
-                            </h3>
-                            <p className="text-sm text-gray-500 mb-1">{dateLabel}</p>
-                            {event.location && (
-                              <p className="text-sm text-gray-600 mb-2">
-                                <span className="mr-1">📍</span>
-                                {event.location}
-                              </p>
-                            )}
-                            {event.shortDescription && (
-                              <p className="text-sm text-gray-600 mb-3 line-clamp-2">
-                                {event.shortDescription}
-                              </p>
-                            )}
-                            <div className="mt-auto">
-                              <span className="inline-block text-sm bg-[#C95D63] text-white px-4 py-1.5 rounded hover:bg-[#f4442e] transition-colors">
-                                {event.ctaLabel || 'Find Out More'}
-                              </span>
-                            </div>
+                        )}
+                        <div className="absolute top-3 left-3 bg-white rounded shadow px-3 py-1 text-center min-w-[52px]">
+                          <span className="block font-heading font-bold text-[#C95D63] text-xl leading-none">
+                            {formatDay(event.startDate)}
+                          </span>
+                          <span className="block text-xs text-[#16697A] font-semibold tracking-wide">
+                            {formatMonth(event.startDate)}
+                          </span>
+                        </div>
+                        {event.eventType && (
+                          <div className="absolute top-3 right-3 bg-[#16697A] text-white text-xs px-2 py-0.5 rounded">
+                            {TYPE_LABELS[event.eventType] ?? event.eventType}
                           </div>
-                        </Link>
-                      )
-                    })}
-                  </div>
-                </div>
-              ))}
+                        )}
+                      </div>
+                      <div className="p-4 flex flex-col flex-1">
+                        <h3 className="font-heading text-lg text-[#16697A] leading-snug mb-1 group-hover:text-[#C95D63] transition-colors">
+                          {event.title}
+                        </h3>
+                        <p className="text-sm text-gray-500 mb-1">{dateLabel}</p>
+                        {event.location && (
+                          <p className="text-sm text-gray-600 mb-2">
+                            <span className="mr-1">📍</span>
+                            {event.location}
+                          </p>
+                        )}
+                        {event.shortDescription && (
+                          <p className="text-sm text-gray-600 mb-3 line-clamp-2">
+                            {event.shortDescription}
+                          </p>
+                        )}
+                        <div className="mt-auto">
+                          <span className="inline-block text-sm bg-[#C95D63] text-white px-4 py-1.5 rounded hover:bg-[#f4442e] transition-colors">
+                            {event.ctaLabel || 'Find Out More'}
+                          </span>
+                        </div>
+                      </div>
+                    </Link>
+                  )
+                })}
+              </div>
 
               {totalPages > 1 && (
                 <div className="flex justify-center gap-2 mt-8">
