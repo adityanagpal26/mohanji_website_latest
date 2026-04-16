@@ -54,6 +54,8 @@ const DEFAULT_JOIN_LABEL = 'Join the Youth Club'
 const DEFAULT_JOIN_URL =
   'https://docs.google.com/forms/d/e/1FAIpQLSd8v541hsenk652wuQnmhjS6XyTJNmRKa-bb6i9vRdKjRZpSQ/viewform'
 
+const DEFAULT_BROCHURE_URL = 'https://mohanji.org/wp-content/uploads/2026/04/MYC-Brochure.pdf'
+
 export default async function YouthClubPage() {
   const payload = await getPayloadClient()
   const { docs } = await payload.find({
@@ -84,7 +86,7 @@ export default async function YouthClubPage() {
   const eligibilityText: string = cms.eligibilityText || DEFAULT_ELIGIBILITY
   const joinButtonLabel: string = cms.joinButtonLabel || DEFAULT_JOIN_LABEL
   const joinButtonUrl: string = cms.joinButtonUrl || DEFAULT_JOIN_URL
-  const brochureUrl: string | null = cms.brochureUrl || null
+  const brochureUrl: string = cms.brochureUrl || DEFAULT_BROCHURE_URL
 
   const introParagraphs = introText.split('\n\n').filter(Boolean)
   const areasList = areasText.split('\n').filter(Boolean)

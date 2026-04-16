@@ -489,12 +489,29 @@ const seed = async () => {
             joinButtonLabel: 'Join the Youth Club',
             joinButtonUrl:
               'https://docs.google.com/forms/d/e/1FAIpQLSd8v541hsenk652wuQnmhjS6XyTJNmRKa-bb6i9vRdKjRZpSQ/viewform',
+            brochureUrl: 'https://mohanji.org/wp-content/uploads/2026/04/MYC-Brochure.pdf',
           },
         } as any,
       })
       console.log('   ✓ Youth Club page created')
     } else {
-      console.log('   ✓ Youth Club page already exists — skipping')
+      // Patch brochureUrl if it was missing from an earlier seed run
+      const existingCms = (existingYC[0] as any)?.youthClubContent ?? {}
+      if (!existingCms.brochureUrl) {
+        await payload.update({
+          collection: 'pages',
+          id: existingYC[0].id,
+          data: {
+            youthClubContent: {
+              ...existingCms,
+              brochureUrl: 'https://mohanji.org/wp-content/uploads/2026/04/MYC-Brochure.pdf',
+            },
+          } as any,
+        })
+        console.log('   ✓ Youth Club page brochureUrl patched')
+      } else {
+        console.log('   ✓ Youth Club page already exists — skipping')
+      }
     }
 
     // ── 12. Seed Volunteer page ──────────────────────────────────────────────
