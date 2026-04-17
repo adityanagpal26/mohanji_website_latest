@@ -223,6 +223,27 @@ export default async function BookDetailPage({ params }: Props) {
                 )}
               </dl>
 
+              {/* ── Store Links — shown BEFORE description, matching WP layout ── */}
+              {storeLinks.length > 0 && (
+                <div className="mb-8">
+                  <h2 className="font-heading text-xl text-[#16697A] mb-4">Store Links</h2>
+                  <div className="flex flex-wrap gap-2">
+                    {storeLinks.map((link, i) => (
+                      <a
+                        key={i}
+                        href={link.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1.5 px-4 py-2 border border-[#16697A] text-[#16697A] text-sm font-medium rounded hover:bg-[#16697A] hover:text-white transition-colors"
+                      >
+                        {link.platform}
+                        <ExternalIcon />
+                      </a>
+                    ))}
+                  </div>
+                </div>
+              )}
+
               {/* Description */}
               {book.description ? (
                 <div className="mb-8">
@@ -230,28 +251,6 @@ export default async function BookDetailPage({ params }: Props) {
                 </div>
               ) : (
                 <p className="text-gray-500 italic mb-8">No description available.</p>
-              )}
-
-              {/* ── Store Links ──────────────────────────────────────────── */}
-              {storeLinks.length > 0 && (
-                <div className="mb-8">
-                  <h2 className="font-heading text-xl text-[#16697A] mb-3">Purchase</h2>
-                  <div className="flex flex-wrap gap-3">
-                    {storeLinks.map((link, i) => (
-                      <a
-                        key={i}
-                        href={link.url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex items-center gap-2 px-5 py-2.5 bg-[#C95D63] text-white text-sm font-semibold rounded-lg hover:bg-[#f4442e] transition-colors"
-                      >
-                        <CartIcon />
-                        {link.label || link.platform}
-                        <ExternalIcon />
-                      </a>
-                    ))}
-                  </div>
-                </div>
               )}
 
               {/* Free download (desktop) */}
@@ -278,18 +277,9 @@ export default async function BookDetailPage({ params }: Props) {
   )
 }
 
-function CartIcon() {
-  return (
-    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
-        d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
-    </svg>
-  )
-}
-
 function ExternalIcon() {
   return (
-    <svg className="w-3 h-3 opacity-70" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+    <svg className="w-3 h-3 opacity-60 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
         d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
     </svg>

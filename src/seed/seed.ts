@@ -1130,15 +1130,15 @@ const seed = async () => {
     ]
     // Regional store links for books that support multi-country purchase
     const guruLeelaI_storeLinks = [
-      { platform: 'United States',    url: 'https://www.amazon.com/dp/B07MBFYWJB',   label: 'Amazon — United States' },
-      { platform: 'United Kingdom',   url: 'https://www.amazon.co.uk/dp/B07MBFYWJB', label: 'Amazon — United Kingdom' },
-      { platform: 'Germany',          url: 'https://www.amazon.de/dp/B07MBFYWJB',    label: 'Amazon — Germany' },
-      { platform: 'France',           url: 'https://www.amazon.fr/dp/B07MBFYWJB',    label: 'Amazon — France' },
-      { platform: 'Spain',            url: 'https://www.amazon.es/dp/B07MBFYWJB',    label: 'Amazon — Spain' },
-      { platform: 'Italy',            url: 'https://www.amazon.it/dp/B07MBFYWJB',    label: 'Amazon — Italy' },
-      { platform: 'Canada',           url: 'https://www.amazon.ca/dp/B07MBFYWJB',    label: 'Amazon — Canada' },
-      { platform: 'Australia',        url: 'https://www.amazon.com.au/dp/B07MBFYWJB',label: 'Amazon — Australia' },
-      { platform: 'India',            url: 'https://www.amazon.in/dp/B07MBFYWJB',    label: 'Amazon — India' },
+      { platform: 'United States',  url: 'https://www.amazon.com/dp/B07MBFYWJB' },
+      { platform: 'United Kingdom', url: 'https://www.amazon.co.uk/dp/B07MBFYWJB' },
+      { platform: 'Germany',        url: 'https://www.amazon.de/dp/B07MBFYWJB' },
+      { platform: 'France',         url: 'https://www.amazon.fr/dp/B07MBFYWJB' },
+      { platform: 'Spain',          url: 'https://www.amazon.es/dp/B07MBFYWJB' },
+      { platform: 'Italy',          url: 'https://www.amazon.it/dp/B07MBFYWJB' },
+      { platform: 'Canada',         url: 'https://www.amazon.ca/dp/B07MBFYWJB' },
+      { platform: 'Australia',      url: 'https://www.amazon.com.au/dp/B07MBFYWJB' },
+      { platform: 'India',          url: 'https://www.amazon.in/dp/B07MBFYWJB' },
     ]
     const storeLinksMap: Record<string, any[]> = {
       'guru-leela-volume-i': guruLeelaI_storeLinks,

@@ -157,17 +157,14 @@ function BookCard({ book }: { book: any }) {
       ? book.coverImage.url
       : null
   const typeConfig = book.bookType ? BOOK_TYPE_CONFIG[book.bookType] : null
-  const primaryLink = book.purchaseUrl
-    || (Array.isArray(book.storeLinks) && book.storeLinks[0]?.url)
-    || null
-  const downloadUrl =
+  const hasStoreLinks =
+    (Array.isArray(book.storeLinks) && book.storeLinks.length > 0) || !!book.purchaseUrl
+  const hasDownload =
     typeof book.downloadFile === 'object' && book.downloadFile?.url
-      ? book.downloadFile.url
-      : null
 
   return (
     <div className="group bg-white rounded-xl shadow-sm hover:shadow-md transition-all overflow-hidden flex flex-col">
-      {/* Cover */}
+      {/* Cover — clicking anywhere on the card goes to the detail page */}
       <Link href={`/books/${book.slug}`} className="block relative aspect-[2/3] overflow-hidden bg-gradient-to-br from-[#16697A]/10 to-[#5B2D8E]/10 flex-shrink-0">
         {coverUrl ? (
           <Image
@@ -211,35 +208,14 @@ function BookCard({ book }: { book: any }) {
           <p className="text-xs text-gray-400 mb-2">{book.language}</p>
         )}
 
-        {/* CTAs */}
+        {/* CTA — always goes to detail page; store links are on the detail page */}
         <div className="mt-auto pt-3 flex gap-2 flex-wrap">
-          {primaryLink ? (
-            <a
-              href={primaryLink}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex-1 text-center text-sm font-semibold bg-[#C95D63] text-white py-2 px-3 rounded hover:bg-[#f4442e] transition-colors"
-            >
-              Buy Now
-            </a>
-          ) : null}
-          {downloadUrl ? (
-            <a
-              href={downloadUrl}
-              download
-              className="flex-1 text-center text-sm font-semibold border border-[#16697A] text-[#16697A] py-2 px-3 rounded hover:bg-[#16697A] hover:text-white transition-colors"
-            >
-              Free PDF
-            </a>
-          ) : null}
-          {!primaryLink && !downloadUrl && (
-            <Link
-              href={`/books/${book.slug}`}
-              className="flex-1 text-center text-sm font-semibold border border-[#16697A] text-[#16697A] py-2 px-3 rounded hover:bg-[#16697A] hover:text-white transition-colors"
-            >
-              View Details
-            </Link>
-          )}
+          <Link
+            href={`/books/${book.slug}`}
+            className="flex-1 text-center text-sm font-semibold bg-[#C95D63] text-white py-2 px-3 rounded hover:bg-[#f4442e] transition-colors"
+          >
+            {hasStoreLinks ? 'Buy Now' : hasDownload ? 'Free Download' : 'View Details'}
+          </Link>
         </div>
       </div>
     </div>
@@ -331,23 +307,13 @@ function AudioCard({ audio }: { audio: any }) {
           <p className="text-xs text-gray-400 mb-2">{audio.duration}</p>
         )}
 
-        {/* CTAs */}
+        {/* CTA — always goes to the detail page; streaming links are on the detail page */}
         <div className="mt-auto pt-3 flex gap-2 flex-wrap">
-          {primaryLink ? (
-            <a
-              href={primaryLink}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex-1 text-center text-sm font-semibold bg-[#C95D63] text-white py-2 px-3 rounded hover:bg-[#f4442e] transition-colors"
-            >
-              Buy Now
-            </a>
-          ) : null}
           <Link
             href={`/audios/${audio.slug}`}
-            className="flex-1 text-center text-sm font-semibold border border-[#16697A] text-[#16697A] py-2 px-3 rounded hover:bg-[#16697A] hover:text-white transition-colors"
+            className="flex-1 text-center text-sm font-semibold bg-[#C95D63] text-white py-2 px-3 rounded hover:bg-[#f4442e] transition-colors"
           >
-            {primaryLink ? 'Listen' : 'View'}
+            {primaryLink ? 'Buy Now' : 'Listen'}
           </Link>
         </div>
       </div>
