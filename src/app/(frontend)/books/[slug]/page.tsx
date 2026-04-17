@@ -115,13 +115,9 @@ export default async function BookDetailPage({ params }: Props) {
 
   const typeConfig = book.bookType ? TYPE_CONFIG[book.bookType] : null
 
-  // Collect all store links: prefer storeLinks array, then fall back to purchaseUrl
+  // Only use the explicit storeLinks array — no purchaseUrl fallback
   const storeLinks: { platform: string; url: string; label?: string }[] =
-    Array.isArray(book.storeLinks) && book.storeLinks.length > 0
-      ? book.storeLinks
-      : book.purchaseUrl
-        ? [{ platform: 'Buy Now', url: book.purchaseUrl }]
-        : []
+    Array.isArray(book.storeLinks) ? book.storeLinks.filter((l: any) => l.platform && l.url) : []
 
   return (
     <div>
