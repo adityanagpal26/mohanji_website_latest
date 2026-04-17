@@ -1128,15 +1128,41 @@ const seed = async () => {
         purchaseUrl: 'https://mohanji.org/book/',
       },
     ]
+    // Regional store links for books that support multi-country purchase
+    const guruLeelaI_storeLinks = [
+      { platform: 'United States',    url: 'https://www.amazon.com/dp/B07MBFYWJB',   label: 'Amazon — United States' },
+      { platform: 'United Kingdom',   url: 'https://www.amazon.co.uk/dp/B07MBFYWJB', label: 'Amazon — United Kingdom' },
+      { platform: 'Germany',          url: 'https://www.amazon.de/dp/B07MBFYWJB',    label: 'Amazon — Germany' },
+      { platform: 'France',           url: 'https://www.amazon.fr/dp/B07MBFYWJB',    label: 'Amazon — France' },
+      { platform: 'Spain',            url: 'https://www.amazon.es/dp/B07MBFYWJB',    label: 'Amazon — Spain' },
+      { platform: 'Italy',            url: 'https://www.amazon.it/dp/B07MBFYWJB',    label: 'Amazon — Italy' },
+      { platform: 'Canada',           url: 'https://www.amazon.ca/dp/B07MBFYWJB',    label: 'Amazon — Canada' },
+      { platform: 'Australia',        url: 'https://www.amazon.com.au/dp/B07MBFYWJB',label: 'Amazon — Australia' },
+      { platform: 'India',            url: 'https://www.amazon.in/dp/B07MBFYWJB',    label: 'Amazon — India' },
+    ]
+    const storeLinksMap: Record<string, any[]> = {
+      'guru-leela-volume-i': guruLeelaI_storeLinks,
+    }
+
     for (const book of booksToSeed) {
+      const extraLinks = storeLinksMap[book.slug]
+      const bookData = extraLinks ? { ...book, storeLinks: extraLinks } : book
       const { docs: existing } = await payload.find({
         collection: 'books',
         where: { slug: { equals: book.slug } },
         limit: 1,
       })
       if (existing.length === 0) {
-        await payload.create({ collection: 'books', data: book as any })
+        await payload.create({ collection: 'books', data: bookData as any })
         console.log(`   ✓ Book created: "${book.title}"`)
+      } else if (extraLinks) {
+        // Update storeLinks on books that have multi-country links
+        await payload.update({
+          collection: 'books',
+          id: (existing[0] as any).id,
+          data: { storeLinks: extraLinks } as any,
+        })
+        console.log(`   ✓ Book updated storeLinks: "${book.title}"`)
       } else {
         console.log(`   ✓ Book already exists — skipping: "${book.title}"`)
       }
@@ -1145,6 +1171,29 @@ const seed = async () => {
     // ── 19. Seed Audio albums ─────────────────────────────────────────────────
     console.log('🎵 Seeding audio albums...')
     const audiosToSeed = [
+      {
+        title: 'Shiva Chants by Mohanji',
+        slug: 'shiva-chants-by-mohanji',
+        audioType: 'chant',
+        duration: '~60 min',
+        tracks: [
+          { title: 'Om Namah Shivaaya (21 Times)', duration: '~8:00' },
+          { title: 'Om Namah Shivaya Shivaya Namaha Om (21 Times)', duration: '~7:00' },
+          { title: 'Maha Mrityunjaya Mantra (21 Times)', duration: '~9:00' },
+          { title: 'Bilvashtakam', duration: '~6:00' },
+          { title: 'Kashi Vishwanathashtakam', duration: '~7:00' },
+          { title: 'Lingashtakam', duration: '~6:00' },
+          { title: 'Shivashtakam', duration: '~8:00' },
+          { title: 'Shiva Panchakshara Stotram', duration: '~9:00' },
+        ],
+        storeLinks: [
+          { platform: 'Spotify',       url: 'https://open.spotify.com/album/40jnV79snB9tEIJxqO7xxC',                                    label: 'Spotify' },
+          { platform: 'Amazon Music',  url: 'http://www.amazon.com/gp/product/B08KSXGNNR/?tag=distrokid06-20',                           label: 'Amazon Music' },
+          { platform: 'Apple Music',   url: 'https://music.apple.com/us/album/shiva-chants/1534327539?uo=4&app=music',                    label: 'Apple Music' },
+          { platform: 'iTunes',        url: 'https://music.apple.com/us/album/shiva-chants/1534327539?uo=4&app=itunes',                   label: 'iTunes' },
+          { platform: 'YouTube Music', url: 'https://music.youtube.com/search?q=Shiva+Chants+Mohanji',                                   label: 'YouTube Music' },
+        ],
+      },
       {
         title: 'Siva Kavacham',
         slug: 'siva-kavacham',
@@ -1155,7 +1204,8 @@ const seed = async () => {
           { title: 'Siva Kavacham Part 2', duration: '23:00' },
         ],
         storeLinks: [
-          { platform: 'Amazon', url: 'https://www.amazon.com/dp/B00X5YQKW0', label: 'Buy on Amazon' },
+          { platform: 'Amazon Music', url: 'https://www.amazon.com/dp/B00X5YQKW0', label: 'Amazon Music' },
+          { platform: 'Spotify',      url: 'https://open.spotify.com/search/Siva%20Kavacham%20Mohanji', label: 'Spotify' },
         ],
       },
       {
@@ -1168,7 +1218,8 @@ const seed = async () => {
           { title: 'Devi Kavacham Part 2', duration: '26:00' },
         ],
         storeLinks: [
-          { platform: 'Amazon', url: 'https://www.amazon.com/dp/B00X5YRMBS', label: 'Buy on Amazon' },
+          { platform: 'Amazon Music', url: 'https://www.amazon.com/dp/B00X5YRMBS', label: 'Amazon Music' },
+          { platform: 'Spotify',      url: 'https://open.spotify.com/search/Devi%20Kavacham%20Mohanji', label: 'Spotify' },
         ],
       },
       {
@@ -1182,7 +1233,8 @@ const seed = async () => {
           { title: 'Om Namo Narayanaya', duration: '20:00' },
         ],
         storeLinks: [
-          { platform: 'Amazon', url: 'https://mohanji.org/store/', label: 'Buy Now' },
+          { platform: 'Amazon Music', url: 'https://mohanji.org/store/', label: 'Amazon Music' },
+          { platform: 'Spotify',      url: 'https://mohanji.org/store/', label: 'Spotify' },
         ],
       },
       {
@@ -1195,7 +1247,8 @@ const seed = async () => {
           { title: 'Devi Ashtothari Namavali', duration: '15:00' },
         ],
         storeLinks: [
-          { platform: 'Amazon', url: 'https://mohanji.org/store/', label: 'Buy Now' },
+          { platform: 'Amazon Music', url: 'https://mohanji.org/store/', label: 'Amazon Music' },
+          { platform: 'Spotify',      url: 'https://mohanji.org/store/', label: 'Spotify' },
         ],
       },
       {
@@ -1209,7 +1262,8 @@ const seed = async () => {
           { title: 'Bedtime Prayer (Shayana Praarthana)', duration: '8:30' },
         ],
         storeLinks: [
-          { platform: 'Amazon', url: 'https://mohanji.org/store/', label: 'Buy Now' },
+          { platform: 'Amazon Music', url: 'https://mohanji.org/store/', label: 'Amazon Music' },
+          { platform: 'Spotify',      url: 'https://mohanji.org/store/', label: 'Spotify' },
         ],
       },
     ]
@@ -1223,7 +1277,13 @@ const seed = async () => {
         await payload.create({ collection: 'audios', data: audio as any })
         console.log(`   ✓ Audio created: "${audio.title}"`)
       } else {
-        console.log(`   ✓ Audio already exists — skipping: "${audio.title}"`)
+        // Update storeLinks + tracks if the record already exists (idempotent upsert)
+        await payload.update({
+          collection: 'audios',
+          id: (existing[0] as any).id,
+          data: { storeLinks: audio.storeLinks, tracks: audio.tracks } as any,
+        })
+        console.log(`   ✓ Audio updated storeLinks/tracks: "${audio.title}"`)
       }
     }
 
