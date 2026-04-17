@@ -116,6 +116,18 @@ export const Events: CollectionConfig = {
       admin: { description: 'Check if the URL points to an external site.' },
     },
 
+    // ── Home page ─────────────────────────────────────────────────────────────
+    {
+      name: 'featuredOnHome',
+      type: 'checkbox',
+      label: 'Feature on Home Page',
+      defaultValue: false,
+      admin: {
+        position: 'sidebar',
+        description: 'Show this event in the Upcoming Events section on the home page. Up to 3 events are shown.',
+      },
+    },
+
     // ── Legacy / computed ─────────────────────────────────────────────────────
     {
       name: 'isPast',

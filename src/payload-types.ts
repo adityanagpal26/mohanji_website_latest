@@ -1831,6 +1831,10 @@ export interface Post {
     description?: string | null;
     image?: (number | null) | Media;
   };
+  /**
+   * Show this post in the Media section on the home page. Up to 3 posts are shown.
+   */
+  featuredOnHome?: boolean | null;
   status?: ('draft' | 'published') | null;
   publishedAt?: string | null;
   updatedAt: string;
@@ -2674,6 +2678,10 @@ export interface Event {
    * Check if the URL points to an external site.
    */
   ctaExternal?: boolean | null;
+  /**
+   * Show this event in the Upcoming Events section on the home page. Up to 3 events are shown.
+   */
+  featuredOnHome?: boolean | null;
   isPast?: boolean | null;
   eventType?: ('retreat' | 'satsang' | 'pilgrimage' | 'celebration' | 'workshop' | 'online') | null;
   updatedAt: string;
@@ -3909,6 +3917,7 @@ export interface PostsSelect<T extends boolean = true> {
         description?: T;
         image?: T;
       };
+  featuredOnHome?: T;
   status?: T;
   publishedAt?: T;
   updatedAt?: T;
@@ -4784,6 +4793,7 @@ export interface EventsSelect<T extends boolean = true> {
   ctaLabel?: T;
   ctaUrl?: T;
   ctaExternal?: T;
+  featuredOnHome?: T;
   isPast?: T;
   eventType?: T;
   updatedAt?: T;

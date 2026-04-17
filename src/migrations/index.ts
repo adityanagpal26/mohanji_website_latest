@@ -17,6 +17,7 @@ import * as migration_20260417_120000_posts_location_field from './20260417_1200
 import * as migration_20260417_130000_annual_reports from './20260417_130000_annual_reports';
 import * as migration_20260417_131000_annual_reports_locked_docs from './20260417_131000_annual_reports_locked_docs';
 import * as migration_20260417_140000_books_audios_store_fields from './20260417_140000_books_audios_store_fields';
+import * as migration_20260417_150000_featured_on_home from './20260417_150000_featured_on_home';
 
 export const migrations = [
   {
@@ -113,5 +114,10 @@ export const migrations = [
     up: migration_20260417_140000_books_audios_store_fields.up,
     down: migration_20260417_140000_books_audios_store_fields.down,
     name: '20260417_140000_books_audios_store_fields',
+  },
+  {
+    up: migration_20260417_150000_featured_on_home.up,
+    down: migration_20260417_150000_featured_on_home.down,
+    name: '20260417_150000_featured_on_home',
   },
 ];

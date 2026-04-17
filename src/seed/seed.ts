@@ -569,6 +569,7 @@ const seed = async () => {
         ctaLabel: 'Join Now',
         ctaUrl: 'https://mohanji.org/register-for-silence-with-mohanji/',
         ctaExternal: true,
+        featuredOnHome: true,
       },
       {
         title: 'Weekly Talk with Mohanji – Live Online Q&A Series',
@@ -580,6 +581,7 @@ const seed = async () => {
         ctaLabel: 'Register',
         ctaUrl: '/courses',
         ctaExternal: false,
+        featuredOnHome: true,
       },
       {
         title: 'Kailash with Mohanji 2026',
@@ -593,6 +595,7 @@ const seed = async () => {
         ctaLabel: 'Know More',
         ctaUrl: 'https://kailash.mohanji.org/',
         ctaExternal: true,
+        featuredOnHome: true,
       },
       {
         title: 'Muktinath with Mohanji 2026',
@@ -645,7 +648,18 @@ const seed = async () => {
         })
         console.log(`   ✓ Event "${eventData.title}" created`)
       } else {
-        console.log(`   ✓ Event "${eventData.title}" already exists — skipping`)
+        // Always patch featuredOnHome so re-runs keep the value up to date
+        const needsPatch = (existing[0] as any).featuredOnHome !== (eventData as any).featuredOnHome
+        if (needsPatch) {
+          await payload.update({
+            collection: 'events',
+            id: (existing[0] as any).id,
+            data: { featuredOnHome: (eventData as any).featuredOnHome ?? false } as any,
+          })
+          console.log(`   ✓ Event "${eventData.title}" featuredOnHome updated`)
+        } else {
+          console.log(`   ✓ Event "${eventData.title}" already exists — skipping`)
+        }
       }
     }
 
@@ -785,6 +799,7 @@ const seed = async () => {
         publishedAt: '2025-11-10T00:00:00.000Z',
         excerpt: 'Mohanji participated in the ORIGINS – World Tribal Alliance Gathering 2025 in Cape Town, joining indigenous leaders, knowledge keepers, and change-makers from across the globe in a landmark gathering that celebrated tribal wisdom and the shared heritage of humanity.',
         status: 'published',
+        featuredOnHome: true,
       },
       {
         title: 'Dr. Brahmarishi Mohanji Recognised Among the Top 100 Influential Men of the Year in Cape Town, South Africa',
@@ -794,6 +809,17 @@ const seed = async () => {
         publishedAt: '2025-11-09T00:00:00.000Z',
         excerpt: 'Dr. Brahmarishi Mohanji was honoured as one of the Top 100 Influential Men of the Year at a prestigious ceremony in Cape Town, recognising his decades of service to humanity, environmental conservation, and spiritual welfare across more than 100 countries.',
         status: 'published',
+        featuredOnHome: true,
+      },
+      {
+        title: 'Mohanji in the United Kingdom: A Landmark Gathering of Consciousness',
+        slug: 'mohanji-in-the-united-kingdom-a-landmark-gathering',
+        postType: 'news',
+        location: 'United Kingdom',
+        publishedAt: '2025-11-16T00:00:00.000Z',
+        excerpt: "Mohanji's visit to the United Kingdom brought together hundreds of seekers, practitioners, and well-wishers for a profound gathering rooted in love, awareness, and the timeless teachings of the Tradition.",
+        status: 'published',
+        featuredOnHome: true,
       },
       {
         title: 'Mohanji Graces 2025 Sumatera Utara Rally in Indonesia: A Blend of Speed, Spirit, and Spiritual Presence',
@@ -852,7 +878,18 @@ const seed = async () => {
         await payload.create({ collection: 'posts', data: article as any })
         console.log(`   ✓ News article created: "${article.title.substring(0, 55)}..."`)
       } else {
-        console.log(`   ✓ News article already exists — skipping: "${article.title.substring(0, 45)}..."`)
+        // Patch featuredOnHome so re-runs keep the value in sync
+        const needsPatch = (existing[0] as any).featuredOnHome !== (article as any).featuredOnHome
+        if (needsPatch) {
+          await payload.update({
+            collection: 'posts',
+            id: (existing[0] as any).id,
+            data: { featuredOnHome: (article as any).featuredOnHome ?? false } as any,
+          })
+          console.log(`   ✓ News article featuredOnHome patched: "${article.title.substring(0, 50)}..."`)
+        } else {
+          console.log(`   ✓ News article already exists — skipping: "${article.title.substring(0, 45)}..."`)
+        }
       }
     }
 

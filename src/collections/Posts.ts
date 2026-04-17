@@ -115,6 +115,16 @@ export const Posts: CollectionConfig = {
       ],
     },
     {
+      name: 'featuredOnHome',
+      type: 'checkbox',
+      label: 'Feature on Home Page',
+      defaultValue: false,
+      admin: {
+        position: 'sidebar',
+        description: 'Show this post in the Media section on the home page. Up to 3 posts are shown.',
+      },
+    },
+    {
       name: 'status',
       type: 'select',
       defaultValue: 'draft',

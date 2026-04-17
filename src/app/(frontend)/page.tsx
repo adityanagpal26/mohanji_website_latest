@@ -66,23 +66,61 @@ export default async function HomePage() {
   const payload = await getPayloadClient()
 
   // ── Fetch all CMS data in parallel ───────────────────────────────────────
-  const [{ docs: homePages }, { docs: events }, { docs: awards }, { docs: posts }] = await Promise.all([
+  const [{ docs: homePages }, { docs: featuredEvents }, { docs: awards }, { docs: featuredPosts }] = await Promise.all([
     payload.find({
       collection: 'pages',
       where: { slug: { equals: 'home' } },
       depth: 2,
       limit: 1,
     }),
+    // Events: prefer CMS-selected (featuredOnHome), fall back to next 3 upcoming
     payload.find({
       collection: 'events',
-      where: { isPast: { equals: false } },
+      where: {
+        and: [
+          { featuredOnHome: { equals: true } },
+          { isPast: { equals: false } },
+        ],
+      },
       limit: 3,
       depth: 1,
       sort: 'startDate',
     }),
     payload.find({ collection: 'awards', limit: 10, depth: 1 }),
-    payload.find({ collection: 'posts', limit: 3, depth: 1, sort: '-createdAt' }),
+    // Posts: prefer CMS-selected (featuredOnHome), fall back to latest 3
+    payload.find({
+      collection: 'posts',
+      where: { featuredOnHome: { equals: true } },
+      limit: 3,
+      depth: 1,
+      sort: '-publishedAt',
+    }),
   ])
+
+  // Fall back to latest upcoming events if none are CMS-selected
+  let events = featuredEvents
+  if (events.length === 0) {
+    const { docs: fallbackEvents } = await payload.find({
+      collection: 'events',
+      where: { isPast: { equals: false } },
+      limit: 3,
+      depth: 1,
+      sort: 'startDate',
+    })
+    events = fallbackEvents
+  }
+
+  // Fall back to latest posts if none are CMS-selected
+  let posts = featuredPosts
+  if (posts.length === 0) {
+    const { docs: fallbackPosts } = await payload.find({
+      collection: 'posts',
+      limit: 3,
+      depth: 1,
+      sort: '-createdAt',
+    })
+    posts = fallbackPosts
+  }
 
   const homePage = homePages[0] as any
 
