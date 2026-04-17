@@ -1767,6 +1767,10 @@ export interface Post {
   slug?: string | null;
   postType: 'news' | 'blog' | 'press-coverage' | 'interview';
   excerpt?: string | null;
+  /**
+   * Location where the event/story took place (e.g. "Cape Town, South Africa")
+   */
+  location?: string | null;
   content?: {
     root: {
       type: string;
@@ -3807,6 +3811,7 @@ export interface PostsSelect<T extends boolean = true> {
   slug?: T;
   postType?: T;
   excerpt?: T;
+  location?: T;
   content?: T;
   featuredImage?: T;
   categories?: T;

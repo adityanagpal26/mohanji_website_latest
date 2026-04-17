@@ -13,6 +13,7 @@ import * as migration_20260416_220000_events_content_fields from './20260416_220
 import * as migration_20260416_230000_courses_landing_page from './20260416_230000_courses_landing_page';
 import * as migration_20260417_100000_press_coverage_fields from './20260417_100000_press_coverage_fields';
 import * as migration_20260417_110000_media_landing_page from './20260417_110000_media_landing_page';
+import * as migration_20260417_120000_posts_location_field from './20260417_120000_posts_location_field';
 
 export const migrations = [
   {
@@ -89,5 +90,10 @@ export const migrations = [
     up: migration_20260417_110000_media_landing_page.up,
     down: migration_20260417_110000_media_landing_page.down,
     name: '20260417_110000_media_landing_page',
+  },
+  {
+    up: migration_20260417_120000_posts_location_field.up,
+    down: migration_20260417_120000_posts_location_field.down,
+    name: '20260417_120000_posts_location_field',
   },
 ];

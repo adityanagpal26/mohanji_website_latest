@@ -773,7 +773,90 @@ const seed = async () => {
       }
     }
 
-    // ── 16. Seed Press Coverage articles ────────────────────────────────────
+    // ── 16. Seed News articles ──────────────────────────────────────────────
+    console.log('📰 Seeding news articles...')
+    const newsArticles = [
+      {
+        title: 'ORIGINS – World Tribal Alliance Gathering 2025, Cape Town',
+        slug: 'origins-world-tribal-alliance-gathering-2025-cape-town',
+        postType: 'news',
+        location: 'Cape Town & !Khwa ttu, South Africa',
+        publishedAt: '2025-11-10T00:00:00.000Z',
+        excerpt: 'Mohanji participated in the ORIGINS – World Tribal Alliance Gathering 2025 in Cape Town, joining indigenous leaders, knowledge keepers, and change-makers from across the globe in a landmark gathering that celebrated tribal wisdom and the shared heritage of humanity.',
+        status: 'published',
+      },
+      {
+        title: 'Dr. Brahmarishi Mohanji Recognised Among the Top 100 Influential Men of the Year in Cape Town, South Africa',
+        slug: 'dr-brahmarishi-mohanji-recognised-among-the-top-100-influential-men-of-the-year-in-cape-town-south-africa',
+        postType: 'news',
+        location: 'Cape Town, South Africa',
+        publishedAt: '2025-11-09T00:00:00.000Z',
+        excerpt: 'Dr. Brahmarishi Mohanji was honoured as one of the Top 100 Influential Men of the Year at a prestigious ceremony in Cape Town, recognising his decades of service to humanity, environmental conservation, and spiritual welfare across more than 100 countries.',
+        status: 'published',
+      },
+      {
+        title: 'Mohanji Graces 2025 Sumatera Utara Rally in Indonesia: A Blend of Speed, Spirit, and Spiritual Presence',
+        slug: 'mohanji-graces-2025-sumatera-utara-rally-in-indonesia-a-blend-of-speed-spirit-and-spiritual-presence',
+        postType: 'news',
+        location: 'Parapat, North Sumatra, Indonesia',
+        publishedAt: '2025-08-08T00:00:00.000Z',
+        excerpt: 'Mohanji graced the 2025 Sumatera Utara Rally at Lake Toba in Indonesia — a celebration that uniquely blended the thrill of motorsport with the spirit of community and Mohanji\'s message of conscious living.',
+        status: 'published',
+      },
+      {
+        title: 'Mohanji Visited Kosovo and Metohija for the First Time as a Pilgrim',
+        slug: 'mohanji-visited-kosovo-and-metohija-for-the-first-time-as-a-pilgrim',
+        postType: 'news',
+        location: 'Kosovo and Metohija',
+        publishedAt: '2025-07-15T00:00:00.000Z',
+        excerpt: 'In a deeply significant journey, Mohanji visited Kosovo and Metohija as a pilgrim for the first time, connecting with the ancient spiritual heritage of the land, meeting local community leaders, and honouring the sacred sites of this historically rich region.',
+        status: 'published',
+      },
+      {
+        title: 'Mohanji and Devi Met with Her Excellency Namrata S. Kumar, Indian Ambassador to Slovenia',
+        slug: 'mohanji-and-devi-met-with-her-excellency-namrata-s-kumar-indian-ambassador-to-slovenia',
+        postType: 'news',
+        location: 'Ljubljana, Slovenia',
+        publishedAt: '2025-06-20T00:00:00.000Z',
+        excerpt: 'Mohanji and Devi had a warm and meaningful meeting with Her Excellency Namrata S. Kumar, the Indian Ambassador to Slovenia, discussing the global activities of the Mohanji Foundation, cultural diplomacy, and opportunities for deeper India-Slovenia cooperation.',
+        status: 'published',
+      },
+      {
+        title: 'Mohanji in the United Kingdom: A Landmark Gathering of Consciousness',
+        slug: 'mohanji-in-the-united-kingdom-a-landmark-gathering',
+        postType: 'news',
+        location: 'United Kingdom',
+        publishedAt: '2025-11-16T00:00:00.000Z',
+        excerpt: "Mohanji's visit to the United Kingdom brought together hundreds of seekers, practitioners, and well-wishers for a profound gathering rooted in love, awareness, and the timeless teachings of the Tradition.",
+        status: 'published',
+      },
+      {
+        title: 'Mohanji Foundation and Ammucare At The Historic Mahamagham Mahotsav 2026',
+        slug: 'mohanji-foundation-ammucare-mahamagham-mahotsav-2026',
+        postType: 'news',
+        location: 'Kerala, India',
+        publishedAt: '2026-02-03T00:00:00.000Z',
+        excerpt: 'Mohanji Foundation and Ammucare participated in the historic Mahamagham Mahotsav 2026 in Kerala, one of the most sacred and rarely occurring Hindu festivals, serving pilgrims and sharing the message of conscious living and compassion.',
+        status: 'published',
+      },
+    ]
+
+    for (const article of newsArticles) {
+      const { docs: existing } = await payload.find({
+        collection: 'posts',
+        where: { slug: { equals: article.slug } },
+        limit: 1,
+      })
+      if (existing.length === 0) {
+        await payload.create({ collection: 'posts', data: article as any })
+        console.log(`   ✓ News article created: "${article.title.substring(0, 55)}..."`)
+      } else {
+        console.log(`   ✓ News article already exists — skipping: "${article.title.substring(0, 45)}..."`)
+      }
+    }
+
+    // ── 17. Seed Press Coverage articles ────────────────────────────────────
+
     console.log('📰 Seeding press coverage articles...')
     const pressArticles = [
       {

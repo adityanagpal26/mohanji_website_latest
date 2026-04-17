@@ -38,6 +38,13 @@ export const Posts: CollectionConfig = {
       type: 'textarea',
     },
     {
+      name: 'location',
+      type: 'text',
+      admin: {
+        description: 'Location where the event/story took place (e.g. "Cape Town, South Africa")',
+      },
+    },
+    {
       name: 'content',
       type: 'richText',
       editor: lexicalEditor(),
