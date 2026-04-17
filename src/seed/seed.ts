@@ -147,6 +147,7 @@ const seed = async () => {
               { label: 'Press Coverage', link: '/press' },
               { label: 'Podcast', link: '/media#podcast' },
               { label: 'Videos', link: '/media#videos' },
+              { label: 'Annual Reports', link: '/annual-reports' },
             ],
           },
           { label: 'Store', link: '/store', openInNewTab: true },

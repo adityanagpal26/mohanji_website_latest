@@ -27,6 +27,7 @@ import { Venues } from './collections/Venues'
 import { Forms } from './collections/Forms'
 import { MaiTriApplications } from './collections/MaiTriApplications'
 import { KriyaApplications } from './collections/KriyaApplications'
+import { AnnualReports } from './collections/AnnualReports'
 
 // Globals
 import { Header } from './globals/Header'
@@ -70,6 +71,7 @@ export default buildConfig({
     Forms,
     MaiTriApplications,
     KriyaApplications,
+    AnnualReports,
   ],
 
   globals: [Header, Footer, SiteSettings],

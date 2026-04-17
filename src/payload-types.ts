@@ -86,6 +86,7 @@ export interface Config {
     forms: Form;
     'mai-tri-applications': MaiTriApplication;
     'kriya-applications': KriyaApplication;
+    'annual-reports': AnnualReport;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -112,6 +113,7 @@ export interface Config {
     forms: FormsSelect<false> | FormsSelect<true>;
     'mai-tri-applications': MaiTriApplicationsSelect<false> | MaiTriApplicationsSelect<true>;
     'kriya-applications': KriyaApplicationsSelect<false> | KriyaApplicationsSelect<true>;
+    'annual-reports': AnnualReportsSelect<false> | AnnualReportsSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -2807,6 +2809,38 @@ export interface KriyaApplication {
   createdAt: string;
 }
 /**
+ * Upload annual report PDF files. Each report appears on the Annual Reports page and can be viewed/downloaded by visitors.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "annual-reports".
+ */
+export interface AnnualReport {
+  id: number;
+  /**
+   * e.g. "Annual Report 2025" or "Mohanji Foundation Annual Report 2025"
+   */
+  title: string;
+  /**
+   * Report year (used for sorting, e.g. 2025)
+   */
+  year: number;
+  /**
+   * Optional short description shown on the listing page.
+   */
+  description?: string | null;
+  /**
+   * Upload the PDF file for this annual report.
+   */
+  file: number | Media;
+  /**
+   * Optional cover page image (shown as thumbnail on the listing). If not set, a placeholder is displayed.
+   */
+  coverImage?: (number | null) | Media;
+  status?: ('published' | 'draft') | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv".
  */
@@ -2905,6 +2939,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'kriya-applications';
         value: number | KriyaApplication;
+      } | null)
+    | ({
+        relationTo: 'annual-reports';
+        value: number | AnnualReport;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -4879,6 +4917,20 @@ export interface KriyaApplicationsSelect<T extends boolean = true> {
   age?: T;
   email?: T;
   needsAssistance?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "annual-reports_select".
+ */
+export interface AnnualReportsSelect<T extends boolean = true> {
+  title?: T;
+  year?: T;
+  description?: T;
+  file?: T;
+  coverImage?: T;
+  status?: T;
   updatedAt?: T;
   createdAt?: T;
 }
