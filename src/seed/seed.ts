@@ -880,6 +880,73 @@ const seed = async () => {
       }
     }
 
+    // ── 17. Seed Media landing page ──────────────────────────────────────────
+    console.log('🎙️ Seeding Media landing page...')
+    const { docs: existingMedia } = await payload.find({
+      collection: 'pages',
+      where: { pageType: { equals: 'media-landing' } },
+      limit: 1,
+    })
+    if (existingMedia.length === 0) {
+      await payload.create({
+        collection: 'pages',
+        data: {
+          title: 'Media',
+          slug: 'media',
+          pageType: 'media-landing',
+          status: 'published',
+          mediaLandingContent: {
+            podcastSectionTitle: 'Podcasts',
+            podcastSectionSubtitle: "Listen to Mohanji's teachings, Q&A sessions, and spiritual conversations — play directly on this page.",
+            podbeanChannelUrl: 'https://mohanji.podbean.com',
+            // NOTE: Add real Podbean episode embed codes via /admin → Pages → Media → Podcast Episodes
+            podcasts: [
+              {
+                title: 'PMC Show — Spiritual Journey with Mohanji',
+                description: 'Mohanji joins The PMC Show for an in-depth conversation on spiritual journey, self-belief, root cause of violence, sacred balance in relationships, and breaking free from karmic patterns.',
+                embedCode: '',
+              },
+              {
+                title: 'Speaking Tree — Ancestral Karma & Healing',
+                description: 'Mohanji discusses ancestral karma, karmic healing, soul contracts, past life energies, and spiritual inheritance in this enlightening podcast with Rangoli Sharma.',
+                embedCode: '',
+              },
+              {
+                title: 'Podcast with Ginu Divakaran',
+                description: "An intimate conversation exploring Mohanji's teachings on consciousness, liberation, and the path to unconditional love.",
+                embedCode: '',
+              },
+            ],
+            videoSectionTitle: 'Videos',
+            videoSectionSubtitle: 'Watch selected videos from the official Mohanji Foundation YouTube channel.',
+            youtubeChannelUrl: 'https://www.youtube.com/@MohanjiFoundation',
+            // NOTE: Add real YouTube embed codes via /admin → Pages → Media → Featured Videos
+            // Get embed code from: YouTube video → Share → Embed → copy the iframe HTML
+            videos: [
+              {
+                title: "Who is Mohanji?",
+                description: "An introduction to Mohanji — his life, mission, and the global movement he has inspired across 100+ countries.",
+                embedCode: '',
+              },
+              {
+                title: 'Mohanji on Conscious Living',
+                description: 'Mohanji shares his insights on what it means to live consciously — with awareness, compassion, and a deep connection to nature.',
+                embedCode: '',
+              },
+              {
+                title: "Mohanji's Message of Love",
+                description: "Mohanji speaks on unconditional love, non-violence, and the path to a life of purpose and freedom.",
+                embedCode: '',
+              },
+            ],
+          },
+        } as any,
+      })
+      console.log('   ✓ Media landing page created')
+    } else {
+      console.log('   ✓ Media landing page already exists — skipping')
+    }
+
     console.log('')
     const appUrl = process.env.NEXT_PUBLIC_SERVER_URL || process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'
     console.log('✅ Seed complete!')

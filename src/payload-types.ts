@@ -266,6 +266,7 @@ export interface Page {
         | 'youth-club'
         | 'volunteer'
         | 'courses-landing'
+        | 'media-landing'
       )
     | null;
   layout?:
@@ -1242,6 +1243,48 @@ export interface Page {
     ctaPrimaryUrl?: string | null;
     ctaSecondaryLabel?: string | null;
     ctaSecondaryUrl?: string | null;
+  };
+  mediaLandingContent?: {
+    podcastSectionTitle?: string | null;
+    podcastSectionSubtitle?: string | null;
+    /**
+     * Full URL to the Podbean channel page (shown on View All button).
+     */
+    podbeanChannelUrl?: string | null;
+    /**
+     * Add podcast episodes to display. Paste the embed code from Podbean for each episode.
+     */
+    podcasts?:
+      | {
+          title: string;
+          description?: string | null;
+          /**
+           * Paste the full Podbean iframe embed code here.
+           */
+          embedCode?: string | null;
+          id?: string | null;
+        }[]
+      | null;
+    videoSectionTitle?: string | null;
+    videoSectionSubtitle?: string | null;
+    /**
+     * Full URL to the YouTube channel (shown on View All button).
+     */
+    youtubeChannelUrl?: string | null;
+    /**
+     * Add YouTube videos to display. Paste the embed code from YouTube "Share > Embed" for each video.
+     */
+    videos?:
+      | {
+          title: string;
+          description?: string | null;
+          /**
+           * Paste the full YouTube iframe embed code here. (YouTube → Share → Embed → copy the iframe HTML)
+           */
+          embedCode?: string | null;
+          id?: string | null;
+        }[]
+      | null;
   };
   updatedAt: string;
   createdAt: string;
@@ -3724,6 +3767,32 @@ export interface PagesSelect<T extends boolean = true> {
         ctaPrimaryUrl?: T;
         ctaSecondaryLabel?: T;
         ctaSecondaryUrl?: T;
+      };
+  mediaLandingContent?:
+    | T
+    | {
+        podcastSectionTitle?: T;
+        podcastSectionSubtitle?: T;
+        podbeanChannelUrl?: T;
+        podcasts?:
+          | T
+          | {
+              title?: T;
+              description?: T;
+              embedCode?: T;
+              id?: T;
+            };
+        videoSectionTitle?: T;
+        videoSectionSubtitle?: T;
+        youtubeChannelUrl?: T;
+        videos?:
+          | T
+          | {
+              title?: T;
+              description?: T;
+              embedCode?: T;
+              id?: T;
+            };
       };
   updatedAt?: T;
   createdAt?: T;

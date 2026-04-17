@@ -12,6 +12,7 @@ import * as migration_20260416_210000_volunteer_page from './20260416_210000_vol
 import * as migration_20260416_220000_events_content_fields from './20260416_220000_events_content_fields';
 import * as migration_20260416_230000_courses_landing_page from './20260416_230000_courses_landing_page';
 import * as migration_20260417_100000_press_coverage_fields from './20260417_100000_press_coverage_fields';
+import * as migration_20260417_110000_media_landing_page from './20260417_110000_media_landing_page';
 
 export const migrations = [
   {
@@ -83,5 +84,10 @@ export const migrations = [
     up: migration_20260417_100000_press_coverage_fields.up,
     down: migration_20260417_100000_press_coverage_fields.down,
     name: '20260417_100000_press_coverage_fields',
+  },
+  {
+    up: migration_20260417_110000_media_landing_page.up,
+    down: migration_20260417_110000_media_landing_page.down,
+    name: '20260417_110000_media_landing_page',
   },
 ];

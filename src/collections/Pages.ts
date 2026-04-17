@@ -50,6 +50,7 @@ export const Pages: CollectionConfig = {
         { label: 'Mohanji Youth Club', value: 'youth-club' },
         { label: 'Volunteer', value: 'volunteer' },
         { label: 'Courses (landing)', value: 'courses-landing' },
+        { label: 'Media (landing)', value: 'media-landing' },
       ],
     },
 
@@ -1262,6 +1263,89 @@ export const Pages: CollectionConfig = {
         { name: 'ctaPrimaryUrl', type: 'text', label: 'Primary Button URL' },
         { name: 'ctaSecondaryLabel', type: 'text', label: 'Secondary Button Label' },
         { name: 'ctaSecondaryUrl', type: 'text', label: 'Secondary Button URL (internal)' },
+      ],
+    },
+
+    // ─────────────────────────────────────────────────────────────────────────
+    // MEDIA LANDING CONTENT (pageType === 'media-landing')
+    // ─────────────────────────────────────────────────────────────────────────
+    {
+      name: 'mediaLandingContent',
+      type: 'group',
+      label: 'Media Landing Content',
+      admin: {
+        condition: (data: any) => data?.pageType === 'media-landing',
+      },
+      fields: [
+        // ── Podcast section ─────────────────────────────────────
+        {
+          name: 'podcastSectionTitle',
+          type: 'text',
+          label: 'Podcast Section Title',
+          defaultValue: 'Podcasts',
+        },
+        {
+          name: 'podcastSectionSubtitle',
+          type: 'textarea',
+          label: 'Podcast Section Subtitle',
+        },
+        {
+          name: 'podbeanChannelUrl',
+          type: 'text',
+          label: 'Podbean Channel URL',
+          admin: { description: 'Full URL to the Podbean channel page (shown on View All button).' },
+        },
+        {
+          name: 'podcasts',
+          type: 'array',
+          label: 'Podcast Episodes',
+          admin: { description: 'Add podcast episodes to display. Paste the embed code from Podbean for each episode.' },
+          fields: [
+            { name: 'title', type: 'text', required: true, label: 'Episode Title' },
+            { name: 'description', type: 'textarea', label: 'Episode Description' },
+            {
+              name: 'embedCode',
+              type: 'textarea',
+              label: 'Embed Code',
+              admin: { description: 'Paste the full Podbean iframe embed code here.' },
+            },
+          ],
+        },
+
+        // ── Video section ────────────────────────────────────────
+        {
+          name: 'videoSectionTitle',
+          type: 'text',
+          label: 'Video Section Title',
+          defaultValue: 'Videos',
+        },
+        {
+          name: 'videoSectionSubtitle',
+          type: 'textarea',
+          label: 'Video Section Subtitle',
+        },
+        {
+          name: 'youtubeChannelUrl',
+          type: 'text',
+          label: 'YouTube Channel URL',
+          admin: { description: 'Full URL to the YouTube channel (shown on View All button).' },
+        },
+        {
+          name: 'videos',
+          type: 'array',
+          label: 'Featured Videos',
+          admin: { description: 'Add YouTube videos to display. Paste the embed code from YouTube "Share > Embed" for each video.' },
+          fields: [
+            { name: 'title', type: 'text', required: true, label: 'Video Title' },
+            { name: 'description', type: 'textarea', label: 'Video Description' },
+            {
+              name: 'embedCode',
+              type: 'textarea',
+              label: 'Embed Code',
+              admin: { description: 'Paste the full YouTube iframe embed code here. (YouTube → Share → Embed → copy the iframe HTML)' },
+            },
+          ],
+        },
       ],
     },
   ],
