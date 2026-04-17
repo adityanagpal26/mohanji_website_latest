@@ -1370,6 +1370,27 @@ export interface Audio {
   featuredImage?: (number | null) | Media;
   audioFile?: (number | null) | Media;
   duration?: string | null;
+  /**
+   * List individual tracks in this album or collection
+   */
+  tracks?:
+    | {
+        title: string;
+        duration?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Purchase or download links for this audio
+   */
+  storeLinks?:
+    | {
+        platform?: string | null;
+        url?: string | null;
+        label?: string | null;
+        id?: string | null;
+      }[]
+    | null;
   audioType?: ('prayer' | 'mantra' | 'chant' | 'talk') | null;
   categories?: (number | Category)[] | null;
   updatedAt: string;
@@ -2683,8 +2704,30 @@ export interface Book {
   } | null;
   coverImage?: (number | null) | Media;
   downloadFile?: (number | null) | Media;
+  /**
+   * Primary purchase URL (e.g. Amazon). For multiple links use storeLinks below.
+   */
   purchaseUrl?: string | null;
+  /**
+   * Add purchase links on different platforms (Amazon, Gumroad, etc.)
+   */
+  storeLinks?:
+    | {
+        platform?: string | null;
+        url?: string | null;
+        label?: string | null;
+        id?: string | null;
+      }[]
+    | null;
   author?: string | null;
+  /**
+   * Series name (e.g. "Guru Leela Series")
+   */
+  series?: string | null;
+  /**
+   * Format (e.g. Paperback, E-Book, Bundle)
+   */
+  format?: string | null;
   publishedYear?: number | null;
   bookType?: ('coffee-table' | 'biography' | 'children' | 'translation') | null;
   language?: string | null;
@@ -4757,7 +4800,17 @@ export interface BooksSelect<T extends boolean = true> {
   coverImage?: T;
   downloadFile?: T;
   purchaseUrl?: T;
+  storeLinks?:
+    | T
+    | {
+        platform?: T;
+        url?: T;
+        label?: T;
+        id?: T;
+      };
   author?: T;
+  series?: T;
+  format?: T;
   publishedYear?: T;
   bookType?: T;
   language?: T;
@@ -4775,6 +4828,21 @@ export interface AudiosSelect<T extends boolean = true> {
   featuredImage?: T;
   audioFile?: T;
   duration?: T;
+  tracks?:
+    | T
+    | {
+        title?: T;
+        duration?: T;
+        id?: T;
+      };
+  storeLinks?:
+    | T
+    | {
+        platform?: T;
+        url?: T;
+        label?: T;
+        id?: T;
+      };
   audioType?: T;
   categories?: T;
   updatedAt?: T;

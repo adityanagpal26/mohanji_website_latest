@@ -37,11 +37,33 @@ export const Books: CollectionConfig = {
     {
       name: 'purchaseUrl',
       type: 'text',
+      admin: { description: 'Primary purchase URL (e.g. Amazon). For multiple links use storeLinks below.' },
+    },
+    {
+      name: 'storeLinks',
+      type: 'array',
+      label: 'Store Links',
+      admin: { description: 'Add purchase links on different platforms (Amazon, Gumroad, etc.)' },
+      fields: [
+        { name: 'platform', type: 'text', label: 'Platform', admin: { placeholder: 'e.g. Amazon, Gumroad, Pothi.com' } },
+        { name: 'url', type: 'text', label: 'URL' },
+        { name: 'label', type: 'text', label: 'Button Label', admin: { placeholder: 'e.g. Buy on Amazon' } },
+      ],
     },
     {
       name: 'author',
       type: 'text',
       defaultValue: 'Mohanji',
+    },
+    {
+      name: 'series',
+      type: 'text',
+      admin: { description: 'Series name (e.g. "Guru Leela Series")' },
+    },
+    {
+      name: 'format',
+      type: 'text',
+      admin: { description: 'Format (e.g. Paperback, E-Book, Bundle)' },
     },
     {
       name: 'publishedYear',

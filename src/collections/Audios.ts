@@ -28,6 +28,7 @@ export const Audios: CollectionConfig = {
       name: 'featuredImage',
       type: 'upload',
       relationTo: 'media',
+      label: 'Cover Image',
     },
     {
       name: 'audioFile',
@@ -37,6 +38,27 @@ export const Audios: CollectionConfig = {
     {
       name: 'duration',
       type: 'text',
+    },
+    {
+      name: 'tracks',
+      type: 'array',
+      label: 'Track Listing',
+      admin: { description: 'List individual tracks in this album or collection' },
+      fields: [
+        { name: 'title', type: 'text', label: 'Track Title', required: true },
+        { name: 'duration', type: 'text', label: 'Duration', admin: { placeholder: 'e.g. 12:34' } },
+      ],
+    },
+    {
+      name: 'storeLinks',
+      type: 'array',
+      label: 'Store Links',
+      admin: { description: 'Purchase or download links for this audio' },
+      fields: [
+        { name: 'platform', type: 'text', label: 'Platform', admin: { placeholder: 'e.g. Amazon, Gumroad' } },
+        { name: 'url', type: 'text', label: 'URL' },
+        { name: 'label', type: 'text', label: 'Button Label', admin: { placeholder: 'e.g. Buy on Amazon' } },
+      ],
     },
     {
       name: 'audioType',

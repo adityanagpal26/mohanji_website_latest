@@ -150,7 +150,7 @@ const seed = async () => {
               { label: 'Annual Reports', link: '/annual-reports' },
             ],
           },
-          { label: 'Store', link: '/store', openInNewTab: true },
+          { label: 'Store', link: '/store', openInNewTab: false },
           { label: 'Contact Us', link: '/contact' },
         ],
       },
@@ -1029,6 +1029,202 @@ const seed = async () => {
       console.log('   ✓ Media landing page created')
     } else {
       console.log('   ✓ Media landing page already exists — skipping')
+    }
+
+    // ── 18. Seed Books ────────────────────────────────────────────────────────
+    console.log('📚 Seeding books...')
+    const booksToSeed = [
+      {
+        title: 'The Maha Yoga Sutras of Mohanji',
+        slug: 'the-maha-yoga-sutras-of-mohanji',
+        bookType: 'biography',
+        author: 'Mohanji',
+        publishedYear: 2020,
+        language: 'English',
+        purchaseUrl: 'https://www.amazon.com/dp/B08BNGFCRW',
+      },
+      {
+        title: 'Guru Leela Volume I: In the Company of the Divine',
+        slug: 'guru-leela-volume-i',
+        bookType: 'biography',
+        series: 'Guru Leela Series',
+        author: 'Mohanji',
+        publishedYear: 2018,
+        language: 'English',
+        purchaseUrl: 'https://www.amazon.com/dp/B07MBFYWJB',
+      },
+      {
+        title: 'Guru Leela Volume II: Awakening',
+        slug: 'guru-leela-volume-ii',
+        bookType: 'biography',
+        series: 'Guru Leela Series',
+        author: 'Mohanji',
+        publishedYear: 2019,
+        language: 'English',
+        purchaseUrl: 'https://www.amazon.com/dp/B07P74M9GS',
+      },
+      {
+        title: 'Guru Leela Volume III: The Silence Beyond',
+        slug: 'guru-leela-volume-iii',
+        bookType: 'biography',
+        series: 'Guru Leela Series',
+        author: 'Mohanji',
+        publishedYear: 2020,
+        language: 'English',
+        purchaseUrl: 'https://www.amazon.com/dp/B08CWF6TXY',
+      },
+      {
+        title: 'Mind: The Ultimate Miracle',
+        slug: 'mind-the-ultimate-miracle',
+        bookType: 'coffee-table',
+        author: 'Mohanji',
+        publishedYear: 2017,
+        language: 'English',
+        purchaseUrl: 'https://www.amazon.com/dp/B074B7ZNQ8',
+      },
+      {
+        title: 'Success: The Right Way',
+        slug: 'success-the-right-way',
+        bookType: 'coffee-table',
+        author: 'Mohanji',
+        publishedYear: 2017,
+        language: 'English',
+        purchaseUrl: 'https://www.amazon.com/dp/B074B7VSV6',
+      },
+      {
+        title: 'Truth: The Life Divine',
+        slug: 'truth-the-life-divine',
+        bookType: 'coffee-table',
+        author: 'Mohanji',
+        publishedYear: 2018,
+        language: 'English',
+        purchaseUrl: 'https://www.amazon.com/dp/B07DDHBMPC',
+      },
+      {
+        title: 'Jagat Mitra: The Friend of the World',
+        slug: 'jagat-mitra-the-friend-of-the-world',
+        bookType: 'coffee-table',
+        author: 'Mohanji',
+        publishedYear: 2022,
+        language: 'English',
+        purchaseUrl: 'https://mohanji.org/book/',
+      },
+      {
+        title: 'In the Lotus of the Heart',
+        slug: 'in-the-lotus-of-the-heart',
+        bookType: 'children',
+        author: 'Mohanji',
+        publishedYear: 2019,
+        language: 'English',
+        purchaseUrl: 'https://mohanji.org/book/',
+      },
+      {
+        title: "Mohanji's Little Book of Love",
+        slug: 'mohanjis-little-book-of-love',
+        bookType: 'children',
+        author: 'Mohanji',
+        publishedYear: 2020,
+        language: 'English',
+        purchaseUrl: 'https://mohanji.org/book/',
+      },
+    ]
+    for (const book of booksToSeed) {
+      const { docs: existing } = await payload.find({
+        collection: 'books',
+        where: { slug: { equals: book.slug } },
+        limit: 1,
+      })
+      if (existing.length === 0) {
+        await payload.create({ collection: 'books', data: book as any })
+        console.log(`   ✓ Book created: "${book.title}"`)
+      } else {
+        console.log(`   ✓ Book already exists — skipping: "${book.title}"`)
+      }
+    }
+
+    // ── 19. Seed Audio albums ─────────────────────────────────────────────────
+    console.log('🎵 Seeding audio albums...')
+    const audiosToSeed = [
+      {
+        title: 'Siva Kavacham',
+        slug: 'siva-kavacham',
+        audioType: 'chant',
+        duration: '47 min',
+        tracks: [
+          { title: 'Siva Kavacham Part 1', duration: '24:00' },
+          { title: 'Siva Kavacham Part 2', duration: '23:00' },
+        ],
+        storeLinks: [
+          { platform: 'Amazon', url: 'https://www.amazon.com/dp/B00X5YQKW0', label: 'Buy on Amazon' },
+        ],
+      },
+      {
+        title: 'Devi Kavacham',
+        slug: 'devi-kavacham',
+        audioType: 'chant',
+        duration: '52 min',
+        tracks: [
+          { title: 'Devi Kavacham Part 1', duration: '26:00' },
+          { title: 'Devi Kavacham Part 2', duration: '26:00' },
+        ],
+        storeLinks: [
+          { platform: 'Amazon', url: 'https://www.amazon.com/dp/B00X5YRMBS', label: 'Buy on Amazon' },
+        ],
+      },
+      {
+        title: 'Nonstop Chants',
+        slug: 'nonstop-chants',
+        audioType: 'chant',
+        duration: '60 min',
+        tracks: [
+          { title: 'Om Namah Shivaya', duration: '20:00' },
+          { title: 'Hare Rama Hare Krishna', duration: '20:00' },
+          { title: 'Om Namo Narayanaya', duration: '20:00' },
+        ],
+        storeLinks: [
+          { platform: 'Amazon', url: 'https://mohanji.org/store/', label: 'Buy Now' },
+        ],
+      },
+      {
+        title: 'Ashtothari',
+        slug: 'ashtothari',
+        audioType: 'mantra',
+        duration: '30 min',
+        tracks: [
+          { title: 'Shiva Ashtothari Namavali', duration: '15:00' },
+          { title: 'Devi Ashtothari Namavali', duration: '15:00' },
+        ],
+        storeLinks: [
+          { platform: 'Amazon', url: 'https://mohanji.org/store/', label: 'Buy Now' },
+        ],
+      },
+      {
+        title: 'Mohanji Nithya Praarthana',
+        slug: 'mohanji-nithya-praarthana',
+        audioType: 'prayer',
+        duration: '25 min',
+        tracks: [
+          { title: 'Morning Prayer (Prabhaata Smaranam)', duration: '8:30' },
+          { title: 'Evening Prayer (Sandhya Vandanam)', duration: '8:00' },
+          { title: 'Bedtime Prayer (Shayana Praarthana)', duration: '8:30' },
+        ],
+        storeLinks: [
+          { platform: 'Amazon', url: 'https://mohanji.org/store/', label: 'Buy Now' },
+        ],
+      },
+    ]
+    for (const audio of audiosToSeed) {
+      const { docs: existing } = await payload.find({
+        collection: 'audios',
+        where: { slug: { equals: audio.slug } },
+        limit: 1,
+      })
+      if (existing.length === 0) {
+        await payload.create({ collection: 'audios', data: audio as any })
+        console.log(`   ✓ Audio created: "${audio.title}"`)
+      } else {
+        console.log(`   ✓ Audio already exists — skipping: "${audio.title}"`)
+      }
     }
 
     console.log('')
