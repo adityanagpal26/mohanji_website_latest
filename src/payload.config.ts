@@ -112,8 +112,13 @@ export default buildConfig({
             collections: {
               media: {
                 prefix: 'media',
-                // Serve files from CloudFront CDN if configured, otherwise direct from S3
-                ...(cdnUrl ? { generateFileURL: ({ filename, prefix }) => `${cdnUrl}/${prefix}/${filename}` } : {}),
+                // Always provide generateFileURL so URLs are absolute.
+                // Uses CloudFront CDN if NEXT_PUBLIC_CDN_URL is set, falls back to direct S3 URL.
+                generateFileURL: ({ filename, prefix }) => {
+                  const p = prefix ?? 'media'
+                  if (cdnUrl) return `${cdnUrl}/${p}/${filename}`
+                  return `https://${process.env.S3_BUCKET}.s3.${process.env.S3_REGION ?? 'us-east-1'}.amazonaws.com/${p}/${filename}`
+                },
               },
             },
             bucket: process.env.S3_BUCKET!,
