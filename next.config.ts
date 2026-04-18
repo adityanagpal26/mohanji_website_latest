@@ -7,12 +7,25 @@ process.env.PATH = `/usr/local/bin:/usr/bin:/bin:${process.env.PATH ?? ''}`
 const nextConfig: NextConfig = {
   images: {
     remotePatterns: [
+      // Direct S3 URL (fallback when no CDN configured)
       {
         protocol: 'https',
         hostname: process.env.S3_BUCKET
           ? `${process.env.S3_BUCKET}.s3.${process.env.S3_REGION ?? 'us-east-1'}.amazonaws.com`
           : 'localhost',
       },
+      // CloudFront CDN (*.cloudfront.net — covers both staging and production distributions)
+      {
+        protocol: 'https',
+        hostname: '*.cloudfront.net',
+      },
+      // Custom CDN domain (e.g. cdn.mohanji.org) — matches if NEXT_PUBLIC_CDN_URL is set to a custom domain
+      ...(process.env.NEXT_PUBLIC_CDN_URL
+        ? [{
+            protocol: 'https' as const,
+            hostname: new URL(process.env.NEXT_PUBLIC_CDN_URL).hostname,
+          }]
+        : []),
       {
         protocol: 'https',
         hostname: 'mohanji.org',

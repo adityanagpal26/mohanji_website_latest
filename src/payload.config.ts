@@ -39,6 +39,8 @@ const dirname = path.dirname(filename)
 
 const isBuilding = process.env.NEXT_PHASE === PHASE_PRODUCTION_BUILD
 const useS3 = Boolean(process.env.S3_BUCKET && process.env.S3_REGION && process.env.AWS_ACCESS_KEY_ID)
+// Optional CloudFront CDN — if set, Payload generates CDN URLs instead of direct S3 URLs
+const cdnUrl = process.env.NEXT_PUBLIC_CDN_URL?.replace(/\/$/, '') || undefined
 
 export default buildConfig({
   // Seed is triggered on-demand via GET /api/dev-seed — NOT on startup.
@@ -110,6 +112,8 @@ export default buildConfig({
             collections: {
               media: {
                 prefix: 'media',
+                // Serve files from CloudFront CDN if configured, otherwise direct from S3
+                ...(cdnUrl ? { generateFileURL: ({ filename, prefix }) => `${cdnUrl}/${prefix}/${filename}` } : {}),
               },
             },
             bucket: process.env.S3_BUCKET!,
