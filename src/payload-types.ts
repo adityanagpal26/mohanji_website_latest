@@ -5127,6 +5127,10 @@ export interface SiteSetting {
   id: number;
   siteName?: string | null;
   tagline?: string | null;
+  /**
+   * Browser tab icon. Upload a square image (32×32 or 512×512 .png/.ico). Falls back to /favicon.ico if not set.
+   */
+  favicon?: (number | null) | Media;
   defaultMeta?: {
     title?: string | null;
     description?: string | null;
@@ -5221,6 +5225,7 @@ export interface FooterSelect<T extends boolean = true> {
 export interface SiteSettingsSelect<T extends boolean = true> {
   siteName?: T;
   tagline?: T;
+  favicon?: T;
   defaultMeta?:
     | T
     | {
