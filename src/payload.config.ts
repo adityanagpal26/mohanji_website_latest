@@ -38,7 +38,7 @@ const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 
 const isBuilding = process.env.NEXT_PHASE === PHASE_PRODUCTION_BUILD
-const useS3 = Boolean(process.env.S3_BUCKET && process.env.S3_REGION && process.env.AWS_ACCESS_KEY_ID)
+const useS3 = Boolean(process.env.S3_BUCKET && process.env.S3_REGION && (process.env.S3_ACCESS_KEY_ID || process.env.AWS_ACCESS_KEY_ID))
 // Optional CloudFront CDN — if set, Payload generates CDN URLs instead of direct S3 URLs
 const cdnUrl = process.env.NEXT_PUBLIC_CDN_URL?.replace(/\/$/, '') || undefined
 
@@ -119,8 +119,8 @@ export default buildConfig({
             bucket: process.env.S3_BUCKET!,
             config: {
               credentials: {
-                accessKeyId: process.env.AWS_ACCESS_KEY_ID!,
-                secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY!,
+                accessKeyId: (process.env.S3_ACCESS_KEY_ID || process.env.AWS_ACCESS_KEY_ID)!,
+                secretAccessKey: (process.env.S3_SECRET_ACCESS_KEY || process.env.AWS_SECRET_ACCESS_KEY)!,
               },
               region: process.env.S3_REGION!,
             },
