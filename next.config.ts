@@ -5,6 +5,12 @@ import type { NextConfig } from 'next'
 process.env.PATH = `/usr/local/bin:/usr/bin:/bin:${process.env.PATH ?? ''}`
 
 const nextConfig: NextConfig = {
+  serverExternalPackages: [
+    '@payloadcms/storage-s3',
+    '@aws-sdk/client-s3',
+    '@aws-sdk/s3-request-presigner',
+    '@aws-sdk/lib-storage',
+  ],
   images: {
     remotePatterns: [
       // Direct S3 URL (fallback when no CDN configured)
