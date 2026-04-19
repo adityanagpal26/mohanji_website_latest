@@ -20,6 +20,8 @@ frontend:
         - DATABASE_URI=$DATABASE_URI npx payload migrate
     build:
       commands:
+        # Regenerate Payload import map so S3 plugin client components are included
+        - npx payload generate:importmap
         - npx cross-env NODE_OPTIONS="--no-deprecation --max-old-space-size=8000" next build --webpack
   artifacts:
     baseDirectory: .next
