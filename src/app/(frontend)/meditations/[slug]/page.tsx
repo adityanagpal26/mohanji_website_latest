@@ -164,9 +164,9 @@ export default async function MeditationDetailPage({ params }: Props) {
                 {downloads.length === 0 ? (
                   <p className="text-sm text-gray-500 mt-4">Downloads coming soon.</p>
                 ) : (
-                  <ul className="mt-4 space-y-2">
-                    {downloads.slice(0, 8).map((dl, idx) => (
-                      <li key={idx} className="flex items-center justify-between gap-2 py-1 border-b border-gray-100 last:border-0">
+                  <ul className="mt-4 space-y-1 max-h-72 overflow-y-auto pr-1">
+                    {downloads.map((dl, idx) => (
+                      <li key={idx} className="flex items-center justify-between gap-2 py-1.5 border-b border-gray-100 last:border-0">
                         <span className="text-sm text-gray-700">{dl.language}</span>
                         {dl.url ? (
                           <a
@@ -182,11 +182,6 @@ export default async function MeditationDetailPage({ params }: Props) {
                         )}
                       </li>
                     ))}
-                    {downloads.length > 8 && (
-                      <li className="pt-1 text-xs text-gray-400 text-center">
-                        +{downloads.length - 8} more on the download page
-                      </li>
-                    )}
                   </ul>
                 )}
               </div>
