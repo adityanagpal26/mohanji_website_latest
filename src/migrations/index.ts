@@ -19,6 +19,7 @@ import * as migration_20260417_131000_annual_reports_locked_docs from './2026041
 import * as migration_20260417_140000_books_audios_store_fields from './20260417_140000_books_audios_store_fields';
 import * as migration_20260417_150000_featured_on_home from './20260417_150000_featured_on_home';
 import * as migration_20260418_100000_site_settings_favicon from './20260418_100000_site_settings_favicon';
+import * as migration_20260419_100000_media_s3_prefix from './20260419_100000_media_s3_prefix';
 
 export const migrations = [
   {
@@ -125,5 +126,10 @@ export const migrations = [
     up: migration_20260418_100000_site_settings_favicon.up,
     down: migration_20260418_100000_site_settings_favicon.down,
     name: '20260418_100000_site_settings_favicon',
+  },
+  {
+    up: migration_20260419_100000_media_s3_prefix.up,
+    down: migration_20260419_100000_media_s3_prefix.down,
+    name: '20260419_100000_media_s3_prefix',
   },
 ];
