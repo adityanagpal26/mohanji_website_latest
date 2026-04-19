@@ -54,6 +54,8 @@ export default buildConfig({
     },
   },
 
+  serverURL: process.env.NEXT_PUBLIC_SERVER_URL || '',
+
   collections: [
     Users,
     Media,
