@@ -112,6 +112,10 @@ export default buildConfig({
     ...(useS3
       ? [
           s3Storage({
+            // Upload directly from browser → S3 via presigned URL.
+            // This bypasses the Lambda entirely so files of any size work.
+            // Without this, Amplify's ~6 MB Lambda payload limit causes 413 errors.
+            clientUploads: true,
             collections: {
               media: {
                 prefix: 'media',
