@@ -6,7 +6,11 @@ process.env.PATH = `/usr/local/bin:/usr/bin:/bin:${process.env.PATH ?? ''}`
 
 const nextConfig: NextConfig = {
   serverExternalPackages: [
-    '@payloadcms/storage-s3',
+    // AWS SDK must be external — bundling it causes NO_RETRY_INCREMENT errors
+    // and significantly bloats the server bundle.
+    // NOTE: @payloadcms/storage-s3 is intentionally NOT here — if it were external,
+    // Node.js would load it via ESM and hit a CSS import error (react-image-crop).
+    // Letting webpack bundle it handles the CSS correctly.
     '@aws-sdk/client-s3',
     '@aws-sdk/s3-request-presigner',
     '@aws-sdk/lib-storage',
