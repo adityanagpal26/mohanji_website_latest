@@ -4,7 +4,6 @@ import type { Metadata } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
 import { getPayloadClient } from '@/lib/payload'
-import { MeditationPlayerClient } from '@/components/meditations/MeditationPlayerClient'
 
 export const dynamic = 'force-dynamic'
 
@@ -70,8 +69,7 @@ export default async function MeditationDetailPage({ params }: Props) {
   const descriptionHtml = meditation.description ? renderRichText(meditation.description) : ''
   const benefitsHtml = meditation.benefits ? renderRichText(meditation.benefits) : ''
   const instructionsHtml = meditation.instructions ? renderRichText(meditation.instructions) : ''
-  const downloads: any[] = meditation.downloads ?? []
-  const playerDownloads = downloads.map((dl: any) => ({
+  const downloads: any[] = (meditation.downloads ?? []).map((dl: any) => ({
     language: dl.language,
     url: typeof dl.audioFile === 'object' && dl.audioFile?.url ? dl.audioFile.url : null,
     duration: dl.fileSize ?? undefined,
@@ -154,27 +152,42 @@ export default async function MeditationDetailPage({ params }: Props) {
               )}
             </div>
 
-            {/* Right: downloads */}
+            {/* Right: language download links */}
             <aside>
               <div className="bg-white rounded-lg shadow-sm p-6 sticky top-24">
                 <h3 className="font-heading text-xl text-[#16697A] mb-1">
-                  {downloads.length > 0 ? `Play or Download (${downloads.length} languages)` : 'Downloads'}
+                  {downloads.length > 0
+                    ? `Available in ${downloads.length} language${downloads.length !== 1 ? 's' : ''}`
+                    : 'Downloads'}
                 </h3>
                 <span className="gold-divider" />
                 {downloads.length === 0 ? (
                   <p className="text-sm text-gray-500 mt-4">Downloads coming soon.</p>
                 ) : (
-                  <div className="mt-4">
-                    <MeditationPlayerClient downloads={playerDownloads} title={meditation.title} />
-                  </div>
-                )}
-                {typeof meditation.audioPreview === 'object' && meditation.audioPreview?.url && (
-                  <div className="mt-6 pt-4 border-t border-gray-100">
-                    <p className="text-xs text-gray-500 uppercase tracking-wide font-semibold mb-2">
-                      Audio Preview
-                    </p>
-                    <audio controls src={meditation.audioPreview.url} className="w-full" />
-                  </div>
+                  <ul className="mt-4 space-y-2">
+                    {downloads.slice(0, 8).map((dl, idx) => (
+                      <li key={idx} className="flex items-center justify-between gap-2 py-1 border-b border-gray-100 last:border-0">
+                        <span className="text-sm text-gray-700">{dl.language}</span>
+                        {dl.url ? (
+                          <a
+                            href={dl.url}
+                            download
+                            title={`Download in ${dl.language}`}
+                            className="flex items-center gap-1 text-xs text-[#16697A] border border-[#16697A] px-2.5 py-1 rounded hover:bg-[#16697A] hover:text-white transition-colors shrink-0"
+                          >
+                            ↓ Download
+                          </a>
+                        ) : (
+                          <span className="text-xs text-gray-400 italic">Coming soon</span>
+                        )}
+                      </li>
+                    ))}
+                    {downloads.length > 8 && (
+                      <li className="pt-1 text-xs text-gray-400 text-center">
+                        +{downloads.length - 8} more on the download page
+                      </li>
+                    )}
+                  </ul>
                 )}
               </div>
               <div className="mt-4">
@@ -182,7 +195,7 @@ export default async function MeditationDetailPage({ params }: Props) {
                   href={`/meditations/${slug}/download`}
                   className="block text-center text-sm bg-[#16697A] text-white rounded py-2.5 hover:bg-[#125567] transition-colors font-semibold"
                 >
-                  All Language Downloads
+                  All Languages &amp; Audio Player →
                 </Link>
               </div>
               <div className="mt-3">

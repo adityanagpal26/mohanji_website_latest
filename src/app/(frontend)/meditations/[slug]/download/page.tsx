@@ -4,7 +4,7 @@ import type { Metadata } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
 import { getPayloadClient } from '@/lib/payload'
-import { MeditationPlayerClient } from '@/components/meditations/MeditationPlayerClient'
+import { MeditationDownloadClient } from '@/components/meditations/MeditationDownloadClient'
 
 export const dynamic = 'force-dynamic'
 
@@ -98,7 +98,7 @@ export default async function MeditationDownloadPage({ params }: Props) {
           </p>
 
           {downloads.length > 0 ? (
-            <MeditationPlayerClient downloads={downloads} title={title} />
+            <MeditationDownloadClient downloads={downloads} title={title} />
           ) : (
             <div className="text-center py-12">
               <p className="text-gray-500 mb-4">
